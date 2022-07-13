@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import GraficaClicks from '../util/GraficaClicks';
 import ItemEmpresa from './ItemEmpresa';
 import * as funciones from '../util/FuncionesEmpresas.js'
+import { default as DynamicTable } from '../util/DynamicTable.js'
 
 const Home = ({ history }) => {
     const [listado, setListado] = useState([]);
@@ -44,6 +45,11 @@ const Home = ({ history }) => {
                 />
                 <button onClick={() => actualizar(empresa)}>Actualizar datos</button>
                 <button onClick={() => eliminar(empresa.empresaNombre)}>Eliminar empresa</button>
+                <hr />
+                <h3>Clicks generados</h3>
+                {empresa.clicks.length > 0 
+                 ?<DynamicTable TableData={empresa.clicks} /> 
+                 : <h4>No existen clicks generados para esta empresa</h4>}
             </>
         }
     }

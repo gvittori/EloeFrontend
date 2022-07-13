@@ -5,7 +5,7 @@ import { useLocalState } from '../util/useLocalStorage';
 const Login = () => {
   const history = useHistory();
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  //const from = location.state?.from?.pathname || "/";
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +13,6 @@ const Login = () => {
   const [jwt, setJwt] = useLocalState("", "jwt");
 
   useEffect(() => {
-    console.log(jwt.length)
     if (!jwt.length == 0) {
       history.push('/');
     }
@@ -48,8 +47,8 @@ const Login = () => {
             Promise.all([res.json(), res.headers])
               .then(([body, headers]) => {
                 setJwt(headers.get("authorization"));
-                history.push(from, { replace: true });
-                //history.push("/");
+                //history.push(from, { replace: true });
+                history.push("/");
               });
           }
         })

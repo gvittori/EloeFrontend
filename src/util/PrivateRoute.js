@@ -39,8 +39,6 @@ const esVencido = (token) => {
     if (parseInt(fecha.getTime().toString().slice(0, -3)) > token.exp) {
         vencido = true;
         localStorage.setItem('jwt', '""');
-        localStorage.setItem('roles', '""');
-        localStorage.setItem('username', '""');
     }
     return vencido;
 }
