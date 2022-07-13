@@ -13,6 +13,7 @@ const Login = () => {
   const [jwt, setJwt] = useLocalState("", "jwt");
 
   useEffect(() => {
+    console.log(jwt.length)
     if (!jwt.length == 0) {
       history.push('/');
     }
