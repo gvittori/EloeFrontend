@@ -1,37 +1,61 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { useLocalState } from "./useLocalStorage";
-
+import { useHistory } from "react-router-dom";
+import { decode } from '../util/decode';
 
 
 const PrivateRoute = ({ children, allowedRoles }) => {
     const [jwt, setJwt] = useLocalState("", "jwt");
+    const history = useHistory();
     if (jwt.length > 0) {
         var tokenDecodificado = decode(jwt);
-        if (!esVencido(jwt)) {
-            var roles = tokenDecodificado.roles;
-            if (contieneRol(roles, allowedRoles)) {
-                return children
-            } else {
-                return <Redirect to="/" />
+        if(tokenDecodificado !== null){
+            if (!esVencido(tokenDecodificado)) {
+                var roles = tokenDecodificado.roles;
+                if (contieneRol(roles, allowedRoles)) {
+                    return children
+                } else {
+                    return <Redirect to="/" />
+                }
             }
-        }
+        }   
     }
     return <Redirect to="/Login" />
 
-    /*if (!esValido(jwt)) {
-        return <Redirect to="/Login" />
-    } else if (contieneRol(roles, allowedRoles)) {
-        return children
-    } else {
-        return <Redirect to="/" />
+    /*
+    if (jwt.length > 0) {
+        var tokenDecodificado = decode(jwt);
+        if (tokenDecodificado !== null) {
+            var val = esVencido(tokenDecodificado);
+            if (!val) {
+                var roles = tokenDecodificado.roles;
+                if (contieneRol(roles, allowedRoles)) {
+                    return children
+                } else {
+                    return <Redirect to="/" />
+                }
+            }else{
+                asyncLocalStorage.setItem('jwt', '""').then(function () {history.push("/Login")});
+            }
+        }
+    } else{
+        asyncLocalStorage.setItem('jwt', '""').then(function () {history.push("/Login")});
     }*/
-    /*return esValido(jwt)
-        ? contieneRol(roles, allowedRoles)
-            ? children 
-            : <Redirect to="/" />
-        : <Redirect to="/Login" />*/
 }
+
+const asyncLocalStorage = {
+    setItem: function (key, value) {
+        return Promise.resolve().then(function () {
+            localStorage.setItem(key, value);
+        });
+    },
+    getItem: function (key) {
+        return Promise.resolve().then(function () {
+            return localStorage.getItem(key);
+        });
+    }
+};
 
 const esVencido = (token) => {
     var vencido = false;
@@ -43,24 +67,15 @@ const esVencido = (token) => {
     return vencido;
 }
 
-
-
-/*const esValido = (token) => {
-    var valido = true;
-    if (token.length <= 0) {
-        valido = false;
-    } else {
-        var tokenDecodificado = decode(token);
-        var fecha = new Date();
-        if (parseInt(fecha.getTime().toString().slice(0, -3)) > tokenDecodificado.exp) {
-            valido = false;
-            localStorage.setItem('jwt', '""');
-            localStorage.setItem('roles', '""');
-            localStorage.setItem('username', '""');
-        }
+/*const esVencido = (token) => {
+    var fecha = new Date().getTime().toString().slice(0, -3);
+    var val = parseInt(fecha);
+    if (val > token.exp) {
+        return true;
     }
-    return valido;
+    return false;
 }*/
+
 
 const contieneRol = (roles, allowedRoles) => {
     var contiene = false;
@@ -74,11 +89,6 @@ const contieneRol = (roles, allowedRoles) => {
     return contiene;
 }
 
-const decode = (token) => {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(window.atob(base64));
-};
 
 
 

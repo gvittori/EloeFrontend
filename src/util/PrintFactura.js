@@ -1,18 +1,27 @@
+import { default as DynamicTable } from '../util/DynamicTable.js'
+import { renderToString } from 'react-dom/server'
+
 const PrintFactura = (data) => {
-    const listaClicks = () => {
+    /*const listaClicks = () => {
         var stringLista = "";
         data.clicks.forEach(click => {
-            stringLista +=`<li>
+            stringLista += `<li>
                 <p>• Data e horario: ${click.fechaHora}</p>
                 <p>• URL: ${click.clickUrl}</p>
                 <p>• Origen: ${click.paisOrigen}</p>
             </li>`;
         });
         return stringLista;
-    }
+    }*/
 
-    let facturaPDF =
-        `<h1>${data.nombre}</h1>
+    /*const output = <DynamicTable TableData={data.clicks} />;
+    var staticElement = ReactDOMServer.renderToStaticMarkup(output);
+    output.innerHTML = `<div>${staticElement}</div>`*/
+    let facturaPDF = `<h1>Não há cliques gerados para esta empresa</h1>`
+
+    if (data.clicks.length > 0) {
+        facturaPDF =
+            `<h1>${data.nombre}</h1>
     <p>CNPJ: ${data.CNPJ}</p>
     <p>Limite Total: R$ ${data.limiteTotal}</p>
 
@@ -33,11 +42,14 @@ const PrintFactura = (data) => {
     </div>
     <div>
         Detalhe:
-        <ul>
-            ${listaClicks()}
-        </ul>
+        <div>
+            ${renderToString(<DynamicTable TableData={data.clicks} />)}
+        </div>
+        
     </div>
     `;
+    }
+
     var printWindow = window.open('', '', 'height=400,width=800');
     printWindow.document.write('<html><head><title>Factura</title>');
     printWindow.document.write('</head><body >');
@@ -48,3 +60,7 @@ const PrintFactura = (data) => {
 }
 
 export default PrintFactura
+
+/*<ul>
+            ${listaClicks()}
+        </ul>*/

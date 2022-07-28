@@ -2,17 +2,20 @@ import React, { useState, useEffect, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import Select from 'react-select'
 import { useHistory, useLocation } from "react-router-dom";
+import { decode } from '../util/decode';
 
 
 
 
 const UpdateUsuario = ({ history }) => {
     const location = useLocation();
-    const usuario = JSON.parse(location.state.usuario)
+    const [usr,setUsr] = useState(
+        location.state ? JSON.parse(location.state.usuario) : ''
+      );
 
-    const [usernameUpdate, setUsername] = useState(usuario.username);
+    const [usernameUpdate, setUsername] = useState(usr.username);
     const [passwordUpdate, setPassword] = useState('');
-    const [roles, setRoles] = useState(usuario.roles);
+    const [roles, setRoles] = useState(usr.roles);
     const [mensajeError, setMensajeError] = useState('');
     const [listaRoles, setListaRoles] = useState([]);
 
@@ -31,6 +34,7 @@ const UpdateUsuario = ({ history }) => {
             });
     }, []);
 
+
     const handleChangeUsername = ({ target: { value } }) => {
         setUsername(value);
     };
@@ -48,14 +52,15 @@ const UpdateUsuario = ({ history }) => {
 
 
     const btnUpdate = () => {
-
+        const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
         setMensajeError(''); {
             const reqBody = {
-                username: usuario.username,
+                username: usr.username,
                 password: "",
                 usernameUpdate,
                 passwordUpdate,
-                roles
+                roles,
+                usuario
             };
             fetch('/api/usuarios/update', {
                 method: 'PUT',
@@ -84,6 +89,8 @@ const UpdateUsuario = ({ history }) => {
         }
 
     };
+
+    if(!location.state) return history.push("/");
 
     return (
         <>

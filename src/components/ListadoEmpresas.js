@@ -3,6 +3,7 @@ import { useLocalState } from '../util/useLocalStorage';
 import { withRouter } from 'react-router-dom';
 import ItemEmpresa from './ItemEmpresa';
 import * as funciones from '../util/FuncionesEmpresas.js'
+import { useEventTracking } from "react-event-tracker";
 
 const ListadoEmpresas = ({ listado }) => {
     /*const [empresas, setEmpresas] = useState();

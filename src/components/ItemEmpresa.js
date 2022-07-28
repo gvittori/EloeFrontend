@@ -19,7 +19,7 @@ const ItemEmpresa = (props) => {
     }
 
     const clicksFiltrados = filtroClicksMes();
-    const [data, setData] = useState(
+    const data = 
         {
             "nombre": nombre,
             "CNPJ": cnpj,
@@ -30,7 +30,7 @@ const ItemEmpresa = (props) => {
             "deudaTotal": deuda,
             "fecha": fecha
 
-        });
+        };
 
 return (
     <>
@@ -38,12 +38,14 @@ return (
             <p>• Nombre de la empresa: {nombre}</p>
             <p>• CNPJ: {cnpj}</p>
             <p>• Email de contacto: {mail}</p>
+            <p>• Taza por click: ${taza}</p>
             <p>• Clicks totales: {clicks.length}</p>
             <p>• Cantidad de clicks del mes: {clicksFiltrados.length}</p>
-            <p>• Deuda del mes: {deuda}</p>
-            <p>• Total anual: {anual}</p>
+            <p>• Deuda del mes: ${deuda}</p>
+            <p>• Total anual: ${anual}</p>
         </div>
-        <button onClick={() => PrintFactura(data)}>Imprimir factura</button>
+        <button disabled={clicks.length>0?false:true} onClick={() => PrintFactura(data)}>Imprimir factura</button>
+
        
     </>
 );

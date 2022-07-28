@@ -1,19 +1,21 @@
-*{
+* {
   margin: 0;
   padding: 0;
 }
 
-ul{
+ul {
   margin: 0;
   padding: 0;
 }
 
-li{
+li {
   list-style: none;
 }
-body{
+
+body {
   background-color: rgb(196, 197, 197);
 }
+
 .App {
   display: flex;
   flex-direction: column;
@@ -22,16 +24,17 @@ body{
 
 .App-content {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: left;
+  align-items: stretch;
 }
 
 .titulo {
   background-color: #0ed450;
   min-height: 100px;
-  width:100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -40,17 +43,17 @@ body{
   color: rgb(31, 32, 30);
 }
 
-.texto{
+.texto {
   padding: 10px 20px;
   margin: 10px 0px;
   border: 1px solid rgb(116, 116, 116);
 }
 
-.select{
+.select {
   margin: 10px 0px;
 }
 
-.loginBox{
+.loginBox {
   width: 30%;
   height: 35%;
   margin: 10px auto;
@@ -60,12 +63,12 @@ body{
   flex-direction: column;
 }
 
-.loginBox p{
+.loginBox p {
   text-align: center;
 }
 
-.registroBox{
-  width: 30%;
+.registroBox {
+  width: 300px;
   height: 400px;
   margin: 10px;
   padding: 10px;
@@ -74,43 +77,45 @@ body{
   flex-direction: column;
 }
 
-.btnLogin{
+.btnLogin {
   width: 50%;
   height: 30px;
   margin: 5px 0px;
   align-self: center;
 }
 
-.btnRegistro{
+.btnRegistro {
   width: 50%;
   height: 30px;
   margin: 5px 0px;
   align-self: center;
 }
 
-.seccion{
+.seccion {
   padding: 20px;
   display: flex;
+  flex-direction: column;
 }
 
 .menuSecciones {
   width: 200px;
-  height: 100%;
+  min-height: 100vh;
   background-color: rgb(31, 32, 30);
   box-sizing: border-box;
   padding: 10px 15px;
+  white-space: nowrap;
   transition: width .2s ease-in;
+  
 }
-
 .menuSecciones.inactivo {
   width: 65px;
 }
 
-.menuSecciones .top{
+.menuSecciones .top {
   position: relative;
 }
 
-.menuSecciones .top .iconoMenu{
+.menuSecciones .top .iconoMenu {
   color: black;
   background-color: rgb(31, 32, 30);
   border: none;
@@ -119,7 +124,7 @@ body{
   cursor: pointer;
 }
 
-.menuSecciones .top .iconoIzquierda{
+.menuSecciones .top .iconoIzquierda {
   color: black;
   background-color: rgb(31, 32, 30);
   border: none;
@@ -131,19 +136,19 @@ body{
   cursor: pointer;
 }
 
-.menuSecciones.inactivo .top .iconoIzquierda{
+.menuSecciones.inactivo .top .iconoIzquierda {
   display: none;
 }
 
-.menuSecciones .top .iconoMenu:hover{
+.menuSecciones .top .iconoMenu:hover {
   color: #0ed450;
 }
 
-.menuSecciones .top .iconoIzquierda:hover{
+.menuSecciones .top .iconoIzquierda:hover {
   color: #0ed450;
 }
 
-hr.lineaTop{
+hr.lineaTop {
   border: 1px solid black;
 }
 
@@ -160,12 +165,12 @@ hr.lineaTop{
 
 .menuSecciones .listado .itemListado:hover {
   background-color: #0ed450;
-  color:rgb(31, 32, 30);
+  color: rgb(31, 32, 30);
 }
 
 .menuSecciones .listado .itemListado.active {
   background-color: #0ed450;
-  color:rgb(31, 32, 30);
+  color: rgb(31, 32, 30);
 }
 
 .menuSecciones .listado .itemListado span {
@@ -185,7 +190,7 @@ hr.lineaTop{
 }
 
 
-.menuSecciones .listado .itemListado .iconoListado{
+.menuSecciones .listado .itemListado .iconoListado {
   display: inline-block;
   font-size: 20px;
   line-height: 37px;
@@ -204,21 +209,87 @@ hr.lineaTop{
 }
 
 .table thead tr th {
-  font-size: 20px ;
+  font-size: 20px;
   font-weight: 300;
 }
 
-.table>thead>tr>th{
+.table>thead>tr>th {
   padding: 12px 8px;
   vertical-align: middle;
   border-color: #ddd;
   font-weight: 500;
 }
 
-.table>tbody>tr>td{
+.table>tbody>tr>td {
   padding: 12px 8px;
   vertical-align: middle;
   border-color: #ddd;
-  font-size:16px;
+  font-size: 16px;
   color: #161a1f;
+}
+
+.menuText {
+  background-color: rgb(31, 32, 30);
+  color: #0ed450;
+  display: block;
+  text-decoration: none;
+  margin: 5px 0;
+  border-radius: 3px;
+}
+
+.menuText>p {
+  transition: opacity .2s ease-in;
+}
+
+.menuText.inactivo{
+  overflow: hidden;
+  background-color: #0ed450;
+}
+
+.menuText.inactivo>p {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.page-item {
+  margin: 5px;
+}
+
+.page-link {
+  padding: 0 5px;
+  text-decoration: none;
+  border: 1px solid black;
+  color: black;
+}
+
+.page-link:hover {
+  background-color: #0ed450;
+}
+
+
+.flex-row {
+  flex-direction: row;
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+  display: flex;
+}
+
+.flex-body {
+  display: flex;
+}
+
+.flex-body div:not([class*="flex"]) {
+  border: 1px solid white;
+  flex: 1 1 200px;
+  width: 300px;
 }

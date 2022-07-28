@@ -8,11 +8,11 @@ const ItemUsuario = (props) => {
 
     return (
             <div>
-                <p>• Nombre de usuario: {username}</p>
+                <h4>• Nombre de usuario: {username}</h4>
                 <ul>
-                    <h4>Roles:</h4>
+                    <p>Roles:</p>
                     {roles.map((item, index) => (
-                        <li key={index}>{item.authority}</li>
+                        <li key={index}> - {item.authority}</li>
                     ))}
                 </ul>
             </div>

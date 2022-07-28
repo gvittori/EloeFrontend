@@ -2,22 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import ItemSecciones from './ItemSecciones';
 import { useLocalState } from '../util/useLocalStorage';
+import { decode } from '../util/decode';
 
 const Secciones = ({ history }) => {
   const [inactivo, setInactivo] = useState(true);
+  const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
 
   const btnLogout = () => {
-    localStorage.setItem('username', '""');
     localStorage.setItem('jwt', '""');
-    localStorage.setItem('roles', '""');
     return <Redirect to='/Login' />
   };
 
-  const decode = (token) => {
-    var base64Url = token.split('.')[1];
-    var base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(window.atob(base64));
-  };
+
 
   const checkDisponible = (disponible) => {
     const array = decode(localStorage.getItem('jwt').slice(1, -1)).roles;
@@ -50,6 +46,10 @@ const Secciones = ({ history }) => {
           <button onClick={() => setInactivo(!inactivo)} className="iconoIzquierda">
             <i className="bi bi-arrow-left-circle"></i>
           </button>
+        </div>
+        <hr className="lineaTop"></hr>
+        <div className={`menuText ${inactivo ? "inactivo" : ""}`}>
+          <p>Logeado como: {usuario}</p>
         </div>
         <hr className="lineaTop"></hr>
         <div className="listado">

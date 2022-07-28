@@ -1,13 +1,13 @@
 import React, { useState, useEffect, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import  Select from 'react-select'
-
+import { decode } from '../util/decode';
 
 
 const RegistroRoles = ({ history }) => {
   const [authority, setAuthority] = useState('');
   const [mensajeError, setMensajeError] = useState('');
-  
+
 
   const handleChangeAuthority = ({ target: { value } }) => {
     setAuthority(value);
@@ -17,14 +17,15 @@ const RegistroRoles = ({ history }) => {
 
 
   const btnRegistrar = () => {
-
+    const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
     setMensajeError('');
     if(authority.length == 0){
         setMensajeError(`Error: Ingrese nombre de rol`);
     } 
     else {
         const reqBody = {
-            authority
+            authority,
+            usuario
         };
         fetch('/api/roles/create', {
           method: 'POST',

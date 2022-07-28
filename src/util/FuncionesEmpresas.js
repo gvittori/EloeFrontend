@@ -1,6 +1,12 @@
 import { withRouter, useHistory } from 'react-router-dom';
+import { decode } from '../util/decode';
 
 async function Eliminar(empresaNombre) {
+    const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
+    const reqBody ={
+        empresaNombre,
+        usuario
+    }
     if (window.confirm("Eliminar empresa?")) {
         const ok = await fetch('/api/empresas/delete', {
             method: 'POST',
@@ -10,7 +16,7 @@ async function Eliminar(empresaNombre) {
                 'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(empresaNombre).slice(1, -1)
+            body: JSON.stringify(reqBody)
         }).then(res => {
             if (!res.ok) {
                 return res.text().then(text => { throw new Error(text) })

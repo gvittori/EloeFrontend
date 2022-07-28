@@ -7,7 +7,7 @@ const DatosClientes = ({ history }) => {
     return (
       <>
         <div className="seccion">
-          <div className="item">
+          <div className="flex-column">
             <h3>Datos Clientes</h3>
             <hr/>
             <InfoEmpresas/>

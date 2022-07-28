@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import  Select from 'react-select'
+import { decode } from '../util/decode';
 
 
 
@@ -28,6 +29,7 @@ const RegistroUsuarios = ({ history }) => {
         });
     }, []);
 
+
   const handleChangeUsername = ({ target: { value } }) => {
     setUsername(value);
   };
@@ -45,7 +47,7 @@ const RegistroUsuarios = ({ history }) => {
 
 
   const btnRegistrar = () => {
-
+    const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
     setMensajeError('');
     if(username.length == 0){
         setMensajeError(`Error: Ingrese nombre de usuario`);
@@ -59,7 +61,8 @@ const RegistroUsuarios = ({ history }) => {
         const reqBody = {
             username,
             password,
-            roles
+            roles,
+            usuario
         };
         fetch('/api/usuarios/create', {
           method: 'POST',

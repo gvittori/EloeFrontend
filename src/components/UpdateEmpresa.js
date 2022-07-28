@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useHistory, useLocation } from "react-router-dom";
+import { decode } from '../util/decode';
 
 
 
@@ -8,13 +9,18 @@ import { useHistory, useLocation } from "react-router-dom";
 const UpdateEmpresa = () => {
     const location = useLocation();
     const history = useHistory();
-    const empresa = JSON.parse(location.state.empresa);
+    //const empresa = JSON.parse(location.state.empresa);
+    const [empresa,setEmpresa] = useState(
+        location.state ? JSON.parse(location.state.empresa) : ''
+      );
+    
 
     const [nombreUpdate, setNombre] = useState(empresa.empresaNombre);
     const [emailUpdate, setEmail] = useState(empresa.empresaMail);
     const [cnpjUpdate, setCnpj] = useState(empresa.empresaCnpj);
     const [tazaUpdate, setTaza] = useState(empresa.tazaClicks);
     const [mensajeError, setMensajeError] = useState('');
+
 
     const handleChangeNombre = ({ target: { value } }) => {
         setNombre(value);
@@ -34,13 +40,15 @@ const UpdateEmpresa = () => {
 
 
     const btnUpdate = () => {
+        const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
         setMensajeError('');
         const reqBody = {
             nombre: empresa.empresaNombre,
             nombreUpdate,
             emailUpdate,
             cnpjUpdate,
-            tazaUpdate
+            tazaUpdate,
+            usuario
         };
         fetch('/api/empresas/update', {
             method: 'PUT',
@@ -69,6 +77,9 @@ const UpdateEmpresa = () => {
 
 
     };
+    
+    if(!location.state) return history.push("/");
+
 
     return (
         <>

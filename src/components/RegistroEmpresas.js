@@ -1,6 +1,7 @@
 import React, { useState, useEffect, Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import  Select from 'react-select'
+import  Select from 'react-select';
+import { decode } from '../util/decode';
 
 
 
@@ -31,7 +32,7 @@ const RegistroEmpresas = ({ history }) => {
 
 
   const btnRegistrar = () => {
-
+    const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
     setMensajeError('');
     if(empresaNombre.length == 0){
         setMensajeError(`Error: Ingrese nombre de empresa`);
@@ -50,7 +51,8 @@ const RegistroEmpresas = ({ history }) => {
             empresaNombre,
             empresaMail,
             empresaCnpj,
-            tazaClicks
+            tazaClicks,
+            usuario
         };
         fetch('/api/empresas/create', {
           method: 'POST',

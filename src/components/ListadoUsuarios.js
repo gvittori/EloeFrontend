@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ItemUsuario from './ItemUsuario';
 import { useLocalState } from '../util/useLocalStorage';
 import { withRouter } from 'react-router-dom';
+import { decode } from '../util/decode';
 
 const ListadoUsuarios = ({ history }) => {
     const disponible = "TODOS";
@@ -35,13 +36,6 @@ const ListadoUsuarios = ({ history }) => {
 
     }, []);
 
-    const decode = (token) => {
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace('-', '+').replace('_', '/');
-        return JSON.parse(window.atob(base64));
-    };
-
-
     const checkNombre = (username) => {
         if (decode(localStorage.getItem('jwt').slice(1, -1)).sub === username) {
             return true;
@@ -73,8 +67,12 @@ const ListadoUsuarios = ({ history }) => {
     }
 
     const eliminar = (username) => {
+        const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
+        const reqBody = {
+            username,
+            usuario
+        }
         if (window.confirm("Eliminar usuario?")) {
-            //console.log(JSON.stringify(username).slice(1,-1));
             fetch('/api/usuarios/delete', {
                 method: 'POST',
                 withCredentials: true,
@@ -83,7 +81,7 @@ const ListadoUsuarios = ({ history }) => {
                     'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(username).slice(1, -1)
+                body: JSON.stringify(reqBody)
             }).then(res => {
                 if (!res.ok) {
                     return res.text().then(text => { throw new Error(text) })
@@ -106,25 +104,25 @@ const ListadoUsuarios = ({ history }) => {
 
 
     return (
-        <>{listado.length>0?<div className="listaUsuarios">
-        <h3>Listado de usuarios</h3>
-        <ul>
-            {listado.map((item, index) => (
-                !checkNombre(item.username) ?
-                    (<li key={index}>
-                        <ItemUsuario
-                            username={item.username}
-                            roles={item.roles} />
-                        <button onClick={() => actualizar(item.username, item.roles)}>Actualizar datos</button>
-                        <button onClick={() => eliminar(item.username)}>Eliminar usuario</button>
-                        <hr />
-                    </li>
-                    ) : null
-            ))
-            }
-        </ul>
-    </div>:<div><p>Cargando...</p></div>}
-            
+        <>{listado.length > 0 ? <div className="listaUsuarios">
+            <h3>Listado de usuarios</h3>
+            <ul>
+                {listado.map((item, index) => (
+                    !checkNombre(item.username) ?
+                        (<li key={index}>
+                            <ItemUsuario
+                                username={item.username}
+                                roles={item.roles} />
+                            <button onClick={() => actualizar(item.username, item.roles)}>Actualizar datos</button>
+                            <button onClick={() => eliminar(item.username)}>Eliminar usuario</button>
+                            <hr />
+                        </li>
+                        ) : null
+                ))
+                }
+            </ul>
+        </div> : <div><p>Cargando...</p></div>}
+
         </>
     );
 

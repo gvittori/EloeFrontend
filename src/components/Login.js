@@ -13,7 +13,7 @@ const Login = () => {
   const [jwt, setJwt] = useLocalState("", "jwt");
 
   useEffect(() => {
-    if (!jwt.length == 0) {
+    if (jwt.length !== 0) {
       history.push('/');
     }
   }, []);
@@ -47,7 +47,6 @@ const Login = () => {
             Promise.all([res.json(), res.headers])
               .then(([body, headers]) => {
                 setJwt(headers.get("authorization"));
-                //history.push(from, { replace: true });
                 history.push("/");
               });
           }

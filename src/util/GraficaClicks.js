@@ -62,6 +62,7 @@ const GraficaClicks = ({listado}) => {
         <>{listado.length>0
             ? <div className='header'>
                 <h3 className='title'>Total de clicks por empresa</h3>
+                <hr/>
                 <Bar data={data} /*options={options}*/ />
                 <hr />
             </div>
