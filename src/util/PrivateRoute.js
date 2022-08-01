@@ -16,15 +16,17 @@ const PrivateRoute = ({ children, allowedRoles }) => {
                 if (contieneRol(roles, allowedRoles)) {
                     return children
                 } else {
-                    return <Redirect to="/" />
+                    localStorage.setItem('jwt', '""');
+                    alert("Permisos de rol no implementados. Redireccionando a Login");
+                    return <Redirect to="/Login" />
                 }
             }
         }   
     }
     return <Redirect to="/Login" />
 
-    /*
-    if (jwt.length > 0) {
+    
+    /*if (jwt.length > 0) {
         var tokenDecodificado = decode(jwt);
         if (tokenDecodificado !== null) {
             var val = esVencido(tokenDecodificado);
@@ -33,7 +35,10 @@ const PrivateRoute = ({ children, allowedRoles }) => {
                 if (contieneRol(roles, allowedRoles)) {
                     return children
                 } else {
-                    return <Redirect to="/" />
+                    asyncLocalStorage.setItem('jwt', '""').then(function () {
+                        alert("Permisos de rol no implementados. Redireccionando a Login");
+                        history.push("/Login")
+                    });
                 }
             }else{
                 asyncLocalStorage.setItem('jwt', '""').then(function () {history.push("/Login")});

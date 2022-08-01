@@ -1,14 +1,14 @@
 import { withRouter, useHistory } from 'react-router-dom';
 import { decode } from '../util/decode';
 
-async function Eliminar(empresaNombre) {
+async function Eliminar(username) {
     const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
     const reqBody ={
-        empresaNombre,
+        username,
         usuario
     }
-    if (window.confirm("Eliminar empresa?")) {
-        const ok = await fetch('/api/empresas/delete', {
+    if (window.confirm("Eliminar usuario?")) {
+        const ok = await fetch('/api/usuarios/delete', {
             method: 'POST',
             withCredentials: true,
             credentials: 'include',
@@ -29,13 +29,13 @@ async function Eliminar(empresaNombre) {
                 alert(err.toString());
             });
         const data = await ok.json();
-        alert("Empresa eliminada...")
+        alert("Usuario eliminado.");
         return data;
     }
 }
 
 async function Obtener() {
-    const res = fetch('/api/empresas', {
+    const res = fetch('/api/usuarios', {
         method: 'GET',
         withCredentials: true,
         credentials: 'include',
@@ -50,14 +50,14 @@ async function Obtener() {
     return res;
 }
 
-const Actualizar = (empresa, history) => {
+const Actualizar = (usuario, history) => {
     //const history = useHistory();
-    var empresa = {
-        ...empresa
+    var usuario = {
+        ...usuario
     }
     history.push({
-        pathname: '/UpdateEmpresa',
-        state: { empresa: JSON.stringify(empresa) }
+        pathname: '/UpdateUsuario',
+        state: { usuario: JSON.stringify(usuario) }
     });
 }
 

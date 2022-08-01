@@ -45,7 +45,7 @@ const InfoEmpresas = ({ history }) => {
         return funciones.default.Actualizar(empresa, history);
     }
     const eliminar = (empresaNombre) => {
-        funciones.default.Eliminar(empresaNombre).then(result => setOk(result)).then(alert("Eliminando empresa..."))
+        funciones.default.Eliminar(empresaNombre).then(result => setOk(result));
         /*if(funciones.default.Eliminar(empresaNombre)){
             handleChangeListado(empresaNombre);
         }  */

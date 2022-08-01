@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import ListadoUsuarios from './ListadoUsuarios';
 import { default as LogAcciones } from '../components/LogAcciones'
+import InfoUsuarios from './InfoUsuarios';
 
 const DatosUsuarios = ({ history }) => {
   const [listado, setListado] = useState([]);
@@ -42,7 +43,8 @@ const DatosUsuarios = ({ history }) => {
         <div className="item">
           <h3>Datos Usuarios</h3>
           <hr />
-          <ListadoUsuarios history={history} usuarios={listado} />
+          <InfoUsuarios/>
+          {/*<ListadoUsuarios history={history} usuarios={listado} />*/}
         </div>
         <div> 
           <LogAcciones/>
