@@ -9,13 +9,14 @@ import { decode } from '../util/decode';
 
 const UpdateUsuario = ({ history }) => {
     const location = useLocation();
-    const [usr,setUsr] = useState(
+    const [usr, setUsr] = useState(
         location.state ? JSON.parse(location.state.usuario) : ''
-      );
+    );
 
     const [usernameUpdate, setUsername] = useState(usr.username);
     const [passwordUpdate, setPassword] = useState('');
     const [roles, setRoles] = useState(usr.roles);
+    const [rolesUpdate, setRolesUpdate] = useState([]);
     const [mensajeError, setMensajeError] = useState('');
     const [listaRoles, setListaRoles] = useState([]);
 
@@ -59,7 +60,7 @@ const UpdateUsuario = ({ history }) => {
                 password: "",
                 usernameUpdate,
                 passwordUpdate,
-                roles,
+                rolesUpdate,
                 usuario
             };
             fetch('/api/usuarios/update', {
@@ -90,7 +91,20 @@ const UpdateUsuario = ({ history }) => {
 
     };
 
-    if(!location.state) return history.push("/");
+    const checkClick = (item) => {
+        if (!rolesUpdate.includes(item)) {
+            rolesUpdate.push(item);
+        } else {
+            setRolesUpdate(current =>
+                current.filter(rol => {
+                    return rol !== item;
+                }),
+            );
+        }
+    }
+
+
+    if (!location.state) return history.push("/");
 
     return (
         <>
@@ -99,13 +113,26 @@ const UpdateUsuario = ({ history }) => {
                 <label htmlFor="txtUsu"><b>Nombre de usuario</b></label>
                 <input className="texto" type="text" onChange={handleChangeUsername} value={usernameUpdate}
                     name="txtUsu" />
+                <label htmlFor="txtPass"><b>Contraseña</b></label>
+                <input className="texto" type="password" onChange={handleChangePassword}
+                    name="txtPass" />
                 <label htmlFor="slcTipo"><b>Tipo de usuario</b></label>
-                <select className='select' name="slcTipo" onChange={handleChangeRoles} value={JSON.stringify(roles[0])}>
+                <p>• Roles actuales:</p>
+                {roles.map((item, index) => (
+                    <li key={index}> - {item.authority}</li>
+                ))}
+                {listaRoles.length > 0 ? listaRoles.map((item, index) => (
+                    <div key={index} >
+                        <label htmlFor={item.authority}>{item.authority} - </label>
+                        <input type="checkbox" onClick={() => checkClick(item)} id={item.authority} />
+                    </div>
+                )) : <p>Cargando roles...</p>}
+                {/*<select className='select'name="slcTipo" onChange={handleChangeRoles} defaultValue={'Default'}>
                     <option value="Default" disabled>Seleccione un rol</option>
                     {listaRoles.map((item, index) => (
-                        <option key={index} value={JSON.stringify(item)}>{item.authority}</option>
+                    <option key={index} value={JSON.stringify(item)}>{item.authority}</option>
                     ))}
-                </select>
+                    </select>                        {console.log(roles.includes(item))}*/}
                 <input type="button" value="Actualizar" onClick={btnUpdate} className="btnRegistro" />
                 <p className="mensaje-error">{mensajeError}</p>
             </div>

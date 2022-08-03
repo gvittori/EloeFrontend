@@ -39,7 +39,7 @@ const InfoUsuarios = ({ history }) => {
                         username={usuario.username}
                         roles={usuario.roles} />
                     <button onClick={() => actualizar(usuario)}>Actualizar datos</button>
-                    <button onClick={() => eliminar(usuario.username)}>Eliminar usuario</button>
+                    <button onClick={() => eliminar(usuario.username)}>Deshabilitar usuario</button>
                     <hr />
                 </>)
         }

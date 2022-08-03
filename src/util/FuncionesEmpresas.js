@@ -29,7 +29,7 @@ async function Eliminar(empresaNombre) {
                 alert(err.toString());
             });
         const data = await ok.json();
-        alert("Empresa eliminada...")
+        alert("Empresa deshabilitada...")
         return data;
     }
 }

@@ -24,7 +24,11 @@ const ItemUsuario = (props) => {
             else {
                 Promise.all([res.json()])
                     .then(([body]) => {
-                        setUltima(body);
+                        if(body.length>0){
+                            setUltima(body[0]);
+                        } else {
+                            setUltima(null);
+                        }
                     });
             }
         })

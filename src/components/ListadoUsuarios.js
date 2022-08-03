@@ -114,7 +114,7 @@ const ListadoUsuarios = ({ history }) => {
                                 username={item.username}
                                 roles={item.roles} />
                             <button onClick={() => actualizar(item.username, item.roles)}>Actualizar datos</button>
-                            <button onClick={() => eliminar(item.username)}>Eliminar usuario</button>
+                            <button onClick={() => eliminar(item.username)}>Deshabilitar usuario</button>
                             <hr />
                         </li>
                         ) : null

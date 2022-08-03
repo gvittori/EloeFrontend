@@ -106,7 +106,7 @@ const InfoEmpresas = ({ history }) => {
                         anual={empresa.totalAnual}
                     />
                     <button onClick={() => actualizar(empresa)}>Actualizar datos</button>
-                    <button onClick={() => eliminar(empresa.empresaNombre)}>Eliminar empresa</button>
+                    <button onClick={() => eliminar(empresa.empresaNombre)}>Deshabilitar empresa</button>
                     <hr />
                     <h3>Clicks generados</h3>
                     {empresa.clicks.length > 0

@@ -29,7 +29,7 @@ async function Eliminar(username) {
                 alert(err.toString());
             });
         const data = await ok.json();
-        alert("Usuario eliminado.");
+        alert("Usuario deshabilitado.");
         return data;
     }
 }
