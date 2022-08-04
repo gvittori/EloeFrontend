@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import InfoEmpresas from './InfoEmpresas';
+import InfoFacturas from './InfoFacturas';
 
 const DatosClientes = ({ history }) => {
   
@@ -9,9 +10,12 @@ const DatosClientes = ({ history }) => {
         <div className="seccion">
           <div className="flex-column">
             <h3>Datos Clientes</h3>
-            <hr/>
+          </div>
+          <hr/>
+          <div className='flex-row'>
             <InfoEmpresas/>
           </div>
+          
         </div>
       </>
     );

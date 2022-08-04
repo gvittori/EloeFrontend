@@ -34,7 +34,7 @@ body {
 .titulo {
   background-color: #0ed450;
   min-height: 100px;
-  width: 100%;
+  min-width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -172,6 +172,7 @@ hr.lineaTop {
   color: rgb(31, 32, 30);
 }
 
+
 .menuSecciones .listado .itemListado span {
   position: absolute;
   display: inline-block;
@@ -187,6 +188,7 @@ hr.lineaTop {
   width: 0;
   overflow: hidden;
 }
+
 
 
 .menuSecciones .listado .itemListado .iconoListado {
@@ -205,6 +207,7 @@ hr.lineaTop {
   max-width: 100%;
   margin-bottom: 16px;
   background-color: transparent;
+  text-align: center;
 }
 
 .table thead tr th {
@@ -261,6 +264,7 @@ hr.lineaTop {
   margin: 5px;
 }
 
+
 .page-link {
   padding: 0 5px;
   text-decoration: none;
@@ -269,6 +273,10 @@ hr.lineaTop {
 }
 
 .page-link:hover {
+  background-color: #0ed450;
+}
+
+.page-link.active{
   background-color: #0ed450;
 }
 

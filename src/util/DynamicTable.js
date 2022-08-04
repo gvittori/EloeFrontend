@@ -10,21 +10,30 @@ function DynamicTable({ TableData, reset }) {
   useMemo(() => {
     if (sortedConfig !== null) {
       sortedItems.sort((a, b) => {
-        if (sortedConfig.direction === "asc") {
-          return a[sortedConfig.key].localeCompare(b[sortedConfig.key]);
+        if (isNaN(+a[sortedConfig.key])) {
+          if (sortedConfig.direction === "asc") {
+            return a[sortedConfig.key].localeCompare(b[sortedConfig.key]);
+          } else {
+            return b[sortedConfig.key].localeCompare(a[sortedConfig.key]);
+          }
         } else {
-          return b[sortedConfig.key].localeCompare(a[sortedConfig.key]);
+          if (sortedConfig.direction === "asc") {
+            return a[sortedConfig.key] - b[sortedConfig.key];
+          } else {
+            return b[sortedConfig.key] - a[sortedConfig.key];
+          }
         }
+
       });
       return sortedItems;
     }
   }, [sortedItems, sortedConfig]);
 
-  useEffect(()=>{
-    if(TableData.length<=itemsPerPage){
+  useEffect(() => {
+    if (TableData.length <= itemsPerPage) {
       setCurrentPage(1);
     }
-  },[TableData])
+  }, [TableData])
 
   // get table column
   const column = Object.keys(sortedItems[0]);
@@ -67,17 +76,26 @@ function DynamicTable({ TableData, reset }) {
     setSortedConfig({ key, direction });
   }
 
+  const pageNumbers = [];
+  for (let i = 1; i <= Math.ceil(TableData.length / itemsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = sortedItems.slice(indexOfFirstItem, indexOfLastItem);
 
-  const paginate = (pageNumber) => {setCurrentPage(pageNumber)};
+  const paginate = (pageNumber) => { setCurrentPage(pageNumber) };
+  const paginateFront = () => { setCurrentPage(currentPage+1<=pageNumbers.length?currentPage+1:currentPage)};
+  const paginateBack = () => { setCurrentPage(currentPage-1>0?currentPage-1:currentPage)};
 
-  
+
 
   return (
     <>
-      {sortedItems !== null ? <>
+      {sortedItems !== null ? 
+      <>
         <table className="table">
           <thead>
             <tr>{ThData()}</tr>
@@ -86,7 +104,7 @@ function DynamicTable({ TableData, reset }) {
             {tdData()}
           </tbody>
         </table>
-        <Pagination itemsPerPage={itemsPerPage} totalItems={TableData.length} paginate={paginate} />
+        <Pagination currentPage={currentPage} pageNumbers={pageNumbers} paginate={paginate} adelante={paginateFront} atras={paginateBack} />
       </>
         : <p>Cargando...</p>}
 

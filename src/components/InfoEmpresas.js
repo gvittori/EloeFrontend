@@ -5,6 +5,7 @@ import GraficaMeses from '../util/GraficaMeses';
 import ItemEmpresa from './ItemEmpresa';
 import * as funciones from '../util/FuncionesEmpresas.js'
 import { default as DynamicTable } from '../util/DynamicTable.js'
+import InfoFacturas from './InfoFacturas';
 
 const InfoEmpresas = ({ history }) => {
     const [listado, setListado] = useState([]);
@@ -134,7 +135,8 @@ const InfoEmpresas = ({ history }) => {
 
     return (
         <>
-            <div>
+            <div className='flex-column'>
+            <InfoFacturas/>
                 <div>
                     <p>Información de empresas</p>
                     <hr />
