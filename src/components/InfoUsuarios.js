@@ -47,22 +47,20 @@ const InfoUsuarios = ({ history }) => {
 
     return (
         <>
-            <div>
-                <div>
-                    <p>Información de usuarios</p>
-                    <hr />
-                    <label htmlFor="slcTipo"><b>Listado de usuarios: </b></label>
-                    {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={'Default'}>
-                        <option value="Default" disabled>Seleccione un usuario</option>
-                        {listado.map((item, index) => (
-                            <option key={index} value={JSON.stringify(item)}>{item.username}</option>
-                        ))}
-                    </select> : <div><p>Cargando usuarios...</p></div>}
+            <div className='seccion'>
+                <h3>Información de usuarios</h3>
+                <hr />
+                <label htmlFor="slcTipo"><b>Listado de usuarios: </b></label>
+                {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={'Default'}>
+                    <option value="Default" disabled>Seleccione un usuario</option>
+                    {listado.map((item, index) => (
+                        <option key={index} value={JSON.stringify(item)}>{item.username}</option>
+                    ))}
+                </select> : <div><p>Cargando usuarios...</p></div>}
 
-                    <hr />
-                    {verUsuario()}
+                <hr />
+                {verUsuario()}
 
-                </div>
             </div>
         </>
     );

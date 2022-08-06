@@ -29,14 +29,16 @@ const InfoFacturas = () => {
 
     return (
         <>
-        <div className='flex-column'>
-            <h3>Listado de facturas</h3>
-            <hr />
-            {facturas.length>0?
-            <div>
-                <DynamicTable TableData={facturas}/>
-            </div>:<p>Cargando...</p>}
-        </div>
+            <div className='seccion'>
+                <div className='flex-column'>
+                    <h3>Listado de facturas</h3>
+                    <hr />
+                    {facturas.length > 0 ?
+                        <div>
+                            <DynamicTable TableData={facturas} />
+                        </div> : <p>Cargando...</p>}
+                </div>
+            </div>
         </>
     )
 

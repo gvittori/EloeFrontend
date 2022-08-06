@@ -15,7 +15,6 @@ const DatosClientes = ({ history }) => {
           <div className='flex-row'>
             <InfoEmpresas/>
           </div>
-          
         </div>
       </>
     );

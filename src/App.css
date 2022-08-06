@@ -104,8 +104,9 @@ body {
   padding: 10px 15px;
   white-space: nowrap;
   transition: width .2s ease-in;
-  
+
 }
+
 .menuSecciones.inactivo {
   width: 65px;
 }
@@ -165,11 +166,13 @@ hr.lineaTop {
 .menuSecciones .listado .itemListado:hover {
   background-color: #0ed450;
   color: rgb(31, 32, 30);
+  font-weight:700;
 }
 
 .menuSecciones .listado .itemListado.active {
   background-color: #0ed450;
   color: rgb(31, 32, 30);
+  font-weight:700;
 }
 
 
@@ -199,6 +202,75 @@ hr.lineaTop {
   height: 35px;
   width: 35px;
   cursor: pointer;
+}
+
+.menuSecciones .listado .itemListado .iconoListadoDerecha {
+  display: inline-block;
+  font-size: 20px;
+  line-height: 37px;
+  text-align: center;
+  height: 35px;
+  width: 35px;
+  cursor: pointer;
+  padding-left: 100px;
+  transition: opacity .2s ease-in;
+}
+
+.menuSecciones.inactivo .listado .itemListado .iconoListadoDerecha {
+  opacity: 0;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+
+.menuSecciones .listado .subMenu {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .2s ease-in;
+}
+
+.menuSecciones .listado .subMenu a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: #0ed450;
+  border-left: 1px solid #0ed450;
+  padding-left: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  display: flex;
+}
+
+
+.menuSecciones .listado .subMenu a:hover {
+  color: #161a1f;
+  background-color: #0ed450;
+  border-end-end-radius: 3px;
+  border-start-end-radius: 3px;
+  font-weight:700;
+}
+
+.menuSecciones .listado .subMenu a.active {
+  color: #161a1f;
+  background-color: #0ed450;
+  border-end-end-radius: 3px;
+  border-start-end-radius: 3px;
+  border-left: 2px solid #161a1f;
+  font-weight:700;
+}
+
+.menuSecciones .listado .subMenu.expanded {
+  color: #0ed450;
+  max-height: 100vh;
+  border: 0;
+}
+
+.menuSecciones.inactivo .listado .subMenu {
+  opacity: 0;
+  height: 0;
+  width: 0;
+  display: none;
+  overflow: hidden;
 }
 
 
@@ -243,7 +315,7 @@ hr.lineaTop {
   transition: opacity .2s ease-in;
 }
 
-.menuText.inactivo{
+.menuText.inactivo {
   overflow: hidden;
   background-color: #0ed450;
 }
@@ -276,7 +348,7 @@ hr.lineaTop {
   background-color: #0ed450;
 }
 
-.page-link.active{
+.page-link.active {
   background-color: #0ed450;
 }
 

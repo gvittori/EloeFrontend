@@ -27,7 +27,7 @@ const InfoEmpresas = ({ history }) => {
         setBusqueda(value);
     }
 
-    const setClicks = (clicks) =>{
+    const setClicks = (clicks) => {
         empresa.clicks = clicks;
     }
 
@@ -135,22 +135,23 @@ const InfoEmpresas = ({ history }) => {
 
     return (
         <>
-            <div className='flex-column'>
-            <InfoFacturas/>
-                <div>
-                    <p>Información de empresas</p>
-                    <hr />
-                    <label htmlFor="slcTipo"><b>Listado de empresas: </b></label>
-                    {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={'Default'}>
-                        <option value="Default" disabled>Seleccione una empresa</option>
-                        {listado.map((item, index) => (
-                            <option key={index} value={JSON.stringify(item)}>{item.empresaNombre}</option>
-                        ))}
-                    </select> : <div><p>Cargando empresas...</p></div>}
+            <div className='seccion'>
+                <div className='flex-column'>
+                    <div>
+                        <h3>Información de empresas</h3>
+                        <hr />
+                        <label htmlFor="slcTipo"><b>Listado de empresas: </b></label>
+                        {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={'Default'}>
+                            <option value="Default" disabled>Seleccione una empresa</option>
+                            {listado.map((item, index) => (
+                                <option key={index} value={JSON.stringify(item)}>{item.empresaNombre}</option>
+                            ))}
+                        </select> : <div><p>Cargando empresas...</p></div>}
 
-                    <hr />
-                    {verEmpresa()}
+                        <hr />
+                        {verEmpresa()}
 
+                    </div>
                 </div>
             </div>
         </>

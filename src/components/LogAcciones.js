@@ -79,22 +79,26 @@ const LogAcciones = () => {
 
     return (
         <>
-            <h3>Log de acciones</h3>
-            <hr />
-            {acciones.length > 0 ?
-                <>
-                    <label htmlFor="slcFiltro">Buscar por: </label>
-                    <select id="slcFiltro" defaultValue="usuario" onChange={handleChangeFiltro}>
-                        <option value="usuario">Usuario</option>
-                        <option value="accion">Accion</option>
-                        <option value="sujeto">Sujeto</option>
-                    </select>
-                    <input type="text" onChange={handleChangeBusqueda}></input>
-                    <button onClick={() => buscar()}>Buscar</button>
-                    <p className="mensaje-error">{mensajeError}</p>
-                    <hr />
-                    <DynamicTable TableData={acciones}/>
-                </> : <p>Cargando...</p>}
+            <div className='seccion'>
+                <h3>Log de acciones</h3>
+                <hr />
+                {acciones.length > 0 ?
+                    <>
+                        <div className='flex-row'>
+                            <label htmlFor="slcFiltro">Buscar por: </label>
+                            <select id="slcFiltro" defaultValue="usuario" onChange={handleChangeFiltro}>
+                                <option value="usuario">Usuario</option>
+                                <option value="accion">Accion</option>
+                                <option value="sujeto">Sujeto</option>
+                            </select>
+                            <input type="text" onChange={handleChangeBusqueda}></input>
+                            <button onClick={() => buscar()}>Buscar</button>
+                            <p className="mensaje-error">{mensajeError}</p>
+                        </div>
+                        <hr />
+                        <DynamicTable TableData={acciones} />
+                    </> : <p>Cargando...</p>}
+            </div>
         </>
     );
 }

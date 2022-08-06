@@ -27,13 +27,37 @@ const Secciones = ({ history }) => {
   }
   const itemsListado = [
     { nombre: "Home", icono: "bi bi-house", to: "/", exact: true, disponible: ["TODOS"] },
-    { nombre: "Registro", icono: "bi bi-person-plus", to: "/Registro", exact: true, disponible: ["ROLE_ADMIN", "ROLE_MANTENIMIENTO"] },
-    /*{ nombre: "Reportes", icono: "bi bi-clipboard2-data", to: "/Reportes", exact: true, disponible: ["TODOS"] },*/
-    { nombre: "Datos clientes", icono: "bi bi-people-fill", to: "/DatosClientes", exact: true, disponible: ["ROLE_ADMIN", "ROLE_MANTENIMIENTO"] },
-    { nombre: "Datos usuarios", icono: "bi bi-person-badge", to: "/DatosUsuarios", exact: true, disponible: ["ROLE_ADMIN"] },
+    {
+      nombre: "Registro", icono: "bi bi-person-plus", to: "", exact: true, disponible: ["ROLE_ADMIN", "ROLE_MANTENIMIENTO"],
+      subMenus: [
+        { nombre: "Usuarios", to: "/Registro/Usuarios" },
+        { nombre: "Empresas", to: "/Registro/Empresas" },
+        { nombre: "Roles", to: "/Registro/Roles" },
+      ],
+    },
+    {
+      nombre: "Datos clientes", icono: "bi bi-people-fill", to: "", exact: true, disponible: ["ROLE_ADMIN", "ROLE_MANTENIMIENTO"],
+      subMenus: [
+        { nombre: "Información", to: "/Clientes/Info" },
+        { nombre: "Lista de facturas", to: "/Clientes/Facturas" },
+      ],
+    },
+    {
+      nombre: "Datos usuarios", icono: "bi bi-person-badge", to: "", exact: true, disponible: ["ROLE_ADMIN"],
+      subMenus: [
+        { nombre: "Información", to: "/Usuarios/Info" },
+        { nombre: "Lista de acciones", to: "/Usuarios/Acciones" },
+      ],
+    },
     { nombre: "Configuración", icono: "bi bi-gear", to: "/Configuracion", exact: true, disponible: ["TODOS"] },
     { nombre: "Logout", icono: "bi bi-box-arrow-right", to: "/Login", exact: true, click: btnLogout, disponible: ["TODOS"] }
   ]
+
+  const listItemSetInactivo = () => {
+    if(inactivo){
+      setInactivo(false);
+    }
+  }
 
 
   return (
@@ -62,7 +86,10 @@ const Secciones = ({ history }) => {
                   icono={item.icono}
                   to={item.to}
                   exact={item.exact}
-                  onClick={item.click} />) : null
+                  onClick={item.click}
+                  subMenus={item.subMenus}
+                  inactivo={inactivo}
+                  open={listItemSetInactivo}/>) : null
             ))}
           </ul>
         </div>

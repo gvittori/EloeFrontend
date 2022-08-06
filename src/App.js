@@ -13,8 +13,14 @@ import Secciones from './components/Secciones';
 import PrivateRoute from './util/PrivateRoute';
 import UpdateUsuario from './components/UpdateUsuario';
 import UpdateEmpresa from './components/UpdateEmpresa';
-import InfoEmpresas from './components/InfoEmpresas';
 import Registros from './components/Registros';
+import RegistroUsuarios from './components/RegistroUsuarios';
+import RegistroEmpresas from './components/RegistroEmpresas';
+import RegistroRoles from './components/RegistroRoles';
+import InfoEmpresas from './components/InfoEmpresas';
+import InfoFacturas from './components/InfoFacturas';
+import { default as LogAcciones } from './components/LogAcciones'
+import InfoUsuarios from './components/InfoUsuarios';
 import { useSiteTracking } from "react-event-tracker";
 
 const trackingConfig = {
@@ -67,12 +73,24 @@ const App = () => {
               </Route>
 
               <Route path={"/Login"} exact><Login /></Route>
-              <Route path={"/Registro"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><Registros/></PrivateRoute></Route>
-              {/*<Route path={"/Reportes"} exact><PrivateRoute allowedRoles={roles1}><Secciones /><Reportes /></PrivateRoute></Route>*/}
-              <Route path={"/DatosClientes"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><DatosClientes /></PrivateRoute></Route>
-              <Route path={"/DatosUsuarios"} exact><PrivateRoute allowedRoles={roles3}><Secciones /><DatosUsuarios /></PrivateRoute></Route>
+              <Route path={"/Registro/Usuarios"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><RegistroUsuarios/></PrivateRoute></Route>
+
+              <Route path={"/Registro/Empresas"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><RegistroEmpresas/></PrivateRoute></Route>
+
+              <Route path={"/Registro/Roles"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><RegistroRoles/></PrivateRoute></Route>
+
+              <Route path={"/Clientes/Info"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><InfoEmpresas/></PrivateRoute></Route>
+
+              <Route path={"/Clientes/Facturas"} exact><PrivateRoute allowedRoles={roles3}><Secciones /><InfoFacturas/></PrivateRoute></Route>
+
+              <Route path={"/Usuarios/Info"} exact><PrivateRoute allowedRoles={roles3}><Secciones /><InfoUsuarios/></PrivateRoute></Route>
+
+              <Route path={"/Usuarios/Acciones"} exact><PrivateRoute allowedRoles={roles3}><Secciones /> <LogAcciones/></PrivateRoute></Route>
+
               <Route path={"/Configuracion"} exact><PrivateRoute allowedRoles={roles1}><Secciones /><Configuracion /></PrivateRoute></Route>
+
               <Route path={"/UpdateUsuario"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><UpdateUsuario /></PrivateRoute></Route>
+
               <Route path={"/UpdateEmpresa"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><UpdateEmpresa /></PrivateRoute></Route>
             </Switch>
           </Router>
