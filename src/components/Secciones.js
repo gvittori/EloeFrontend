@@ -30,23 +30,23 @@ const Secciones = ({ history }) => {
     {
       nombre: "Registro", icono: "bi bi-person-plus", to: "", exact: true, disponible: ["ROLE_ADMIN", "ROLE_MANTENIMIENTO"],
       subMenus: [
-        { nombre: "Usuarios", to: "/Registro/Usuarios" },
-        { nombre: "Empresas", to: "/Registro/Empresas" },
-        { nombre: "Roles", to: "/Registro/Roles" },
+        { nombre: "Usuarios", to: "/RegistroUsuarios" },
+        { nombre: "Empresas", to: "/RegistroEmpresas" },
+        { nombre: "Roles", to: "/RegistroRoles" },
       ],
     },
     {
       nombre: "Datos clientes", icono: "bi bi-people-fill", to: "", exact: true, disponible: ["ROLE_ADMIN", "ROLE_MANTENIMIENTO"],
       subMenus: [
-        { nombre: "Información", to: "/Clientes/Info" },
-        { nombre: "Lista de facturas", to: "/Clientes/Facturas" },
+        { nombre: "Información", to: "/ClientesInfo" },
+        { nombre: "Lista de facturas", to: "/ClientesFacturas" },
       ],
     },
     {
       nombre: "Datos usuarios", icono: "bi bi-person-badge", to: "", exact: true, disponible: ["ROLE_ADMIN"],
       subMenus: [
-        { nombre: "Información", to: "/Usuarios/Info" },
-        { nombre: "Lista de acciones", to: "/Usuarios/Acciones" },
+        { nombre: "Información", to: "/UsuariosInfo" },
+        { nombre: "Lista de acciones", to: "/UsuariosAcciones" },
       ],
     },
     { nombre: "Configuración", icono: "bi bi-gear", to: "/Configuracion", exact: true, disponible: ["TODOS"] },

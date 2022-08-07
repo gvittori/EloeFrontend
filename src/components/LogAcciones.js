@@ -83,7 +83,7 @@ const LogAcciones = () => {
                 <h3>Log de acciones</h3>
                 <hr />
                 {acciones.length > 0 ?
-                    <>
+                    <div className='flex-column'>
                         <div className='flex-row'>
                             <label htmlFor="slcFiltro">Buscar por: </label>
                             <select id="slcFiltro" defaultValue="usuario" onChange={handleChangeFiltro}>
@@ -97,7 +97,7 @@ const LogAcciones = () => {
                         </div>
                         <hr />
                         <DynamicTable TableData={acciones} />
-                    </> : <p>Cargando...</p>}
+                    </div> : <p>Cargando...</p>}
             </div>
         </>
     );

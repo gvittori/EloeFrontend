@@ -94,7 +94,7 @@ const RegistroEmpresas = ({ history }) => {
         <input className="texto" type="text" placeholder="Ingrese Email de contacto..." onChange={handleChangeMail}
             name="txtMail"/>
         <label htmlFor="txtCnpj"><b>CNPJ</b></label>
-        <input className="texto" type="text" placeholder="Ingrese CNPJ" onChange={handleChangeCnpj}
+        <input className="texto" type="text" placeholder="Ej: 11122233304444" onChange={handleChangeCnpj}
             name="txtCnpj"/>
         <label htmlFor="txtTaza"><b>Taza por click</b></label>
         <input className="texto" type="number" placeholder="Ingrese taza por click..." onChange={handleChangeTazaClicks}

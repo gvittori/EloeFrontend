@@ -5,27 +5,31 @@ import { useHistory } from "react-router-dom";
 import { decode } from '../util/decode';
 
 
-const PrivateRoute = ({ children, allowedRoles }) => {
+const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
     const [jwt, setJwt] = useLocalState("", "jwt");
     const history = useHistory();
     if (jwt.length > 0) {
         var tokenDecodificado = decode(jwt);
-        if(tokenDecodificado !== null){
+        if (tokenDecodificado !== null) {
             if (!esVencido(tokenDecodificado)) {
                 var roles = tokenDecodificado.roles;
                 if (contieneRol(roles, allowedRoles)) {
                     return children
                 } else {
-                    localStorage.setItem('jwt', '""');
-                    alert("Permisos de rol no implementados. Redireccionando a Login");
-                    return <Redirect to="/Login" />
+                    if (homeValid(roles, homeRoles)) {
+                        return <Redirect to="/" />
+                    } else {
+                        localStorage.setItem('jwt', '""');
+                        alert("Permisos de rol no implementados. Redireccionando a Login");
+                        return <Redirect to="/Login" />
+                    }
                 }
             }
-        }   
+        }
     }
     return <Redirect to="/Login" />
 
-    
+
     /*if (jwt.length > 0) {
         var tokenDecodificado = decode(jwt);
         if (tokenDecodificado !== null) {
@@ -35,10 +39,14 @@ const PrivateRoute = ({ children, allowedRoles }) => {
                 if (contieneRol(roles, allowedRoles)) {
                     return children
                 } else {
-                    asyncLocalStorage.setItem('jwt', '""').then(function () {
-                        alert("Permisos de rol no implementados. Redireccionando a Login");
-                        history.push("/Login")
-                    });
+                    if (homeValid(roles, homeRoles)) {
+                        history.push("/");
+                    } else {
+                        asyncLocalStorage.setItem('jwt', '""').then(function () {
+                            alert("Permisos de rol no implementados. Redireccionando a Login");
+                            history.push("/Login")
+                        });
+                    }    
                 }
             }else{
                 asyncLocalStorage.setItem('jwt', '""').then(function () {history.push("/Login")});
@@ -86,6 +94,18 @@ const contieneRol = (roles, allowedRoles) => {
     var contiene = false;
     roles.forEach(rol => {
         allowedRoles.forEach(allowedRol => {
+            if (rol.authority === allowedRol) {
+                contiene = true;
+            }
+        });
+    });
+    return contiene;
+}
+
+const homeValid = (roles, homeRoles) => {
+    var contiene = false;
+    roles.forEach(rol => {
+        homeRoles.forEach(allowedRol => {
             if (rol.authority === allowedRol) {
                 contiene = true;
             }

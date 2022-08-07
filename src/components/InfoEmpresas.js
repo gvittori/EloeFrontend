@@ -111,8 +111,8 @@ const InfoEmpresas = ({ history }) => {
                     <hr />
                     <h3>Clicks generados</h3>
                     {empresa.clicks.length > 0
-                        ? <>
-                            <>
+                        ? <div className='flex-column'>
+                            <div className='flex-row'>
                                 <label htmlFor="slcFiltro">Buscar por: </label>
                                 <select id="slcFiltro" defaultValue={filtro} onChange={handleChangeFiltro}>
                                     {opcionesFiltro.map((item, index) => (
@@ -122,11 +122,11 @@ const InfoEmpresas = ({ history }) => {
                                 <input type="text" onChange={handleChangeBusqueda}></input>
                                 <button onClick={() => buscar()}>Buscar</button>
                                 <p className="mensaje-error">{mensajeError}</p>
-                                <hr />
-                            </>
+                            </div>
+                            <hr />
                             <DynamicTable TableData={listClicks} />
                             <GraficaMeses empresa={empresa} />
-                        </>
+                        </div>
                         : <h4>No existen clicks generados para esta empresa</h4>
                     }
                 </>)

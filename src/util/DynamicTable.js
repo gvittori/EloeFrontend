@@ -42,10 +42,22 @@ function DynamicTable({ TableData, reset }) {
   const ThData = () => {
 
     return column.map((data) => {
-      return <th key={data} >
-        <button type="button" onClick={() => requestSort(data)}>{data}</button>
+      return <th key={data} className="dynamicTh">
+        <span>{data.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ")}</span>
+        <button type="button" className="thButton" onClick={() => requestSort(data)}>
+          <i className={iconChange(data)}></i>
+        </button>
       </th>
     })
+  }
+
+  const iconChange = (data) =>{
+    if(sortedConfig&&sortedConfig.key===data){
+      if(sortedConfig.direction==="asc"){
+        return "bi bi-caret-up-fill";
+      }
+    }
+    return "bi bi-caret-down-fill";
   }
 
   // get table row data
@@ -87,25 +99,25 @@ function DynamicTable({ TableData, reset }) {
   const currentItems = sortedItems.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => { setCurrentPage(pageNumber) };
-  const paginateFront = () => { setCurrentPage(currentPage+1<=pageNumbers.length?currentPage+1:currentPage)};
-  const paginateBack = () => { setCurrentPage(currentPage-1>0?currentPage-1:currentPage)};
+  const paginateFront = () => { setCurrentPage(currentPage + 1 <= pageNumbers.length ? currentPage + 1 : currentPage) };
+  const paginateBack = () => { setCurrentPage(currentPage - 1 > 0 ? currentPage - 1 : currentPage) };
 
 
 
   return (
     <>
-      {sortedItems !== null ? 
-      <>
-        <table className="table">
-          <thead>
-            <tr>{ThData()}</tr>
-          </thead>
-          <tbody>
-            {tdData()}
-          </tbody>
-        </table>
-        <Pagination currentPage={currentPage} pageNumbers={pageNumbers} paginate={paginate} adelante={paginateFront} atras={paginateBack} />
-      </>
+      {sortedItems !== null ?
+        <>
+          <table className="table">
+            <thead>
+              <tr>{ThData()}</tr>
+            </thead>
+            <tbody>
+              {tdData()}
+            </tbody>
+          </table>
+          <Pagination currentPage={currentPage} pageNumbers={pageNumbers} paginate={paginate} adelante={paginateFront} atras={paginateBack} />
+        </>
         : <p>Cargando...</p>}
 
     </>

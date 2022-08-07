@@ -56,6 +56,7 @@ const App = () => {
       sessionStorage.setItem('tipo', null);
     }*/
   const { SiteTracking } = useSiteTracking(trackingConfig);
+  
   const roles1 = ["ROLE_ADMIN", "ROLE_USER", "ROLE_MANTENIMIENTO"];
   const roles2 = ["ROLE_ADMIN", "ROLE_MANTENIMIENTO"];
   const roles3 = ["ROLE_ADMIN"];
@@ -69,29 +70,32 @@ const App = () => {
         <div className="App-content">
           <Router>
             <Switch>
-              <Route path={"/"} exact><PrivateRoute allowedRoles={roles1}><Secciones /><Home /></PrivateRoute>
+              <Route path={"/"} exact><PrivateRoute allowedRoles={roles1} homeRoles={roles1}><Secciones /><Home /></PrivateRoute>
               </Route>
 
               <Route path={"/Login"} exact><Login /></Route>
-              <Route path={"/Registro/Usuarios"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><RegistroUsuarios/></PrivateRoute></Route>
+              <Route path={"/RegistroUsuarios"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><RegistroUsuarios/></PrivateRoute></Route>
 
-              <Route path={"/Registro/Empresas"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><RegistroEmpresas/></PrivateRoute></Route>
+              <Route path={"/RegistroEmpresas"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><RegistroEmpresas/></PrivateRoute></Route>
 
-              <Route path={"/Registro/Roles"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><RegistroRoles/></PrivateRoute></Route>
+              <Route path={"/RegistroRoles"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><RegistroRoles/></PrivateRoute></Route>
 
-              <Route path={"/Clientes/Info"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><InfoEmpresas/></PrivateRoute></Route>
+              <Route path={"/ClientesInfo"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><InfoEmpresas/></PrivateRoute></Route>
 
-              <Route path={"/Clientes/Facturas"} exact><PrivateRoute allowedRoles={roles3}><Secciones /><InfoFacturas/></PrivateRoute></Route>
+              <Route path={"/ClientesFacturas"} exact><PrivateRoute allowedRoles={roles3} homeRoles={roles1}><Secciones /><InfoFacturas/></PrivateRoute></Route>
 
-              <Route path={"/Usuarios/Info"} exact><PrivateRoute allowedRoles={roles3}><Secciones /><InfoUsuarios/></PrivateRoute></Route>
+              <Route path={"/UsuariosInfo"} exact><PrivateRoute allowedRoles={roles3} homeRoles={roles1}><Secciones /><InfoUsuarios/></PrivateRoute></Route>
 
-              <Route path={"/Usuarios/Acciones"} exact><PrivateRoute allowedRoles={roles3}><Secciones /> <LogAcciones/></PrivateRoute></Route>
+              <Route path={"/UsuariosAcciones"} exact><PrivateRoute allowedRoles={roles3} homeRoles={roles1}><Secciones /> <LogAcciones/></PrivateRoute></Route>
 
-              <Route path={"/Configuracion"} exact><PrivateRoute allowedRoles={roles1}><Secciones /><Configuracion /></PrivateRoute></Route>
+              <Route path={"/Configuracion"} exact><PrivateRoute allowedRoles={roles1} homeRoles={roles1}><Secciones /><Configuracion /></PrivateRoute></Route>
 
-              <Route path={"/UpdateUsuario"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><UpdateUsuario /></PrivateRoute></Route>
+              <Route path={"/UpdateUsuario"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1} ><Secciones /><UpdateUsuario /></PrivateRoute></Route>
 
-              <Route path={"/UpdateEmpresa"} exact><PrivateRoute allowedRoles={roles2}><Secciones /><UpdateEmpresa /></PrivateRoute></Route>
+              <Route path={"/UpdateEmpresa"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><UpdateEmpresa /></PrivateRoute></Route>
+
+              <Route path={"*"} exact><PrivateRoute allowedRoles={roles1} homeRoles={roles1}><Secciones /><Home /></PrivateRoute>
+              </Route>
             </Switch>
           </Router>
         </div>
