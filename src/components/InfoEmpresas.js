@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import GraficaClicks from '../util/GraficaClicks';
 import GraficaMeses from '../util/GraficaMeses';
+import GraficaSemanas from '../util/GraficaSemanas';
 import ItemEmpresa from './ItemEmpresa';
 import * as funciones from '../util/FuncionesEmpresas.js'
 import { default as DynamicTable } from '../util/DynamicTable.js'
@@ -126,6 +127,7 @@ const InfoEmpresas = ({ history }) => {
                             <hr />
                             <DynamicTable TableData={listClicks} />
                             <GraficaMeses empresa={empresa} />
+                            <GraficaSemanas empresa={empresa} />
                         </div>
                         : <h4>No existen clicks generados para esta empresa</h4>
                     }
