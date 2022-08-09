@@ -14,7 +14,10 @@ const InfoEmpresas = ({ history }) => {
     const [ok, setOk] = useState(false);
     const [listClicks, setListClicks] = useState([]);
 
-    const opcionesFiltro = ["Pais", "Url", "Ip"]
+    const [fechaInicio, setInicio] = useState("");
+    const [fechaFin, setFin] = useState("");
+
+    const opcionesFiltro = ["Pais", "Url", "Ip", "Fecha"]
 
     const [filtro, setFiltro] = useState(opcionesFiltro[0]);
     const [busqueda, setBusqueda] = useState("");
@@ -26,6 +29,14 @@ const InfoEmpresas = ({ history }) => {
 
     const handleChangeBusqueda = ({ target: { value } }) => {
         setBusqueda(value);
+    }
+
+    const handleChangeInicio = ({ target: { value } }) => {
+        setInicio(value)
+    }
+
+    const handleChangeFin = ({ target: { value } }) => {
+        setFin(value);
     }
 
     const setClicks = (clicks) => {
@@ -59,7 +70,9 @@ const InfoEmpresas = ({ history }) => {
         const reqBody = {
             empresaNom,
             filtro,
-            busqueda
+            busqueda,
+            fechaInicio,
+            fechaFin
         }
         fetch('/api/clicks/busqueda', {
             method: 'POST',
@@ -102,6 +115,7 @@ const InfoEmpresas = ({ history }) => {
                         nombre={empresa.empresaNombre}
                         mail={empresa.empresaMail}
                         clicks={empresa.clicks}
+                        clicksMes={empresa.clicksMes}
                         deuda={empresa.deuda}
                         taza={empresa.tazaClicks}
                         cnpj={empresa.empresaCnpj}
@@ -120,7 +134,14 @@ const InfoEmpresas = ({ history }) => {
                                         <option key={index} value={item}>{item}</option>
                                     ))}
                                 </select>
-                                <input type="text" onChange={handleChangeBusqueda}></input>
+                                {filtro === "Fecha" ?
+                                    <div>
+                                        <label htmlFor='inputInicio'>Desde: </label>
+                                        <input type="date" id="inputInicio" onChange={handleChangeInicio}></input>
+                                        <label htmlFor='inputFin'>Hasta: </label>
+                                        <input type="date" id="inputFin" onChange={handleChangeFin}></input>
+                                    </div>
+                                    : <input type="text" onChange={handleChangeBusqueda}></input>}
                                 <button onClick={() => buscar()}>Buscar</button>
                                 <p className="mensaje-error">{mensajeError}</p>
                             </div>

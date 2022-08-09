@@ -5,7 +5,7 @@ import PrintFactura from '../util/PrintFactura';
 const ItemEmpresa = (props) => {
     const fecha = new Date();
     const fechaV = new Date();
-    const { nombre, mail, clicks, deuda, taza, cnpj, anual } = props;
+    const { nombre, mail, clicks, clicksMes, deuda, taza, cnpj, anual } = props;
 
     const filtroClicksMes = () => {
         const clicksFiltrados = [];
@@ -24,7 +24,7 @@ const ItemEmpresa = (props) => {
             "nombre": nombre,
             "CNPJ": cnpj,
             "limiteTotal": "1000",
-            "clicks": clicksFiltrados,
+            "clicks": clicksMes,
             "tazaPorClick": taza,
             "vencimiento": new Date(fechaV.setMonth(fechaV.getMonth() + 1)),
             "deudaTotal": deuda,
@@ -40,7 +40,7 @@ return (
             <p>• Email de contacto: {mail}</p>
             <p>• Taza por click: ${taza}</p>
             <p>• Clicks totales: {clicks.length}</p>
-            <p>• Cantidad de clicks del mes: {clicksFiltrados.length}</p>
+            <p>• Cantidad de clicks del mes: {clicksMes.length}</p>
             <p>• Deuda del mes: ${deuda}</p>
             <p>• Total anual: ${anual}</p>
         </div>

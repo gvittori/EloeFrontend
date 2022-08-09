@@ -7,7 +7,11 @@ const LogAcciones = () => {
     const [acciones, setAcciones] = useState([]);
     const [filtro, setFiltro] = useState("usuario");
     const [busqueda, setBusqueda] = useState("");
+    const [fechaInicio, setInicio] = useState("");
+    const [fechaFin, setFin] = useState("");
     const [mensajeError, setMensajeError] = useState("");
+
+    const opcionesFiltro = ["Usuario", "Accion", "Sujeto", "Fecha"]
 
     useEffect(() => {
         fetch('/api/acciones', {
@@ -42,10 +46,20 @@ const LogAcciones = () => {
         setBusqueda(value);
     }
 
+    const handleChangeInicio = ({ target: { value } }) => {
+        setInicio(value)
+    }
+
+    const handleChangeFin = ({ target: { value } }) => {
+        setFin(value);
+    }
+
     const buscar = () => {
         const reqBody = {
             filtro,
-            busqueda
+            busqueda,
+            fechaInicio,
+            fechaFin
         }
         fetch('/api/acciones/busqueda', {
             method: 'POST',
@@ -87,11 +101,20 @@ const LogAcciones = () => {
                         <div className='flex-row'>
                             <label htmlFor="slcFiltro">Buscar por: </label>
                             <select id="slcFiltro" defaultValue="usuario" onChange={handleChangeFiltro}>
-                                <option value="usuario">Usuario</option>
-                                <option value="accion">Accion</option>
-                                <option value="sujeto">Sujeto</option>
+                                {opcionesFiltro.map((item, index) => (
+                                    <option key={index} value={item}>{item}</option>
+                                ))}
                             </select>
-                            <input type="text" onChange={handleChangeBusqueda}></input>
+                            {filtro === "Fecha" ?
+                                <div>
+                                    <label htmlFor='inputInicio'>Desde: </label>
+                                    <input type="date" id="inputInicio" onChange={handleChangeInicio}></input>
+                                    <label htmlFor='inputFin'>Hasta: </label>
+                                    <input type="date" id="inputFin" onChange={handleChangeFin}></input>
+                                </div>
+                                :
+                                <input type="text" onChange={handleChangeBusqueda}></input>
+                            }
                             <button onClick={() => buscar()}>Buscar</button>
                             <p className="mensaje-error">{mensajeError}</p>
                         </div>

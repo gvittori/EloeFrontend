@@ -9,7 +9,7 @@ const GraficaSemanas = ({ empresa }) => {
   const clickFecha = (semana) => {
     var arregloClicks = [];
 
-    empresa.clicks.forEach(click => {
+    empresa.clicksMes.forEach(click => {
       var fecha = new Date(click.fechaHora);
       var date = fecha.getDate();
       var day = fecha.getDay();
@@ -49,11 +49,11 @@ const GraficaSemanas = ({ empresa }) => {
   return (
     <>
       <h3>Cantidad de clicks por semana</h3>
-      <MDBContainer>
+      {empresa.clicksMes.length>0?<MDBContainer>
         <Bar data={data}
           style={{ maxHeight: '600px' }}
         />
-      </MDBContainer>
+      </MDBContainer>:<h4>No hubo clicks generados este mes</h4>}     
     </>
   );
 }
