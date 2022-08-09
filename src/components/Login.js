@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter, Link, useLocation, useHistory } from 'react-router-dom';
 import { useLocalState } from '../util/useLocalStorage';
+import Titulo from './Titulo';
 
 const Login = () => {
   const history = useHistory();
@@ -79,21 +80,26 @@ const Login = () => {
 
   return (
     <>
-      <div className="loginBox">
-        <label htmlFor="txtUsu"><b>Nombre de usuario</b></label>
-        <input className="texto"
-          type="text"
-          placeholder="Ingrese el usuario..."
-          onChange={handleChangeUsername}
-          name="txtUsu" />
-        <label htmlFor="txtPass"><b>Contraseña</b></label>
-        <input className="texto"
-          type="password"
-          placeholder="Ingrese la contraseña..."
-          onChange={handleChangePassword}
-          name="txtPass" />
-        <input type="button" value="Entrar" onClick={btnClick} className="btnLogin" />
-        <p className="mensaje-error">{mensajeError}</p>
+      <div className='flex-column'>
+        <div className="titulo">
+          <Titulo />
+        </div>
+        <div className="loginBox">
+          <label htmlFor="txtUsu"><b>Nombre de usuario</b></label>
+          <input className="texto"
+            type="text"
+            placeholder="Ingrese el usuario..."
+            onChange={handleChangeUsername}
+            name="txtUsu" />
+          <label htmlFor="txtPass"><b>Contraseña</b></label>
+          <input className="texto"
+            type="password"
+            placeholder="Ingrese la contraseña..."
+            onChange={handleChangePassword}
+            name="txtPass" />
+          <input type="button" value="Entrar" onClick={btnClick} className="btnLogin" />
+          <p className="mensaje-error">{mensajeError}</p>
+        </div>
       </div>
     </>
   );

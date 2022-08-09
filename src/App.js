@@ -64,9 +64,7 @@ const App = () => {
   return (
     <SiteTracking>
       <div className="App">
-        <header className="titulo">
-          <Titulo />
-        </header>
+        
         <div className="App-content">
           <Router>
             <Switch>
