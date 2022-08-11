@@ -7,7 +7,7 @@ async function Eliminar(empresaNombre) {
         empresaNombre,
         usuario
     }
-    if (window.confirm("Eliminar empresa?")) {
+    if (window.confirm("Deshabilitar empresa?")) {
         const ok = await fetch('/api/empresas/delete', {
             method: 'POST',
             withCredentials: true,

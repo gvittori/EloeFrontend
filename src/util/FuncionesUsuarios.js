@@ -7,7 +7,7 @@ async function Eliminar(username) {
         username,
         usuario
     }
-    if (window.confirm("Eliminar usuario?")) {
+    if (window.confirm("Deshabilitar usuario?")) {
         const ok = await fetch('/api/usuarios/delete', {
             method: 'POST',
             withCredentials: true,

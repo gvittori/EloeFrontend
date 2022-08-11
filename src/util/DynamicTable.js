@@ -99,6 +99,7 @@ function DynamicTable({ TableData, reset }) {
   const currentItems = sortedItems.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => { setCurrentPage(pageNumber) };
+
   const paginateFront = () => { setCurrentPage(currentPage + 1 <= pageNumbers.length ? currentPage + 1 : currentPage) };
   const paginateBack = () => { setCurrentPage(currentPage - 1 > 0 ? currentPage - 1 : currentPage) };
 
@@ -116,7 +117,7 @@ function DynamicTable({ TableData, reset }) {
               {tdData()}
             </tbody>
           </table>
-          <Pagination currentPage={currentPage} pageNumbers={pageNumbers} paginate={paginate} adelante={paginateFront} atras={paginateBack} />
+          <Pagination currentPage={currentPage} pageNumbers={pageNumbers} paginate={paginate} adelante={paginateFront} atras={paginateBack}/>
         </>
         : <p>Cargando...</p>}
 

@@ -71,7 +71,6 @@ const ListadoEmpresas = ({ listado }) => {
                         <li key={index}>
                             <p>• Nombre de la empresa: {item.empresaNombre}</p>
                             <p>• Deuda del mes: ${item.deuda}</p>
-                            <hr />
                         </li>
                     ))}
                 </ul>

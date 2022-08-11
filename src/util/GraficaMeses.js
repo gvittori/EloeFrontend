@@ -42,7 +42,7 @@ const GraficaMeses = ({ empresa }) => {
     return (
         <>
             <h3>Cantidad de clicks por meses</h3>
-            <MDBContainer>
+            <MDBContainer className="grafica">
                 <Line data={data} />
             </MDBContainer>
         </>

@@ -62,7 +62,7 @@ const MailConfig = ({ history }) => {
     return (
         <>
             <div className="flex-column registroBox">
-                <p>Configuración de mails</p>
+                <h4>Configuración de día de envío de mails: </h4>
                 <select defaultValue={opcion} onChange={handleChangeOpcion}>
                     <option value="Primero">Primer día del mes</option>
                     <option value="Ultimo">Ultimo día del mes</option>

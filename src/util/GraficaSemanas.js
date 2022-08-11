@@ -49,7 +49,7 @@ const GraficaSemanas = ({ empresa }) => {
   return (
     <>
       <h3>Cantidad de clicks por semana</h3>
-      {empresa.clicksMes.length>0?<MDBContainer>
+      {empresa.clicksMes.length>0?<MDBContainer className="grafica">
         <Bar data={data}
           style={{ maxHeight: '600px' }}
         />

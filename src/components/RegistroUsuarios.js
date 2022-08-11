@@ -108,6 +108,7 @@ const RegistroUsuarios = ({ history }) => {
     <>
       <div className="seccion registroBox">
         <h2>Registro de usuarios</h2>
+        <hr/>
         <label htmlFor="txtUsu"><b>Nombre de usuario</b></label>
         <input className="texto" type="text" placeholder="Ingrese el usuario..." onChange={handleChangeUsername}
           name="txtUsu" />

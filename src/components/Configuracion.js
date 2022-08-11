@@ -10,6 +10,7 @@ const Configuracion = ({ history }) => {
             <div className='flex-row'>
               <h3>Configuracion</h3>
             </div>
+            <hr/>
             <MailConfig/>
           </div>
         </div>

@@ -97,7 +97,7 @@ const Login = () => {
             placeholder="Ingrese la contraseña..."
             onChange={handleChangePassword}
             name="txtPass" />
-          <input type="button" value="Entrar" onClick={btnClick} className="btnLogin" />
+          <input type="button" value="Entrar" onClick={btnClick} className="btnRegistro" />
           <p className="mensaje-error">{mensajeError}</p>
         </div>
       </div>

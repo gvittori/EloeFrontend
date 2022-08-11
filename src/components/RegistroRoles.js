@@ -60,6 +60,7 @@ const RegistroRoles = ({ history }) => {
     <>
       <div className="seccion registroBox">
       <h2>Registro de roles</h2>
+      <hr/>
         <label htmlFor="txtNom"><b>Nombre de rol</b></label>
         <input className="texto" type="text" placeholder="Ingrese nombre de rol..." onChange={handleChangeAuthority} 
             name="txtNom"/>

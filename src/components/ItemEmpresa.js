@@ -34,7 +34,7 @@ const ItemEmpresa = (props) => {
 
 return (
     <>
-        <div>
+        <div className='flex-column centerBox'>
             <p>• Nombre de la empresa: {nombre}</p>
             <p>• CNPJ: {cnpj}</p>
             <p>• Email de contacto: {mail}</p>
@@ -44,7 +44,7 @@ return (
             <p>• Deuda del mes: ${deuda}</p>
             <p>• Total anual: ${anual}</p>
         </div>
-        <button disabled={clicks.length>0?false:true} onClick={() => PrintFactura(data)}>Imprimir factura</button>
+        <button className='btnRegistro' disabled={clicks.length>0?false:true} onClick={() => PrintFactura(data)}>Imprimir factura</button>
 
        
     </>

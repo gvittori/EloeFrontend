@@ -47,15 +47,17 @@ const Home = ({ props, history }) => {
       <div className="seccion">
         <div className="flex-column">
           <h2>Información general</h2>
-          <hr/>
+          <hr />
         </div>
         {listado.length > 0
-          ? <div className="flex-column">
-            <h4>Cantidad de empresas registradas: {listado.length}</h4>
-            <h4>Ganancias del mes: ${gananciasMensuales()}</h4>
-            <h4>Ganancias del año: ${gananciasAnuales()}</h4>
-            <h4>Promedio de ganancias mensuales: ${promedioGananciasMes()}</h4>
-            <h4>Promedio de ganancias anuales: ${promedioGananciasAño()}</h4>
+          ? <div className="flex-row">
+            <div className='flex-column centerBox'>
+              <h4>• Cantidad de empresas registradas: {listado.length}</h4>
+              <h4>• Ganancias del mes: ${gananciasMensuales()}</h4>
+              <h4>• Ganancias del año: ${gananciasAnuales()}</h4>
+              <h4>• Promedio de ganancias mensuales: ${promedioGananciasMes()}</h4>
+              <h4>• Promedio de ganancias anuales: ${promedioGananciasAño()}</h4>
+            </div>
             <ListadoEmpresas listado={listado} />
           </div>
           : <div><p>Cargando...</p></div>}
