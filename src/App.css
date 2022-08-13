@@ -87,9 +87,15 @@ body {
   transition: box-shadow ease-in .1s;
 }
 
-.btnRegistro:hover{
+.btnRegistro:hover {
   box-shadow: 2px 3px 5px;
 }
+
+.btnRegistro:disabled {
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
 
 
 .seccion {
@@ -301,11 +307,11 @@ hr.lineaTop {
 }
 
 
-.table tbody tr{
+.table tbody tr {
   background: #f6f6f6
 }
 
-.table tbody tr:nth-of-type(odd){
+.table tbody tr:nth-of-type(odd) {
   background: #e9e9e9;
 }
 
@@ -369,11 +375,12 @@ hr.lineaTop {
 
 .page-link {
   padding: 0 5px;
-  background: #e9e9e9;;
+  background: #e9e9e9;
+  ;
   text-decoration: none;
   border: 1px solid black;
   color: black;
-  
+
 }
 
 .page-link:hover {
@@ -393,7 +400,7 @@ hr.lineaTop {
 .page-link.inactive:hover {
   background-color: #888888;
   box-shadow: none;
-  cursor:not-allowed;
+  cursor: not-allowed;
 }
 
 
@@ -418,14 +425,14 @@ hr.lineaTop {
   width: 300px;
 }
 
-.listaEmpresas{
+.listaEmpresas {
   border: 1px solid rgb(80, 78, 78);
-  padding:10px;
+  padding: 10px;
   margin: 5px 0 5px 30px;
 }
 
 
-.whiteBox{
+.whiteBox {
   margin: 5px 0;
   background: #f6f6f6;
   border: 1px solid rgb(80, 78, 78);
@@ -434,7 +441,7 @@ hr.lineaTop {
   box-shadow: 2px 3px 5px;
 }
 
-.centerBox{
+.centerBox {
   max-height: 400px;
   max-width: 400px;
   display: flex;
@@ -444,27 +451,27 @@ hr.lineaTop {
   margin: 5px 0;
 }
 
-.min{
+.min {
   min-width: 350px;
 }
 
-.centerBox p{
+.centerBox p {
   margin: 3px 0;
 }
 
-h4{
+h4 {
   margin: 5px 0;
 }
 
-hr{
+hr {
   margin: 2px 0;
 }
 
-.grafica{
+.grafica {
   max-width: 700px;
 }
 
-.hidden{
+.hidden {
   visibility: hidden;
   opacity: 0;
   width: 0;
@@ -473,15 +480,14 @@ hr{
   overflow: hidden;
 }
 
-.facturaDiv hr{
+.facturaDiv hr {
   border-bottom: 1px groove #3438357e;
 }
 
-.facturaDiv strong{
+.facturaDiv strong {
   margin-top: 20px;
 }
 
-.facturaDiv h3{
+.facturaDiv h3 {
   margin-top: 20px;
 }
-

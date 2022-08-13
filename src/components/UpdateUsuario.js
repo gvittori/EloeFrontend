@@ -3,22 +3,34 @@ import { withRouter } from 'react-router-dom';
 import Select from 'react-select'
 import { useHistory, useLocation } from "react-router-dom";
 import { decode } from '../util/decode';
+import * as funciones from '../util/FuncionesUsuarios'
 
 
 
 
 const UpdateUsuario = ({ history }) => {
     const location = useLocation();
-    const [usr, setUsr] = useState(
-        location.state ? JSON.parse(location.state.usuario) : ''
-    );
+    const [usr, setUsr] = useState(JSON.parse(sessionStorage.getItem("usr")));
+    const [listado, setListado] = useState(funciones.default.Obtener().then(result => { setListado(result) }));
 
-    const [usernameUpdate, setUsername] = useState(usr.username);
+    const [usernameUpdate, setUsername] = useState("");
     const [passwordUpdate, setPassword] = useState('');
-    const [roles, setRoles] = useState(usr.roles);
+    const [roles, setRoles] = useState([]);
     const [rolesUpdate, setRolesUpdate] = useState([]);
     const [mensajeError, setMensajeError] = useState('');
     const [listaRoles, setListaRoles] = useState([]);
+
+    const [ver, setVer] = useState(false);
+
+    useEffect(() => {
+        if (usr) {
+            setUsername(usr.username);
+            setRoles(usr.roles);
+            setPassword("");
+        } else {
+            setVer(true);
+        }
+    }, [usr])
 
     useEffect(() => {
         fetch('/api/roles', {
@@ -49,45 +61,55 @@ const UpdateUsuario = ({ history }) => {
         setRoles([obj]);
     };
 
+    const handleChangeUsuario = ({ target: { value } }) => {
+        let obj = JSON.parse(value);
+        setUsr(obj);
+    };
 
 
 
     const btnUpdate = () => {
         const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
-        setMensajeError(''); {
-            const reqBody = {
-                username: usr.username,
-                password: "",
-                usernameUpdate,
-                passwordUpdate,
-                rolesUpdate,
-                usuario
-            };
-            fetch('/api/usuarios/update', {
-                method: 'PUT',
-                withCredentials: true,
-                credentials: 'include',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(reqBody)
-            }).then(res => {
-                if (!res.ok) {
-                    return res.text().then(text => { throw new Error(text) })
-                }
-                else {
-                    return res.text().then(
-                        res => {
-                            setMensajeError(`Usuario "${res}" actualizado correctamente`);
-                        }
-                    );
-                }
-            })
-                .catch(err => {
-                    setMensajeError(err.toString());
-                });
-        }
+        setMensajeError('');
+        document.body.style.cursor = 'wait'
+        const reqBody = {
+            username: usr.username,
+            password: "",
+            usernameUpdate,
+            passwordUpdate,
+            rolesUpdate,
+            usuario
+        };
+        fetch('/api/usuarios/update', {
+            method: 'PUT',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reqBody)
+        }).then(res => {
+            if (!res.ok) {
+                return res.text().then(text => { throw new Error(text) })
+            }
+            else {
+                return res.json().then(
+                    res => {
+                        document.body.style.cursor = 'default'
+                        setUsr(res);
+                        setMensajeError(`Usuario "${res.username}" actualizado correctamente`);
+                        if (!ver) { sessionStorage.setItem("usr", JSON.stringify(res)); }
+                        funciones.default.Obtener().then(result => { setListado(result) })
+                    }
+                );
+            }
+        })
+            .catch(err => {
+                document.body.style.cursor = 'default'
+                setMensajeError(err.toString());
+            });
+
 
     };
 
@@ -104,25 +126,33 @@ const UpdateUsuario = ({ history }) => {
     }
 
 
-    if (!location.state) return history.push("/");
-
     const checkEnter = (e) => {
         const { key, keyCode } = e;
         if (keyCode === 13) {
-          btnUpdate();
+            btnUpdate();
         }
-      };
+    };
 
 
     return (
         <>
             <div className="seccion registroBox">
                 <h2>Update de usuarios</h2>
+                <hr />
+                <label htmlFor="slcTipo"><b>Listado de usuarios: </b></label>
+                {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={usr ? JSON.stringify(usr) : 'Default'}>
+                    <option value="Default" disabled>Seleccione un usuario</option>
+                    {listado.map((item, index) => (
+                        <option key={index} value={JSON.stringify(item)}>{item.username}</option>
+                    ))}
+                </select> : <div><p>Cargando usuarios...</p></div>}
+
+                <hr />
                 <label htmlFor="txtUsu"><b>Nombre de usuario</b></label>
-                <input className="texto" type="text" onChange={handleChangeUsername} value={usernameUpdate}  onKeyDown={checkEnter}
+                <input className="texto" type="text" onChange={handleChangeUsername} value={usernameUpdate} onKeyDown={checkEnter}
                     name="txtUsu" />
                 <label htmlFor="txtPass"><b>Contraseña</b></label>
-                <input className="texto" type="password" onChange={handleChangePassword}  onKeyDown={checkEnter}
+                <input className="texto" type="password" onChange={handleChangePassword} onKeyDown={checkEnter}
                     name="txtPass" />
                 <label htmlFor="slcTipo"><b>Tipo de usuario</b></label>
                 <p>• Roles actuales:</p>

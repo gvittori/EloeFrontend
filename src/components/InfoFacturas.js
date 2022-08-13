@@ -53,6 +53,7 @@ const InfoFacturas = () => {
     }
 
     const buscar = () => {
+        document.body.style.cursor = 'wait'
         const reqBody = {
             filtro,
             busqueda,
@@ -75,6 +76,7 @@ const InfoFacturas = () => {
             else {
                 Promise.all([res.json()])
                     .then(([body]) => {
+                        document.body.style.cursor = 'default'
                         if (body.length <= 0) {
                             setMensajeError("No hay resultados para la busqueda");
                         } else {
@@ -85,6 +87,7 @@ const InfoFacturas = () => {
             }
         })
             .catch(err => {
+                document.body.style.cursor = 'default'
                 console.log(err);
             });
     }

@@ -58,6 +58,7 @@ const RegistroUsuarios = ({ history }) => {
         if (roles.length == 0) {
           setMensajeError(`Error: Seleccione rol de usuario`);
         } else {
+          document.body.style.cursor = 'wait'
           const reqBody = {
             username,
             password,
@@ -80,6 +81,7 @@ const RegistroUsuarios = ({ history }) => {
             else {
               return res.text().then(
                 res => {
+                  document.body.style.cursor = 'default'
                   setMensajeError(`Usuario "${res}" agregado correctamente`);
                 }
               );
@@ -87,6 +89,7 @@ const RegistroUsuarios = ({ history }) => {
           })
             .catch(err => {
               setMensajeError(err.toString());
+              document.body.style.cursor = 'default'
             });
         }
 

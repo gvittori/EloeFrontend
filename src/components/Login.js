@@ -34,6 +34,7 @@ const Login = () => {
       } else if (password.length === 0) {
         setMensajeError("Ingrese una contraseña");
       } else {
+        document.body.style.cursor = 'wait'
         const reqBody = {
           username,
           password,
@@ -54,11 +55,13 @@ const Login = () => {
                 .then(([body, headers]) => {
                   setJwt(headers.get("authorization"));
                   history.push("/");
+                  document.body.style.cursor = 'default'
                 });
             }
           })
           .catch(err => {
             setMensajeError("Credenciales invalidas");
+            document.body.style.cursor = 'default'
           });
       }
 

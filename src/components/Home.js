@@ -34,11 +34,11 @@ const Home = ({ props, history }) => {
   }
 
   const promedioGananciasMes = () => {
-    return (gananciasMensuales() / listado.length);
+    return Math.ceil((gananciasMensuales() / listado.length));
   }
 
   const promedioGananciasAño = () => {
-    return (gananciasAnuales() / listado.length);
+    return Math.ceil((gananciasAnuales() / listado.length));
   }
 
 

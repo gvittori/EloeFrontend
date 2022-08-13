@@ -113,7 +113,7 @@ const Pagination = ({ currentPage, pageNumbers, paginate, adelante, atras }) => 
                     </a>
                 </li>
                 {pageItems.map((number,index) => (
-                    number != 0 ?
+                    number !== 0 ?
                         <li key={number} id={`li${number}`} className={"page-item"}>
                             <a id={number} onClick={handleClick} href="#/" className="page-link">
                                 {number}

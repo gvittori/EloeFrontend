@@ -24,6 +24,7 @@ const MailConfig = ({ history }) => {
     }
 
     const guardarConfig = () => {
+        document.body.style.cursor = 'wait'
         const reqBody = {
             opcion,
             dias
@@ -46,12 +47,14 @@ const MailConfig = ({ history }) => {
             else {
              return res.text().then(
                 res => {
+                    document.body.style.cursor = 'default'
                     setMensajeError(`Día de envio seteado como: ${res}`);
                 }
              );
            }    
           })
           .catch(err => {
+            document.body.style.cursor = 'default'
             setMensajeError(err.toString());
           })     
     }

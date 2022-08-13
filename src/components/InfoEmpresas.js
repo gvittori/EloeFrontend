@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useLocation } from 'react-router-dom';
 import GraficaClicks from '../util/GraficaClicks';
 import GraficaMeses from '../util/GraficaMeses';
 import GraficaSemanas from '../util/GraficaSemanas';
@@ -9,8 +9,9 @@ import { default as DynamicTable } from '../util/DynamicTable.js'
 import InfoFacturas from './InfoFacturas';
 
 const InfoEmpresas = ({ history }) => {
+
     const [listado, setListado] = useState([]);
-    const [empresa, setEmpresa] = useState(null);
+    const [empresa, setEmpresa] = useState(JSON.parse(sessionStorage.getItem("empresa")));
     const [ok, setOk] = useState(false);
     const [listClicks, setListClicks] = useState([]);
 
@@ -45,13 +46,13 @@ const InfoEmpresas = ({ history }) => {
 
 
     useEffect(() => {
-        funciones.default.Obtener().then(result => { setListado(result); setEmpresa(null); setOk(false); });
+        funciones.default.Obtener().then(result => { setListado(result); /*setEmpresa(null);*/ setOk(false); });
     }, [ok ? ok : null]);
 
     const handleChangeEmpresa = ({ target: { value } }) => {
         let obj = JSON.parse(value);
         setEmpresa(obj);
-        setListClicks(obj.clicks);
+        sessionStorage.setItem("empresa", value);
     };
 
     const actualizar = (empresa) => {
@@ -67,6 +68,7 @@ const InfoEmpresas = ({ history }) => {
 
     const buscar = () => {
         const empresaNom = empresa.empresaNombre;
+        document.body.style.cursor = 'wait'
         const reqBody = {
             empresaNom,
             filtro,
@@ -90,6 +92,7 @@ const InfoEmpresas = ({ history }) => {
             else {
                 Promise.all([res.json()])
                     .then(([body]) => {
+                        document.body.style.cursor = 'default'
                         if (body.length <= 0) {
                             setMensajeError("No hay resultados para la busqueda");
                         } else {
@@ -100,6 +103,7 @@ const InfoEmpresas = ({ history }) => {
             }
         })
             .catch(err => {
+                document.body.style.cursor = 'default'
                 console.log(err);
             });
     }
@@ -114,10 +118,10 @@ const InfoEmpresas = ({ history }) => {
     const checkEnter = (e) => {
         const { key, keyCode } = e;
         if (keyCode === 13) {
-          buscar();
+            buscar();
         }
-      };
-      
+    };
+
     const verEmpresa = () => {
         if (empresa === null) {
             return <p>No hay selección</p>
@@ -155,16 +159,16 @@ const InfoEmpresas = ({ history }) => {
                                 {filtro === "Fecha" ?
                                     <div>
                                         <label htmlFor='inputInicio'>Desde: </label>
-                                        <input type="date" id="inputInicio"  onKeyDown={checkEnter} onChange={handleChangeInicio}></input>
+                                        <input type="date" id="inputInicio" onKeyDown={checkEnter} onChange={handleChangeInicio}></input>
                                         <label htmlFor='inputFin'>Hasta: </label>
-                                        <input type="date" id="inputFin"  onKeyDown={checkEnter} onChange={handleChangeFin}></input>
+                                        <input type="date" id="inputFin" onKeyDown={checkEnter} onChange={handleChangeFin}></input>
                                     </div>
-                                    : <input type="text" onKeyDown={checkEnter}  onChange={handleChangeBusqueda}></input>}
+                                    : <input type="text" onKeyDown={checkEnter} onChange={handleChangeBusqueda}></input>}
                                 <button onClick={() => buscar()}>Buscar</button>
                                 <p className="mensaje-error">{mensajeError}</p>
                             </div>
                             <hr />
-                            <DynamicTable TableData={listClicks} num={10} />
+                            <DynamicTable TableData={empresa.clicks} num={10} />
                             <GraficaMeses empresa={empresa} />
                             <GraficaSemanas empresa={empresa} />
                         </div>
@@ -176,13 +180,14 @@ const InfoEmpresas = ({ history }) => {
 
     return (
         <>
+
             <div className='seccion'>
                 <div className='flex-column'>
                     <div>
                         <h3>Información de empresas</h3>
                         <hr />
                         <label htmlFor="slcTipo"><b>Listado de empresas: </b></label>
-                        {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={'Default'}>
+                        {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={empresa?JSON.stringify(empresa) : 'Default'}>
                             <option value="Default" disabled>Seleccione una empresa</option>
                             {listado.map((item, index) => (
                                 <option key={index} value={JSON.stringify(item)}>{item.empresaNombre}</option>

@@ -10,6 +10,7 @@ const Secciones = ({ history }) => {
 
   const btnLogout = () => {
     localStorage.setItem('jwt', '""');
+    sessionStorage.clear();
     return <Redirect to='/Login' />
   };
 

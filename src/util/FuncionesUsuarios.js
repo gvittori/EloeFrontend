@@ -52,12 +52,9 @@ async function Obtener() {
 
 const Actualizar = (usuario, history) => {
     //const history = useHistory();
-    var usuario = {
-        ...usuario
-    }
     history.push({
         pathname: '/UpdateUsuario',
-        state: { usuario: JSON.stringify(usuario) }
+        //state: { usuario: JSON.stringify(usuario) }
     });
 }
 

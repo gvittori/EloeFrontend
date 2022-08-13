@@ -8,6 +8,7 @@ async function Eliminar(empresaNombre) {
         usuario
     }
     if (window.confirm("Deshabilitar empresa?")) {
+        document.body.style.cursor = 'wait'
         const ok = await fetch('/api/empresas/delete', {
             method: 'POST',
             withCredentials: true,
@@ -30,6 +31,7 @@ async function Eliminar(empresaNombre) {
             });
         const data = await ok.json();
         alert("Empresa deshabilitada...")
+        document.body.style.cursor = 'default'
         return data;
     }
 }
@@ -52,12 +54,9 @@ async function Obtener() {
 
 const Actualizar = (empresa, history) => {
     //const history = useHistory();
-    var empresa = {
-        ...empresa
-    }
     history.push({
         pathname: '/UpdateEmpresa',
-        state: { empresa: JSON.stringify(empresa) }
+        //state: { empresa: JSON.stringify(empresa) }
     });
 }
 

@@ -2,23 +2,32 @@ import React, { useState, useEffect, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useHistory, useLocation } from "react-router-dom";
 import { decode } from '../util/decode';
-
-
-
+import * as funciones from '../util/FuncionesEmpresas.js'
 
 const UpdateEmpresa = () => {
     const location = useLocation();
     const history = useHistory();
-    //const empresa = JSON.parse(location.state.empresa);
-    const [empresa,setEmpresa] = useState(
-        location.state ? JSON.parse(location.state.empresa) : ''
-      );
-    
+    const [empresa, setEmpresa] = useState(JSON.parse(sessionStorage.getItem("empresa")));
 
-    const [nombreUpdate, setNombre] = useState(empresa.empresaNombre);
-    const [emailUpdate, setEmail] = useState(empresa.empresaMail);
-    const [cnpjUpdate, setCnpj] = useState(empresa.empresaCnpj);
-    const [tazaUpdate, setTaza] = useState(empresa.tazaClicks);
+    const [listado, setListado] = useState(funciones.default.Obtener().then(result => { setListado(result) }));
+    const [nombreUpdate, setNombre] = useState("");
+    const [emailUpdate, setEmail] = useState("");
+    const [cnpjUpdate, setCnpj] = useState("");
+    const [tazaUpdate, setTaza] = useState("");
+    //let ver = false;
+    const [ver, setVer] = useState(false);
+
+    useEffect(() => {
+        if (empresa) {
+            setNombre(empresa.empresaNombre);
+            setEmail(empresa.empresaMail);
+            setCnpj(empresa.empresaCnpj);
+            setTaza(empresa.tazaClicks);
+        } else {
+            setVer(true);
+        }
+    }, [empresa])
+
     const [mensajeError, setMensajeError] = useState('');
 
 
@@ -38,10 +47,10 @@ const UpdateEmpresa = () => {
         setTaza(value);
     };
 
-
     const btnUpdate = () => {
         const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
         setMensajeError('');
+        document.body.style.cursor = 'wait'
         const reqBody = {
             nombre: empresa.empresaNombre,
             nombreUpdate,
@@ -64,34 +73,52 @@ const UpdateEmpresa = () => {
                 return res.text().then(text => { throw new Error(text) })
             }
             else {
-                return res.text().then(
+                return res.json().then(
                     res => {
-                        setMensajeError(`Empresa "${res}" actualizada correctamente`);
+                        document.body.style.cursor = 'default'
+                        setEmpresa(res);
+                        setMensajeError(`Empresa "${res.empresaNombre}" actualizada correctamente`);
+                        if (!ver) { sessionStorage.setItem("empresa", JSON.stringify(res)); }
+                        funciones.default.Obtener().then(result => { setListado(result) })
                     }
                 );
             }
         })
             .catch(err => {
+                document.body.style.cursor = 'default'
                 setMensajeError(err.toString());
             });
 
 
     };
-    
-    if(!location.state) return history.push("/");
 
     const checkEnter = (e) => {
         const { key, keyCode } = e;
         if (keyCode === 13) {
-          btnUpdate();
+            btnUpdate();
         }
-      };
+    };
+
+    const handleChangeEmpresa = ({ target: { value } }) => {
+        let obj = JSON.parse(value);
+        setEmpresa(obj);
+    };
 
 
     return (
         <>
             <div className="seccion registroBox">
                 <h2>Update de empresas</h2>
+                <hr />
+                <label htmlFor="slcTipo"><b>Listado de empresas: </b></label>
+                {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={empresa ? JSON.stringify(empresa) : 'Default'}>
+                    <option value="Default" disabled>Seleccione una empresa</option>
+                    {listado.map((item, index) => (
+                        <option key={index} value={JSON.stringify(item)}>{item.empresaNombre}</option>
+                    ))}
+                </select> : <div><p>Cargando empresas...</p></div>}
+                <hr />
+
                 <label htmlFor="txtNom"><b>Nombre de empresa</b></label>
                 <input className="texto" type="text" onChange={handleChangeNombre} placeholder={nombreUpdate} value={nombreUpdate} onKeyDown={checkEnter}
                     name="txtNom" />

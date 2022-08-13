@@ -47,6 +47,7 @@ const RegistroEmpresas = ({ history }) => {
             setMensajeError(`Error: Ingrese valor de taza por click`);
           }
           else {
+            document.body.style.cursor = 'wait'
             const reqBody = {
               empresaNombre,
               empresaMail,
@@ -70,12 +71,14 @@ const RegistroEmpresas = ({ history }) => {
               else {
                 return res.text().then(
                   res => {
+                    document.body.style.cursor = 'default'
                     setMensajeError(`Empresa "${res}" agregado correctamente`);
                   }
                 );
               }
             })
               .catch(err => {
+                document.body.style.cursor = 'default'
                 setMensajeError(err.toString());
               })
           }

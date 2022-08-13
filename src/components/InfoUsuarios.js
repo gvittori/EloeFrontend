@@ -5,17 +5,18 @@ import * as funciones from '../util/FuncionesUsuarios'
 
 const InfoUsuarios = ({ history }) => {
     const [listado, setListado] = useState([]);
-    const [usuario, setUsuario] = useState(null);
+    const [usuario, setUsuario] = useState(JSON.parse(sessionStorage.getItem("usr")));
     const [ok, setOk] = useState(false);
 
 
     useEffect(() => {
-        funciones.default.Obtener().then(result => { setListado(result); setUsuario(null); setOk(false); });
+        funciones.default.Obtener().then(result => { setListado(result); /*setUsuario(null); */setOk(false); });
     }, [ok ? ok : null]);
 
     const handleChangeUsuario = ({ target: { value } }) => {
         let obj = JSON.parse(value);
         setUsuario(obj);
+        sessionStorage.setItem("usr", value);
     };
 
     const actualizar = (usuario) => {
@@ -51,7 +52,7 @@ const InfoUsuarios = ({ history }) => {
                 <h3>Información de usuarios</h3>
                 <hr />
                 <label htmlFor="slcTipo"><b>Listado de usuarios: </b></label>
-                {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={'Default'}>
+                {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={usuario?JSON.stringify(usuario) : 'Default'}>
                     <option value="Default" disabled>Seleccione un usuario</option>
                     {listado.map((item, index) => (
                         <option key={index} value={JSON.stringify(item)}>{item.username}</option>
