@@ -104,25 +104,43 @@ const InfoEmpresas = ({ history }) => {
             });
     }
 
+    const printFactura = (data) => {
+        sessionStorage.setItem("printEmp", JSON.stringify(data));
+        var printWindow = window.open('/FacturaWindow', '', 'height=700,width=1050');
+        sessionStorage.clear();
+        printWindow.print();
+    }
 
+    const checkEnter = (e) => {
+        const { key, keyCode } = e;
+        if (keyCode === 13) {
+          buscar();
+        }
+      };
+      
     const verEmpresa = () => {
         if (empresa === null) {
             return <p>No hay selección</p>
         } else {
             return (
                 <>
-                    <ItemEmpresa
-                        nombre={empresa.empresaNombre}
-                        mail={empresa.empresaMail}
-                        clicks={empresa.clicks}
-                        clicksMes={empresa.clicksMes}
-                        deuda={empresa.deuda}
-                        taza={empresa.tazaClicks}
-                        cnpj={empresa.empresaCnpj}
-                        anual={empresa.totalAnual}
-                    />
-                    <button className='btnRegistro' onClick={() => actualizar(empresa)}>Actualizar datos</button>
-                    <button className='btnRegistro' onClick={() => eliminar(empresa.empresaNombre)}>Deshabilitar empresa</button>
+                    <div className='flex-row'>
+                        <ItemEmpresa
+                            nombre={empresa.empresaNombre}
+                            mail={empresa.empresaMail}
+                            clicks={empresa.clicks}
+                            clicksMes={empresa.clicksMes}
+                            deuda={empresa.deuda}
+                            taza={empresa.tazaClicks}
+                            cnpj={empresa.empresaCnpj}
+                            anual={empresa.totalAnual}
+                        />
+                        <div className='flex-column centerBox'>
+                            <button className='btnRegistro' disabled={empresa.clicks.length > 0 ? false : true} onClick={() => printFactura(empresa)}>Imprimir factura</button>
+                            <button className='btnRegistro' onClick={() => actualizar(empresa)}>Actualizar datos</button>
+                            <button className='btnRegistro' onClick={() => eliminar(empresa.empresaNombre)}>Deshabilitar empresa</button>
+                        </div>
+                    </div>
                     <hr />
                     <h3>Clicks generados</h3>
                     {empresa.clicks.length > 0
@@ -137,16 +155,16 @@ const InfoEmpresas = ({ history }) => {
                                 {filtro === "Fecha" ?
                                     <div>
                                         <label htmlFor='inputInicio'>Desde: </label>
-                                        <input type="date" id="inputInicio" onChange={handleChangeInicio}></input>
+                                        <input type="date" id="inputInicio"  onKeyDown={checkEnter} onChange={handleChangeInicio}></input>
                                         <label htmlFor='inputFin'>Hasta: </label>
-                                        <input type="date" id="inputFin" onChange={handleChangeFin}></input>
+                                        <input type="date" id="inputFin"  onKeyDown={checkEnter} onChange={handleChangeFin}></input>
                                     </div>
-                                    : <input type="text" onChange={handleChangeBusqueda}></input>}
+                                    : <input type="text" onKeyDown={checkEnter}  onChange={handleChangeBusqueda}></input>}
                                 <button onClick={() => buscar()}>Buscar</button>
                                 <p className="mensaje-error">{mensajeError}</p>
                             </div>
                             <hr />
-                            <DynamicTable TableData={listClicks} />
+                            <DynamicTable TableData={listClicks} num={10} />
                             <GraficaMeses empresa={empresa} />
                             <GraficaSemanas empresa={empresa} />
                         </div>

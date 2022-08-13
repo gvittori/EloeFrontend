@@ -5,7 +5,7 @@ import { default as DynamicTable } from '../util/DynamicTable.js'
 
 const LogAcciones = () => {
     const [acciones, setAcciones] = useState([]);
-    const [filtro, setFiltro] = useState("usuario");
+    const [filtro, setFiltro] = useState("Usuario");
     const [busqueda, setBusqueda] = useState("");
     const [fechaInicio, setInicio] = useState("");
     const [fechaFin, setFin] = useState("");
@@ -91,6 +91,13 @@ const LogAcciones = () => {
             });
     }
 
+    const checkEnter = (e) => {
+        const { key, keyCode } = e;
+        if (keyCode === 13) {
+          buscar();
+        }
+      };
+
     return (
         <>
             <div className='seccion'>
@@ -108,18 +115,18 @@ const LogAcciones = () => {
                             {filtro === "Fecha" ?
                                 <div>
                                     <label htmlFor='inputInicio'>Desde: </label>
-                                    <input type="date" id="inputInicio" onChange={handleChangeInicio}></input>
+                                    <input type="date" id="inputInicio" onKeyDown={checkEnter}   onChange={handleChangeInicio}></input>
                                     <label htmlFor='inputFin'>Hasta: </label>
-                                    <input type="date" id="inputFin" onChange={handleChangeFin}></input>
+                                    <input type="date" id="inputFin" onKeyDown={checkEnter}   onChange={handleChangeFin}></input>
                                 </div>
                                 :
-                                <input type="text" onChange={handleChangeBusqueda}></input>
+                                <input type="text" onKeyDown={checkEnter}  onChange={handleChangeBusqueda}></input>
                             }
                             <button onClick={() => buscar()}>Buscar</button>
                             <p className="mensaje-error">{mensajeError}</p>
                         </div>
                         <hr />
-                        <DynamicTable TableData={acciones} />
+                        <DynamicTable TableData={acciones} num={10}/>
                     </div> : <p>Cargando...</p>}
             </div>
         </>

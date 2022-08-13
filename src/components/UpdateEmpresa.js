@@ -80,22 +80,29 @@ const UpdateEmpresa = () => {
     
     if(!location.state) return history.push("/");
 
+    const checkEnter = (e) => {
+        const { key, keyCode } = e;
+        if (keyCode === 13) {
+          btnUpdate();
+        }
+      };
+
 
     return (
         <>
             <div className="seccion registroBox">
                 <h2>Update de empresas</h2>
                 <label htmlFor="txtNom"><b>Nombre de empresa</b></label>
-                <input className="texto" type="text" onChange={handleChangeNombre} placeholder={nombreUpdate} value={nombreUpdate}
+                <input className="texto" type="text" onChange={handleChangeNombre} placeholder={nombreUpdate} value={nombreUpdate} onKeyDown={checkEnter}
                     name="txtNom" />
                 <label htmlFor="txtMail"><b>Email de contacto</b></label>
-                <input className="texto" type="text" onChange={handleChangeEmail} placeholder={emailUpdate} value={emailUpdate}
+                <input className="texto" type="text" onChange={handleChangeEmail} placeholder={emailUpdate} value={emailUpdate} onKeyDown={checkEnter}
                     name="txtMail" />
                 <label htmlFor="txtCnpj"><b>CNPJ</b></label>
-                <input className="texto" type="text" onChange={handleChangeCnpj} placeholder={cnpjUpdate} value={cnpjUpdate}
+                <input className="texto" type="text" onChange={handleChangeCnpj} placeholder={cnpjUpdate} value={cnpjUpdate} onKeyDown={checkEnter}
                     name="txtCnpj" />
                 <label htmlFor="txtTaza"><b>Taza por click</b></label>
-                <input className="texto" type="number" onChange={handleChangeTaza} placeholder={tazaUpdate} value={tazaUpdate}
+                <input className="texto" type="number" onChange={handleChangeTaza} placeholder={tazaUpdate} value={tazaUpdate} onKeyDown={checkEnter}
                     name="txtTaza" />
 
                 <input type="button" value="Actualizar" onClick={btnUpdate} className="btnRegistro" />

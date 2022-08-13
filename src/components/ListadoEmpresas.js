@@ -68,7 +68,7 @@ const ListadoEmpresas = ({ listado }) => {
                 <h3>Listado de empresas</h3>
                 <ul>
                     {listado.map((item, index) => (
-                        <li key={index}>
+                        <li key={index} className="whiteBox">
                             <p>• Nombre de la empresa: {item.empresaNombre}</p>
                             <p>• Deuda del mes: ${item.deuda}</p>
                         </li>

@@ -19,6 +19,7 @@ import RegistroEmpresas from './components/RegistroEmpresas';
 import RegistroRoles from './components/RegistroRoles';
 import InfoEmpresas from './components/InfoEmpresas';
 import InfoFacturas from './components/InfoFacturas';
+import FacturaWindow from './util/FacturaWindow'
 import { default as LogAcciones } from './components/LogAcciones'
 import InfoUsuarios from './components/InfoUsuarios';
 import { useSiteTracking } from "react-event-tracker";
@@ -91,6 +92,8 @@ const App = () => {
               <Route path={"/UpdateUsuario"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1} ><Secciones /><UpdateUsuario /></PrivateRoute></Route>
 
               <Route path={"/UpdateEmpresa"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><UpdateEmpresa /></PrivateRoute></Route>
+
+              <Route path={"/facturaWindow"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><FacturaWindow /></PrivateRoute></Route>
 
               <Route path={"*"} exact><PrivateRoute allowedRoles={roles1} homeRoles={roles1}><Secciones /><Home /></PrivateRoute>
               </Route>

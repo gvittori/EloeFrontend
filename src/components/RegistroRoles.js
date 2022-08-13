@@ -56,13 +56,20 @@ const RegistroRoles = ({ history }) => {
     }
   };
 
+  const checkEnter = (e) => {
+    const { key, keyCode } = e;
+    if (keyCode === 13) {
+      btnRegistrar();
+    }
+  };
+
   return (   
     <>
       <div className="seccion registroBox">
       <h2>Registro de roles</h2>
       <hr/>
         <label htmlFor="txtNom"><b>Nombre de rol</b></label>
-        <input className="texto" type="text" placeholder="Ingrese nombre de rol..." onChange={handleChangeAuthority} 
+        <input className="texto" type="text" placeholder="Ingrese nombre de rol..." onChange={handleChangeAuthority} onKeyDown={checkEnter}
             name="txtNom"/>
         <input type="button" value="Registrar" onClick={btnRegistrar} className="btnRegistro"/>
         <p className="mensaje-error">{mensajeError}</p>

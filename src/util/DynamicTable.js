@@ -1,10 +1,10 @@
 import { useEffect, useState, useMemo } from "react";
 import Pagination from "./Pagination";
 
-function DynamicTable({ TableData, reset }) {
+function DynamicTable({ TableData, num }) {
   const [sortedConfig, setSortedConfig] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(num===undefined?TableData.length:num);
 
   let sortedItems = [...TableData];
   useMemo(() => {

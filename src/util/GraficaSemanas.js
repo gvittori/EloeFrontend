@@ -14,7 +14,6 @@ const GraficaSemanas = ({ empresa }) => {
       var date = fecha.getDate();
       var day = fecha.getDay();
       var weekOfMonth = Math.ceil((date - 1 - day) / 7);
-      console.log(weekOfMonth);
       if (weekOfMonth === semana) {
         arregloClicks.push(click)
       }
@@ -42,6 +41,8 @@ const GraficaSemanas = ({ empresa }) => {
         fill: true,
         backgroundColor: "rgba(6, 156,51, .3)",
         borderColor: "#02b844",
+        borderWidth: 1,
+        hoverBackgroundColor: "rgba(6, 156, 51)",
       }
     ]
   }
@@ -49,11 +50,12 @@ const GraficaSemanas = ({ empresa }) => {
   return (
     <>
       <h3>Cantidad de clicks por semana</h3>
-      {empresa.clicksMes.length>0?<MDBContainer className="grafica">
+      <hr />
+      {empresa.clicksMes.length > 0 ? <MDBContainer className="grafica">
         <Bar data={data}
           style={{ maxHeight: '600px' }}
         />
-      </MDBContainer>:<h4>No hubo clicks generados este mes</h4>}     
+      </MDBContainer> : <h4>No hubo clicks generados este mes</h4>}
     </>
   );
 }

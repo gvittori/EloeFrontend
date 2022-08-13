@@ -16,7 +16,7 @@ const PrintFactura = (data) => {
 
     /*const output = <DynamicTable TableData={data.clicks} />;
     var staticElement = ReactDOMServer.renderToStaticMarkup(output);
-    output.innerHTML = `<div>${staticElement}</div>`*/
+    output.innerHTML = `<div>${staticElement}</div>`
     let facturaPDF = `<h1>Não há cliques gerados para esta empresa</h1>`
 
     if (data.clicks.length > 0) {
@@ -56,8 +56,13 @@ const PrintFactura = (data) => {
     printWindow.document.write(facturaPDF);
     printWindow.document.write('</body></html>');
     printWindow.document.close();
+    printWindow.print();*/
+
+    sessionStorage.setItem("printEmp", JSON.stringify(data));
+    var printWindow = window.open('/FacturaWindow', '', 'height=700,width=1000');
     printWindow.print();
 }
+
 
 export default PrintFactura
 

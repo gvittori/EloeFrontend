@@ -89,6 +89,13 @@ const InfoFacturas = () => {
             });
     }
 
+    const checkEnter = (e) => {
+        const { key, keyCode } = e;
+        if (keyCode === 13) {
+          buscar();
+        }
+      };
+
     return (
         <>
             <div className='seccion'>
@@ -107,23 +114,23 @@ const InfoFacturas = () => {
                                 { filtro === "Fecha generada" || filtro ==="Fecha vencimiento"?
                                     <div>
                                         <label htmlFor='inputInicio'>Desde: </label>
-                                        <input type="date" id="inputInicio" onChange={handleChangeInicio}></input>
+                                        <input type="date" id="inputInicio" onKeyDown={checkEnter}  onChange={handleChangeInicio}></input>
                                         <label htmlFor='inputFin'>Hasta: </label>
-                                        <input type="date" id="inputFin" onChange={handleChangeFin}></input>
+                                        <input type="date" id="inputFin" onKeyDown={checkEnter}  onChange={handleChangeFin}></input>
                                     </div>
                                     : filtro === "Clicks" || filtro === "Monto"?
-                                     <input type="number" onChange={handleChangeBusqueda}></input>:
+                                     <input type="number" onKeyDown={checkEnter}  onChange={handleChangeBusqueda}></input>:
                                      filtro ==="Pagada"?
-                                     <select defaultValue="true" onChange={handleChangeBusqueda}>
+                                     <select defaultValue="true"  onKeyDown={checkEnter} onChange={handleChangeBusqueda}>
                                         <option value="true">Si</option>
                                         <option value="false">No</option>
                                      </select>
-                                     :<input type="text" onChange={handleChangeBusqueda}></input>}
+                                     :<input type="text"  onKeyDown={checkEnter}  onChange={handleChangeBusqueda}></input>}
                                 <button onClick={() => buscar()}>Buscar</button>
                                 <p className="mensaje-error">{mensajeError}</p>
                             </div>
                             <div>
-                                <DynamicTable TableData={facturas} />
+                                <DynamicTable TableData={facturas} num={10}/>
                             </div></> : <p>Cargando...</p>}
                 </div>
             </div>

@@ -35,6 +35,7 @@ const GraficaMeses = ({ empresa }) => {
                 fill: true,
                 backgroundColor: "rgba(6, 156,51, .3)",
                 borderColor: "#02b844",
+                hoverBackgroundColor: "rgba(6, 156, 51)",
             }
         ]
     }
@@ -42,6 +43,7 @@ const GraficaMeses = ({ empresa }) => {
     return (
         <>
             <h3>Cantidad de clicks por meses</h3>
+            <hr/>
             <MDBContainer className="grafica">
                 <Line data={data} />
             </MDBContainer>

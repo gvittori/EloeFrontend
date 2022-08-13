@@ -3,11 +3,11 @@ import { NavLink } from 'react-router-dom';
 import PrintFactura from '../util/PrintFactura';
 
 const ItemEmpresa = (props) => {
-    const fecha = new Date();
-    const fechaV = new Date();
+    //const fecha = new Date();
+    //const fechaV = new Date();
     const { nombre, mail, clicks, clicksMes, deuda, taza, cnpj, anual } = props;
 
-    const filtroClicksMes = () => {
+    /*const filtroClicksMes = () => {
         const clicksFiltrados = [];
         clicks.forEach(click => {
             var clickFecha = new Date(click.fechaHora);
@@ -30,11 +30,11 @@ const ItemEmpresa = (props) => {
             "deudaTotal": deuda,
             "fecha": fecha
 
-        };
+        };*/
 
 return (
     <>
-        <div className='flex-column centerBox'>
+        <div className='flex-column centerBox min'>
             <p>• Nombre de la empresa: {nombre}</p>
             <p>• CNPJ: {cnpj}</p>
             <p>• Email de contacto: {mail}</p>
@@ -44,9 +44,7 @@ return (
             <p>• Deuda del mes: ${deuda}</p>
             <p>• Total anual: ${anual}</p>
         </div>
-        <button className='btnRegistro' disabled={clicks.length>0?false:true} onClick={() => PrintFactura(data)}>Imprimir factura</button>
-
-       
+      
     </>
 );
 

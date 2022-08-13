@@ -79,12 +79,12 @@ body {
 
 
 .btnRegistro {
-  width: 50%;
+  width: 150px;
   height: 30px;
   margin: 5px 5px;
   align-self: center;
+  cursor: pointer;
   transition: box-shadow ease-in .1s;
-  max-width: 150px;
 }
 
 .btnRegistro:hover{
@@ -278,6 +278,8 @@ hr.lineaTop {
 
 
 .table {
+  max-width: 1200px;
+  min-width: 1000px;
   margin-bottom: 16px;
   background-color: transparent;
   text-align: center;
@@ -294,7 +296,7 @@ hr.lineaTop {
   font-size: 16px;
   color: #161a1f;
   min-width: 150px;
-  max-width: 500px;
+  max-width: 300px;
   word-wrap: break-word;
 }
 
@@ -332,6 +334,7 @@ hr.lineaTop {
   text-decoration: none;
   margin: 5px 0;
   border-radius: 3px;
+  transition: .4s ease all;
 }
 
 .menuText>p {
@@ -348,6 +351,10 @@ hr.lineaTop {
   width: 0;
   overflow: hidden;
 }
+
+
+
+
 
 .pagination {
   display: flex;
@@ -378,6 +385,17 @@ hr.lineaTop {
   background-color: #0ed450;
 }
 
+.page-link.inactive {
+  background-color: #888888;
+  border-color: #5a5a5a;
+}
+
+.page-link.inactive:hover {
+  background-color: #888888;
+  box-shadow: none;
+  cursor:not-allowed;
+}
+
 
 .flex-row {
   flex-direction: row;
@@ -406,7 +424,8 @@ hr.lineaTop {
   margin: 5px 0 5px 30px;
 }
 
-.listaEmpresas li{
+
+.whiteBox{
   margin: 5px 0;
   background: #f6f6f6;
   border: 1px solid rgb(80, 78, 78);
@@ -425,6 +444,10 @@ hr.lineaTop {
   margin: 5px 0;
 }
 
+.min{
+  min-width: 350px;
+}
+
 .centerBox p{
   margin: 3px 0;
 }
@@ -440,3 +463,25 @@ hr{
 .grafica{
   max-width: 700px;
 }
+
+.hidden{
+  visibility: hidden;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.facturaDiv hr{
+  border-bottom: 1px groove #3438357e;
+}
+
+.facturaDiv strong{
+  margin-top: 20px;
+}
+
+.facturaDiv h3{
+  margin-top: 20px;
+}
+

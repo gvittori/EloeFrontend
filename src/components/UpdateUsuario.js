@@ -106,15 +106,23 @@ const UpdateUsuario = ({ history }) => {
 
     if (!location.state) return history.push("/");
 
+    const checkEnter = (e) => {
+        const { key, keyCode } = e;
+        if (keyCode === 13) {
+          btnUpdate();
+        }
+      };
+
+
     return (
         <>
             <div className="seccion registroBox">
                 <h2>Update de usuarios</h2>
                 <label htmlFor="txtUsu"><b>Nombre de usuario</b></label>
-                <input className="texto" type="text" onChange={handleChangeUsername} value={usernameUpdate}
+                <input className="texto" type="text" onChange={handleChangeUsername} value={usernameUpdate}  onKeyDown={checkEnter}
                     name="txtUsu" />
                 <label htmlFor="txtPass"><b>Contraseña</b></label>
-                <input className="texto" type="password" onChange={handleChangePassword}
+                <input className="texto" type="password" onChange={handleChangePassword}  onKeyDown={checkEnter}
                     name="txtPass" />
                 <label htmlFor="slcTipo"><b>Tipo de usuario</b></label>
                 <p>• Roles actuales:</p>

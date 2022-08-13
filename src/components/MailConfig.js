@@ -56,7 +56,12 @@ const MailConfig = ({ history }) => {
           })     
     }
 
-
+    const checkEnter = (e) => {
+        const { key, keyCode } = e;
+        if (keyCode === 13) {
+          guardarConfig();
+        }
+      };
 
 
     return (
@@ -73,6 +78,7 @@ const MailConfig = ({ history }) => {
                         placeholder='Seleccione uno o multiples dias'
                         data={listadoDias}
                         onChange={dias => setDias(dias)}
+                        onKeyDown={checkEnter} 
                     />
                     : null}
                 <input type="button" value="Guardar" className="btnRegistro" onClick={guardarConfig} />

@@ -103,6 +103,13 @@ const RegistroUsuarios = ({ history }) => {
       );
     }
   }
+  
+  const checkEnter = (e) => {
+    const { key, keyCode } = e;
+    if (keyCode === 13) {
+      btnRegistrar();
+    }
+  };
 
   return (
     <>
@@ -110,10 +117,10 @@ const RegistroUsuarios = ({ history }) => {
         <h2>Registro de usuarios</h2>
         <hr/>
         <label htmlFor="txtUsu"><b>Nombre de usuario</b></label>
-        <input className="texto" type="text" placeholder="Ingrese el usuario..." onChange={handleChangeUsername}
+        <input className="texto" type="text" placeholder="Ingrese el usuario..." onChange={handleChangeUsername}  onKeyDown={checkEnter}
           name="txtUsu" />
         <label htmlFor="txtPass"><b>Contraseña</b></label>
-        <input className="texto" type="password" placeholder="Ingrese la contraseña..." onChange={handleChangePassword}
+        <input className="texto" type="password" placeholder="Ingrese la contraseña..." onChange={handleChangePassword}  onKeyDown={checkEnter}
           name="txtPass" />
         <label htmlFor="slcTipo"><b>Tipo de usuario</b></label>
         {listaRoles.length > 0 ? listaRoles.map((item, index) => (

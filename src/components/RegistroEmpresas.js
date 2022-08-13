@@ -82,22 +82,29 @@ const RegistroEmpresas = ({ history }) => {
 
   };
 
+  const checkEnter = (e) => {
+    const { key, keyCode } = e;
+    if (keyCode === 13) {
+      btnRegistrar();
+    }
+  };
+
   return (
     <>
       <div className="seccion registroBox">
         <h2>Registro de empresas</h2>
         <hr />
         <label htmlFor="txtNom"><b>Nombre de empresa</b></label>
-        <input className="texto" type="text" placeholder="Ingrese nombre de empresa..." onChange={handleChangeNombre}
+        <input className="texto" type="text" placeholder="Ingrese nombre de empresa..." onChange={handleChangeNombre}  onKeyDown={checkEnter}
           name="txtNom" />
         <label htmlFor="txtMail"><b>Email de contacto</b></label>
-        <input className="texto" type="text" placeholder="Ingrese Email de contacto..." onChange={handleChangeMail}
+        <input className="texto" type="text" placeholder="Ingrese Email de contacto..." onChange={handleChangeMail}  onKeyDown={checkEnter}
           name="txtMail" />
         <label htmlFor="txtCnpj"><b>CNPJ</b></label>
         <input className="texto" type="text" placeholder="Ej: 11122233304444" onChange={handleChangeCnpj}
-          name="txtCnpj" />
+          name="txtCnpj"  onKeyDown={checkEnter}/>
         <label htmlFor="txtTaza"><b>Taza por click</b></label>
-        <input className="texto" type="number" placeholder="Ingrese taza por click..." onChange={handleChangeTazaClicks}
+        <input className="texto" type="number" placeholder="Ingrese taza por click..." onChange={handleChangeTazaClicks}  onKeyDown={checkEnter}
           name="txtTaza" />
         <input type="button" value="Registrar" onClick={btnRegistrar} className="btnRegistro" />
         <p className="mensaje-error">{mensajeError}</p>

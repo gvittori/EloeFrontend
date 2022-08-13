@@ -72,7 +72,7 @@ const Secciones = ({ history }) => {
           </button>
         </div>
         <hr className="lineaTop"></hr>
-        <div className={`menuText ${inactivo ? "inactivo" : ""}`}>
+        <div className={`menuText menuText-ltr ${inactivo ? "inactivo" : ""}`}>
           <p>Logeado como: {usuario}</p>
         </div>
         <hr className="lineaTop"></hr>
