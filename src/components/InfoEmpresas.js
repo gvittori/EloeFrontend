@@ -11,7 +11,7 @@ import InfoFacturas from './InfoFacturas';
 const InfoEmpresas = ({ history }) => {
 
     const [listado, setListado] = useState([]);
-    const [empresa, setEmpresa] = useState(JSON.parse(sessionStorage.getItem("empresa")));
+    const [empresa, setEmpresa] = useState(funciones.default.Validar());
     const [ok, setOk] = useState(false);
     const [listClicks, setListClicks] = useState([]);
 
@@ -58,8 +58,8 @@ const InfoEmpresas = ({ history }) => {
     const actualizar = (empresa) => {
         return funciones.default.Actualizar(empresa, history);
     }
-    const eliminar = (empresaNombre) => {
-        funciones.default.Eliminar(empresaNombre).then(result => setOk(result));
+    const eliminar = (empresaCnpj) => {
+        funciones.default.Eliminar(empresaCnpj).then(result => setOk(result));
         /*if(funciones.default.Eliminar(empresaNombre)){
             handleChangeListado(empresaNombre);
         }  */
@@ -142,7 +142,7 @@ const InfoEmpresas = ({ history }) => {
                         <div className='flex-column centerBox'>
                             <button className='btnRegistro' disabled={empresa.clicks.length > 0 ? false : true} onClick={() => printFactura(empresa)}>Imprimir factura</button>
                             <button className='btnRegistro' onClick={() => actualizar(empresa)}>Actualizar datos</button>
-                            <button className='btnRegistro' onClick={() => eliminar(empresa.empresaNombre)}>Deshabilitar empresa</button>
+                            <button className='btnRegistro' onClick={() => eliminar(empresa.empresaCnpj)}>Deshabilitar empresa</button>
                         </div>
                     </div>
                     <hr />

@@ -4,13 +4,14 @@ import Select from 'react-select'
 import { useHistory, useLocation } from "react-router-dom";
 import { decode } from '../util/decode';
 import * as funciones from '../util/FuncionesUsuarios'
+import Multiselect from "react-widgets/Multiselect";
 
 
 
 
 const UpdateUsuario = ({ history }) => {
     const location = useLocation();
-    const [usr, setUsr] = useState(JSON.parse(sessionStorage.getItem("usr")));
+    const [usr, setUsr] = useState(funciones.default.Validar());
     const [listado, setListado] = useState(funciones.default.Obtener().then(result => { setListado(result) }));
 
     const [usernameUpdate, setUsername] = useState("");
@@ -74,7 +75,7 @@ const UpdateUsuario = ({ history }) => {
         document.body.style.cursor = 'wait'
         const reqBody = {
             username: usr.username,
-            password: "",
+            passwordUpdate,
             usernameUpdate,
             passwordUpdate,
             rolesUpdate,
@@ -129,6 +130,7 @@ const UpdateUsuario = ({ history }) => {
     const checkEnter = (e) => {
         const { key, keyCode } = e;
         if (keyCode === 13) {
+            console.log(keyCode)
             btnUpdate();
         }
     };
@@ -159,12 +161,21 @@ const UpdateUsuario = ({ history }) => {
                 {roles.map((item, index) => (
                     <li key={index}> - {item.authority}</li>
                 ))}
-                {listaRoles.length > 0 ? listaRoles.map((item, index) => (
+                <Multiselect
+                    className='multiselect'
+                    placeholder='Seleccione uno o multiples roles'
+                    dataKey="rolId"
+                    textField="authority"
+                    data={listaRoles}
+                    onChange={roles => setRolesUpdate(roles)}
+                    onKeyDown={checkEnter}
+                />
+                {/*listaRoles.length > 0 ? listaRoles.map((item, index) => (
                     <div key={index} >
                         <label htmlFor={item.authority}>{item.authority} - </label>
                         <input type="checkbox" onClick={() => checkClick(item)} id={item.authority} />
                     </div>
-                )) : <p>Cargando roles...</p>}
+                )) : <p>Cargando roles...</p>*/}
                 {/*<select className='select'name="slcTipo" onChange={handleChangeRoles} defaultValue={'Default'}>
                     <option value="Default" disabled>Seleccione un rol</option>
                     {listaRoles.map((item, index) => (

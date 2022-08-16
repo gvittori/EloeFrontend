@@ -41,6 +41,7 @@ const Secciones = ({ history }) => {
       subMenus: [
         { nombre: "Información", to: "/ClientesInfo" },
         { nombre: "Lista de facturas", to: "/ClientesFacturas" },
+        { nombre: "Actualizar datos", to: "/UpdateEmpresa" },
       ],
     },
     {
@@ -48,6 +49,7 @@ const Secciones = ({ history }) => {
       subMenus: [
         { nombre: "Información", to: "/UsuariosInfo" },
         { nombre: "Lista de acciones", to: "/UsuariosAcciones" },
+        { nombre: "Actualizar datos", to: "/UpdateUsuario" },
       ],
     },
     { nombre: "Configuración", icono: "bi bi-gear", to: "/Configuracion", exact: true, disponible: ["TODOS"] },

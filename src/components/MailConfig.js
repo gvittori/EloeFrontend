@@ -30,41 +30,40 @@ const MailConfig = ({ history }) => {
             dias
         };
         fetch('/api/mail/setconfig', {
-          method: 'POST',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-            'Content-Type': 'application/json'
-          },
-          body:JSON.stringify(reqBody)
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reqBody)
         })
-        .then(res => 
-            {
-            if(!res.ok) {
-              return res.text().then(text => { throw new Error(text) })
-             }
-            else {
-             return res.text().then(
-                res => {
-                    document.body.style.cursor = 'default'
-                    setMensajeError(`Día de envio seteado como: ${res}`);
+            .then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error(text) })
                 }
-             );
-           }    
-          })
-          .catch(err => {
-            document.body.style.cursor = 'default'
-            setMensajeError(err.toString());
-          })     
+                else {
+                    return res.text().then(
+                        res => {
+                            document.body.style.cursor = 'default'
+                            setMensajeError(`Día de envio seteado como: ${res}`);
+                        }
+                    );
+                }
+            })
+            .catch(err => {
+                document.body.style.cursor = 'default'
+                setMensajeError(err.toString());
+            })
     }
 
     const checkEnter = (e) => {
         const { key, keyCode } = e;
         if (keyCode === 13) {
-          guardarConfig();
+            guardarConfig();
         }
-      };
+    };
 
 
     return (
@@ -77,11 +76,12 @@ const MailConfig = ({ history }) => {
                     <option value="Custom">Personalizado</option>
                 </select>
                 {opcion === "Custom" ?
-                    <Multiselect        
+                    <Multiselect
+                        className='multiselect'
                         placeholder='Seleccione uno o multiples dias'
                         data={listadoDias}
                         onChange={dias => setDias(dias)}
-                        onKeyDown={checkEnter} 
+                        onKeyDown={checkEnter}
                     />
                     : null}
                 <input type="button" value="Guardar" className="btnRegistro" onClick={guardarConfig} />

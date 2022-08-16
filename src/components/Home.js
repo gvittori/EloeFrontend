@@ -42,6 +42,7 @@ const Home = ({ props, history }) => {
   }
 
 
+
   return (
     <>
       <div className="seccion">

@@ -2,6 +2,7 @@ import React, { useState, useEffect, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import Select from 'react-select'
 import { decode } from '../util/decode';
+import Multiselect from "react-widgets/Multiselect";
 
 
 
@@ -92,7 +93,6 @@ const RegistroUsuarios = ({ history }) => {
               document.body.style.cursor = 'default'
             });
         }
-
   };
 
   const checkClick = (item) => {
@@ -106,7 +106,7 @@ const RegistroUsuarios = ({ history }) => {
       );
     }
   }
-  
+
   const checkEnter = (e) => {
     const { key, keyCode } = e;
     if (keyCode === 13) {
@@ -118,20 +118,29 @@ const RegistroUsuarios = ({ history }) => {
     <>
       <div className="seccion registroBox">
         <h2>Registro de usuarios</h2>
-        <hr/>
+        <hr />
         <label htmlFor="txtUsu"><b>Nombre de usuario</b></label>
-        <input className="texto" type="text" placeholder="Ingrese el usuario..." onChange={handleChangeUsername}  onKeyDown={checkEnter}
+        <input className="texto" type="text" placeholder="Ingrese el usuario..." onChange={handleChangeUsername} onKeyDown={checkEnter}
           name="txtUsu" />
         <label htmlFor="txtPass"><b>Contraseña</b></label>
-        <input className="texto" type="password" placeholder="Ingrese la contraseña..." onChange={handleChangePassword}  onKeyDown={checkEnter}
+        <input className="texto" type="password" placeholder="Ingrese la contraseña..." onChange={handleChangePassword} onKeyDown={checkEnter}
           name="txtPass" />
         <label htmlFor="slcTipo"><b>Tipo de usuario</b></label>
-        {listaRoles.length > 0 ? listaRoles.map((item, index) => (
+        <Multiselect
+          className='multiselect'
+          placeholder='Seleccione uno o multiples roles'
+          dataKey="rolId"
+          textField="authority"
+          data={listaRoles}
+          onChange={roles => setRoles(roles)}
+          onKeyDown={checkEnter}
+        />
+        {/*listaRoles.length > 0 ? listaRoles.map((item, index) => (
           <div key={index} >
             <label htmlFor={item.authority}>{item.authority} - </label>
             <input type="checkbox" onClick={() => checkClick(item)} id={item.authority} />
           </div>
-        )) : <p>Cargando roles...</p>}
+        )) : <p>Cargando roles...</p>*/}
         {/*<select className='select'name="slcTipo" onChange={handleChangeRoles} defaultValue={'Default'}>
         <option value="Default" disabled>Seleccione un rol</option>
           {listaRoles.map((item, index) => (

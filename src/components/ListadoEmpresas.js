@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLocalState } from '../util/useLocalStorage';
-import { withRouter } from 'react-router-dom';
+import { withRouter, useHistory } from 'react-router-dom';
 import ItemEmpresa from './ItemEmpresa';
 import * as funciones from '../util/FuncionesEmpresas.js'
 import { useEventTracking } from "react-event-tracker";
 
 const ListadoEmpresas = ({ listado }) => {
+    const history = useHistory();
     /*const [empresas, setEmpresas] = useState();
     
         useEffect(() => {
@@ -61,6 +62,10 @@ const ListadoEmpresas = ({ listado }) => {
         }
     */
 
+    const linkInfo = (empresa) =>{
+        sessionStorage.setItem("empresa", JSON.stringify(empresa));
+        history.push("/ClientesInfo")
+    }
 
     return (
         <>
@@ -68,7 +73,7 @@ const ListadoEmpresas = ({ listado }) => {
                 <h3>Listado de empresas</h3>
                 <ul>
                     {listado.map((item, index) => (
-                        <li key={index} className="whiteBox">
+                        <li key={index} className="whiteBox" onClick={()=>linkInfo(item)}>
                             <p>• Nombre de la empresa: {item.empresaNombre}</p>
                             <p>• Deuda del mes: ${item.deuda}</p>
                         </li>

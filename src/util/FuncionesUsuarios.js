@@ -3,7 +3,7 @@ import { decode } from '../util/decode';
 
 async function Eliminar(username) {
     const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
-    const reqBody ={
+    const reqBody = {
         username,
         usuario
     }
@@ -22,7 +22,7 @@ async function Eliminar(username) {
                 return res.text().then(text => { throw new Error(text) })
             }
             else {
-                return res        
+                return res
             }
         })
             .catch(err => {
@@ -58,6 +58,30 @@ const Actualizar = (usuario, history) => {
     });
 }
 
-export default withRouter({ Actualizar, Eliminar, Obtener })
+const Validar = () => {
+    try {
+        let obj = JSON.parse(sessionStorage.getItem("usr"));
+        if (
+            (obj.accountNonExpired===true||obj.accountNonExpired===false)&&
+            (obj.accountNonLocked===true||obj.accountNonLocked===false)&&
+            (obj.activo===true||obj.activo===false)&&
+            (obj.credentialsNonExpired===true||obj.credentialsNonExpired===false)&&
+            (obj.enabled===true||obj.enabled===false)&&
+            obj.username.length>0&&
+            obj.usuId>0&&
+            obj.password.length>0&&
+            obj.authorities.length>0&&
+            obj.roles.length>0
+           ) {
+            return obj
+        } else {
+            return null
+        }
+    } catch (error) {
+        return null
+    }
+}
+
+export default withRouter({ Actualizar, Eliminar, Obtener, Validar })
 
 

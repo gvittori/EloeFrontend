@@ -7,7 +7,7 @@ import * as funciones from '../util/FuncionesEmpresas.js'
 const UpdateEmpresa = () => {
     const location = useLocation();
     const history = useHistory();
-    const [empresa, setEmpresa] = useState(JSON.parse(sessionStorage.getItem("empresa")));
+    const [empresa, setEmpresa] = useState(funciones.default.Validar());
 
     const [listado, setListado] = useState(funciones.default.Obtener().then(result => { setListado(result) }));
     const [nombreUpdate, setNombre] = useState("");
@@ -52,7 +52,7 @@ const UpdateEmpresa = () => {
         setMensajeError('');
         document.body.style.cursor = 'wait'
         const reqBody = {
-            nombre: empresa.empresaNombre,
+            cnpj: empresa.empresaCnpj,
             nombreUpdate,
             emailUpdate,
             cnpjUpdate,

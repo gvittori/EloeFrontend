@@ -5,7 +5,7 @@ import * as funciones from '../util/FuncionesUsuarios'
 
 const InfoUsuarios = ({ history }) => {
     const [listado, setListado] = useState([]);
-    const [usuario, setUsuario] = useState(JSON.parse(sessionStorage.getItem("usr")));
+    const [usuario, setUsuario] = useState(funciones.default.Validar());
     const [ok, setOk] = useState(false);
 
 

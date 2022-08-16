@@ -431,6 +431,11 @@ hr.lineaTop {
   margin: 5px 0 5px 30px;
 }
 
+.listaEmpresas li:hover{
+  background-color: #0ed450;
+  cursor: pointer;
+}
+
 
 .whiteBox {
   margin: 5px 0;
@@ -490,4 +495,8 @@ hr {
 
 .facturaDiv h3 {
   margin-top: 20px;
+}
+
+.multiselect{
+  margin: 10px 0;
 }

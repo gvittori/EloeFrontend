@@ -1,10 +1,10 @@
 import { withRouter, useHistory } from 'react-router-dom';
 import { decode } from '../util/decode';
 
-async function Eliminar(empresaNombre) {
+async function Eliminar(empresaCnpj) {
     const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
     const reqBody ={
-        empresaNombre,
+        empresaCnpj,
         usuario
     }
     if (window.confirm("Deshabilitar empresa?")) {
@@ -60,6 +60,29 @@ const Actualizar = (empresa, history) => {
     });
 }
 
-export default withRouter({ Actualizar, Eliminar, Obtener })
+const Validar = () => {
+    try {
+      let obj = JSON.parse(sessionStorage.getItem("empresa"))
+      if (
+        obj.empresaNombre.length > 0 &&
+        obj.empresaCnpj.length === 14 &&
+        obj.empresaId > 0 &&
+        obj.empresaMail.length > 0 &&
+        obj.tazaClicks >= 0 &&
+        obj.deuda >= 0 &&
+        obj.totalAnual >= 0 &&
+        obj.clicks.length >= 0 &&
+        obj.clicksMes.length >= 0 &&
+        (obj.activo === true || obj.activo === false)) {
+        return obj
+      } else {
+        return null
+      }
+    } catch (error) {
+      return null
+    }
+  }
+
+export default withRouter({ Actualizar, Eliminar, Obtener, Validar })
 
 

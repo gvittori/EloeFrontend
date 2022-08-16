@@ -40,7 +40,7 @@ const RegistroEmpresas = ({ history }) => {
       if (empresaMail.length == 0) {
         setMensajeError(`Error: Ingrese Email de contacto`);
       } else
-        if (empresaCnpj.length < 14) {
+        if (empresaCnpj.length !== 14) {
           setMensajeError(`Error: Ingrese CNPJ valido`);
         } else
           if (tazaClicks <= 0) {
