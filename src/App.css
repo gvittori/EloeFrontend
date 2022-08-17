@@ -429,6 +429,7 @@ hr.lineaTop {
   border: 1px solid rgb(80, 78, 78);
   padding: 10px;
   margin: 5px 0 5px 30px;
+  width: 350px;
 }
 
 .listaEmpresas li:hover{
@@ -454,6 +455,11 @@ hr.lineaTop {
   border: 1px solid rgb(80, 78, 78);
   padding: 10px;
   margin: 5px 0;
+}
+
+.centerBox.homeBox {
+  min-height: 300px;
+  min-width: 300px;
 }
 
 .min {

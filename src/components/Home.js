@@ -52,14 +52,14 @@ const Home = ({ props, history }) => {
         </div>
         {listado.length > 0
           ? <div className="flex-row">
-            <div className='flex-column centerBox'>
+            <div className='flex-column centerBox homeBox'>
               <h4>• Cantidad de empresas registradas: {listado.length}</h4>
               <h4>• Ganancias del mes: ${gananciasMensuales()}</h4>
               <h4>• Ganancias del año: ${gananciasAnuales()}</h4>
               <h4>• Promedio de ganancias mensuales: ${promedioGananciasMes()}</h4>
               <h4>• Promedio de ganancias anuales: ${promedioGananciasAño()}</h4>
             </div>
-            <ListadoEmpresas listado={listado} />
+            <ListadoEmpresas listado={listado} num={4}/>
           </div>
           : <div><p>Cargando...</p></div>}
         <div className="flex-column">

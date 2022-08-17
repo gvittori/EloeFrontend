@@ -65,6 +65,7 @@ const UpdateUsuario = ({ history }) => {
     const handleChangeUsuario = ({ target: { value } }) => {
         let obj = JSON.parse(value);
         setUsr(obj);
+        setMensajeError("");
     };
 
 

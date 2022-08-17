@@ -102,6 +102,7 @@ const UpdateEmpresa = () => {
     const handleChangeEmpresa = ({ target: { value } }) => {
         let obj = JSON.parse(value);
         setEmpresa(obj);
+        setMensajeError("");
     };
 
 
