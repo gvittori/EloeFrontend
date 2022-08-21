@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import Pagination from "./Pagination";
 
-function DynamicTable({ TableData, num, facturas, update }) {
+function DynamicTable({ TableData, num, facturas, update, inProgress }) {
   const [sortedConfig, setSortedConfig] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(num === undefined ? TableData.length : num);
@@ -34,6 +34,7 @@ function DynamicTable({ TableData, num, facturas, update }) {
       setCurrentPage(1);
     }
   }, [TableData])
+
 
   // get table column
   const column = Object.keys(sortedItems[0]);
@@ -74,6 +75,8 @@ function DynamicTable({ TableData, num, facturas, update }) {
     update(data)
   }
 
+
+
   // get table row data
   const tdData = () => {
     return currentItems.map((data, index) => {
@@ -86,7 +89,7 @@ function DynamicTable({ TableData, num, facturas, update }) {
           }
           {facturas ?
             <>
-              <td><button onClick={() => cambioEstado(data)}>Cambio</button></td>
+              <td><button disabled={inProgress?true:false} className="btnRegistro td" onClick={() => cambioEstado(data)}>Actualizar</button></td>
             </>
             : null}
         </tr>

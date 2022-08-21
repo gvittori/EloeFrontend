@@ -96,6 +96,17 @@ body {
   cursor: not-allowed;
 }
 
+.btnRegistro.td {
+  width: 70px;
+  height: 20px;
+  cursor: pointer;
+  transition: box-shadow ease-in .1s;
+}
+
+.btnRegistro.td:disabled {
+  box-shadow: none;
+  cursor: not-allowed;
+}
 
 
 .seccion {

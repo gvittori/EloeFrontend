@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import DynamicTable from '../util/DynamicTable';
+import { decode } from '../util/decode';
 
 const InfoFacturas = () => {
     const [facturas, setFacturas] = useState([]);
@@ -10,6 +11,7 @@ const InfoFacturas = () => {
     const [fechaInicio, setInicio] = useState("");
     const [fechaFin, setFin] = useState("");
     const [mensajeError, setMensajeError] = useState("");
+    const [inProgress, setInProgress] = useState(false);
 
     const opcionesFiltro = ["Empresa", "Monto", "Clicks", "Pagada", "Fecha generada", "Fecha vencimiento"]
 
@@ -100,11 +102,14 @@ const InfoFacturas = () => {
     };
 
     const updateFactura = (data) => {
+        setInProgress(true)
         document.body.style.cursor = 'wait'
         let id = data.empresa.split(/[\s]/)[2];
+        const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
         let reqBody = {
             fechaGenerada: data.fechaGenerada,
-            empresaId: id
+            empresaId: id,
+            usuario
         }
         fetch('/api/facturas/update', {
             method: 'POST',
@@ -123,8 +128,12 @@ const InfoFacturas = () => {
             else {
                 Promise.all([res.json()])
                     .then(([body]) => {
+                        let copy = JSON.parse(JSON.stringify(facturas))
+                        let index = facturas.indexOf(data)
+                        copy[index]=body
+                        setFacturas(copy)
                         document.body.style.cursor = 'default'
-                        console.log(body)
+                        setInProgress(false)
                     });
             }
         })
@@ -164,7 +173,7 @@ const InfoFacturas = () => {
                                 <p className="mensaje-error">{mensajeError}</p>
                             </div>
                             <div>
-                                <DynamicTable TableData={facturas} num={10} facturas={true} update={updateFactura} />
+                                <DynamicTable TableData={facturas} num={10} facturas={true} update={updateFactura} inProgress={inProgress}/>
                             </div></> : <p>Cargando...</p>}
                 </div>
             </div>
