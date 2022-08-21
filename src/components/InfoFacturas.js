@@ -34,7 +34,7 @@ const InfoFacturas = () => {
                     });
             }
         })
-    },[]);
+    }, []);
 
     const handleChangeFiltro = ({ target: { value } }) => {
         setFiltro(value)
@@ -95,9 +95,40 @@ const InfoFacturas = () => {
     const checkEnter = (e) => {
         const { key, keyCode } = e;
         if (keyCode === 13) {
-          buscar();
+            buscar();
         }
-      };
+    };
+
+    const updateFactura = (data) => {
+        document.body.style.cursor = 'wait'
+        let id = data.empresa.split(/[\s]/)[2];
+        let reqBody = {
+            fechaGenerada: data.fechaGenerada,
+            empresaId: id
+        }
+        fetch('/api/facturas/update', {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reqBody)
+        }).then(res => {
+            if (!res.ok) {
+                document.body.style.cursor = 'default'
+                return res.text().then(text => { throw new Error(text) })
+            }
+            else {
+                Promise.all([res.json()])
+                    .then(([body]) => {
+                        document.body.style.cursor = 'default'
+                        console.log(body)
+                    });
+            }
+        })
+    }
 
     return (
         <>
@@ -114,26 +145,26 @@ const InfoFacturas = () => {
                                         <option key={index} value={item}>{item}</option>
                                     ))}
                                 </select>
-                                { filtro === "Fecha generada" || filtro ==="Fecha vencimiento"?
+                                {filtro === "Fecha generada" || filtro === "Fecha vencimiento" ?
                                     <div>
                                         <label htmlFor='inputInicio'>Desde: </label>
-                                        <input type="date" id="inputInicio" onKeyDown={checkEnter}  onChange={handleChangeInicio}></input>
+                                        <input type="date" id="inputInicio" onKeyDown={checkEnter} onChange={handleChangeInicio}></input>
                                         <label htmlFor='inputFin'>Hasta: </label>
-                                        <input type="date" id="inputFin" onKeyDown={checkEnter}  onChange={handleChangeFin}></input>
+                                        <input type="date" id="inputFin" onKeyDown={checkEnter} onChange={handleChangeFin}></input>
                                     </div>
-                                    : filtro === "Clicks" || filtro === "Monto"?
-                                     <input type="number" onKeyDown={checkEnter}  onChange={handleChangeBusqueda}></input>:
-                                     filtro ==="Pagada"?
-                                     <select defaultValue="true"  onKeyDown={checkEnter} onChange={handleChangeBusqueda}>
-                                        <option value="true">Si</option>
-                                        <option value="false">No</option>
-                                     </select>
-                                     :<input type="text"  onKeyDown={checkEnter}  onChange={handleChangeBusqueda}></input>}
+                                    : filtro === "Clicks" || filtro === "Monto" ?
+                                        <input type="number" onKeyDown={checkEnter} onChange={handleChangeBusqueda}></input> :
+                                        filtro === "Pagada" ?
+                                            <select defaultValue="true" onKeyDown={checkEnter} onChange={handleChangeBusqueda}>
+                                                <option value="true">Si</option>
+                                                <option value="false">No</option>
+                                            </select>
+                                            : <input type="text" onKeyDown={checkEnter} onChange={handleChangeBusqueda}></input>}
                                 <button onClick={() => buscar()}>Buscar</button>
                                 <p className="mensaje-error">{mensajeError}</p>
                             </div>
                             <div>
-                                <DynamicTable TableData={facturas} num={10}/>
+                                <DynamicTable TableData={facturas} num={10} facturas={true} update={updateFactura} />
                             </div></> : <p>Cargando...</p>}
                 </div>
             </div>

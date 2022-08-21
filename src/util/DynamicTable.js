@@ -1,10 +1,10 @@
 import { useEffect, useState, useMemo } from "react";
 import Pagination from "./Pagination";
 
-function DynamicTable({ TableData, num }) {
+function DynamicTable({ TableData, num, facturas, update }) {
   const [sortedConfig, setSortedConfig] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(num===undefined?TableData.length:num);
+  const [itemsPerPage, setItemsPerPage] = useState(num === undefined ? TableData.length : num);
 
   let sortedItems = [...TableData];
   useMemo(() => {
@@ -40,29 +40,42 @@ function DynamicTable({ TableData, num }) {
 
   // get table heading data
   const ThData = () => {
-
-    return column.map((data) => {
-      return <th key={data} className="dynamicTh">
-        <span>{data.match(/([A-Z]?[^A-Z]*)/g).slice(0,-1).join(" ")}</span>
-        <button type="button" className="thButton" onClick={() => requestSort(data)}>
-          <i className={iconChange(data)}></i>
-        </button>
-      </th>
-    })
+    return (
+      <>
+        {
+          column.map((data) => {
+            return <th key={data} className="dynamicTh">
+              <span>{data.match(/([A-Z]?[^A-Z]*)/g).slice(0, -1).join(" ")}</span>
+              <button type="button" className="thButton" onClick={() => requestSort(data)}>
+                <i className={iconChange(data)}></i>
+              </button>
+            </th>
+          })
+        }
+        {facturas ?
+          <>
+            <th className="dynamicTh">Cambiar estado</th>
+          </>
+          : null}
+      </>
+    )
   }
 
-  const iconChange = (data) =>{
-    if(sortedConfig&&sortedConfig.key===data){
-      if(sortedConfig.direction==="asc"){
+  const iconChange = (data) => {
+    if (sortedConfig && sortedConfig.key === data) {
+      if (sortedConfig.direction === "asc") {
         return "bi bi-caret-up-fill";
       }
     }
     return "bi bi-caret-down-fill";
   }
 
+  const cambioEstado = (data) => {
+    update(data)
+  }
+
   // get table row data
   const tdData = () => {
-
     return currentItems.map((data, index) => {
       return (
         <tr key={index}>
@@ -71,10 +84,16 @@ function DynamicTable({ TableData, num }) {
               return <td key={index}>{data[v]}</td>
             })
           }
+          {facturas ?
+            <>
+              <td><button onClick={() => cambioEstado(data)}>Cambio</button></td>
+            </>
+            : null}
         </tr>
       )
     })
   }
+
 
 
 
@@ -117,7 +136,7 @@ function DynamicTable({ TableData, num }) {
               {tdData()}
             </tbody>
           </table>
-          <Pagination currentPage={currentPage} pageNumbers={pageNumbers} paginate={paginate} adelante={paginateFront} atras={paginateBack}/>
+          <Pagination currentPage={currentPage} pageNumbers={pageNumbers} paginate={paginate} adelante={paginateFront} atras={paginateBack} />
         </>
         : <p>Cargando...</p>}
 

@@ -6,12 +6,17 @@ import { decode } from '../util/decode';
 
 
 const RegistroEmpresas = ({ history }) => {
+  const [empresaId, setId] = useState('');
   const [empresaNombre, setNombre] = useState('');
   const [empresaMail, setMail] = useState('');
   const [empresaCnpj, setCnpj] = useState('');
   const [tazaClicks, setTazaClicks] = useState(0);
   const [mensajeError, setMensajeError] = useState('');
 
+
+  const handleChangeId = ({ target: { value } }) => {
+    setId(value);
+  };
 
   const handleChangeNombre = ({ target: { value } }) => {
     setNombre(value);
@@ -34,7 +39,9 @@ const RegistroEmpresas = ({ history }) => {
   const btnRegistrar = () => {
     const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
     setMensajeError('');
-    if (empresaNombre.length == 0) {
+    if (empresaId < 0 || empresaId > 2147483647) {
+      setMensajeError(`Error: Id de empresa inválido`);
+    } else if (empresaNombre.length == 0) {
       setMensajeError(`Error: Ingrese nombre de empresa`);
     } else
       if (empresaMail.length == 0) {
@@ -49,6 +56,7 @@ const RegistroEmpresas = ({ history }) => {
           else {
             document.body.style.cursor = 'wait'
             const reqBody = {
+              empresaId,
               empresaNombre,
               empresaMail,
               empresaCnpj,
@@ -83,6 +91,7 @@ const RegistroEmpresas = ({ history }) => {
               })
           }
 
+
   };
 
   const checkEnter = (e) => {
@@ -97,17 +106,20 @@ const RegistroEmpresas = ({ history }) => {
       <div className="seccion registroBox">
         <h2>Registro de empresas</h2>
         <hr />
+        <label htmlFor="txtId"><b>ID de empresa (opcional)</b></label>
+        <input className="texto" type="number" placeholder="Ingrese ID de empresa..." onChange={handleChangeId} onKeyDown={checkEnter}
+          name="txtNom" />
         <label htmlFor="txtNom"><b>Nombre de empresa</b></label>
-        <input className="texto" type="text" placeholder="Ingrese nombre de empresa..." onChange={handleChangeNombre}  onKeyDown={checkEnter}
+        <input className="texto" type="text" placeholder="Ingrese nombre de empresa..." onChange={handleChangeNombre} onKeyDown={checkEnter}
           name="txtNom" />
         <label htmlFor="txtMail"><b>Email de contacto</b></label>
-        <input className="texto" type="text" placeholder="Ingrese Email de contacto..." onChange={handleChangeMail}  onKeyDown={checkEnter}
+        <input className="texto" type="text" placeholder="Ingrese Email de contacto..." onChange={handleChangeMail} onKeyDown={checkEnter}
           name="txtMail" />
         <label htmlFor="txtCnpj"><b>CNPJ</b></label>
         <input className="texto" type="text" placeholder="Ej: 11122233304444" onChange={handleChangeCnpj}
-          name="txtCnpj"  onKeyDown={checkEnter}/>
+          name="txtCnpj" onKeyDown={checkEnter} />
         <label htmlFor="txtTaza"><b>Taza por click</b></label>
-        <input className="texto" type="number" placeholder="Ingrese taza por click..." onChange={handleChangeTazaClicks}  onKeyDown={checkEnter}
+        <input className="texto" type="number" placeholder="Ingrese taza por click..." onChange={handleChangeTazaClicks} onKeyDown={checkEnter}
           name="txtTaza" />
         <input type="button" value="Registrar" onClick={btnRegistrar} className="btnRegistro" />
         <p className="mensaje-error">{mensajeError}</p>
