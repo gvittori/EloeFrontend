@@ -3,7 +3,7 @@ import { decode } from '../util/decode';
 
 async function Eliminar(empresaCnpj) {
     const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
-    const reqBody ={
+    const reqBody = {
         empresaCnpj,
         usuario
     }
@@ -23,7 +23,7 @@ async function Eliminar(empresaCnpj) {
                 return res.text().then(text => { throw new Error(text) })
             }
             else {
-                return res        
+                return res
             }
         })
             .catch(err => {
@@ -52,6 +52,50 @@ async function Obtener() {
     return res;
 }
 
+async function Enviar(empresaCnpj) {
+    const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
+    if (window.confirm("Enviar factura de empresa seleccionada?")) {
+        let condicion = false;
+        if(window.confirm("Generar nueva factura en base de datos?")){
+            condicion = true;
+        }
+        const reqBody = {
+            empresaCnpj,
+            usuario,
+            condicion
+        }
+        document.body.style.cursor = 'wait'
+        const ok = await fetch('/api/empresas/enviar', {
+            method: 'POST',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(reqBody)
+        }).then(res => {
+            if (!res.ok) {
+                return res.text().then(text => { throw new Error(text) })
+            }
+            else {
+                return res
+            }
+        }).catch(err => {
+            alert(err.toString());
+        });
+        if (ok) {
+            alert("Factura enviada...")
+        } else {
+            alert("Factura no enviada...")
+        }
+        document.body.style.cursor = 'default'
+        return false
+    }
+
+}
+
+
 const Actualizar = (empresa, history) => {
     //const history = useHistory();
     history.push({
@@ -60,29 +104,30 @@ const Actualizar = (empresa, history) => {
     });
 }
 
+
 const Validar = () => {
     try {
-      let obj = JSON.parse(sessionStorage.getItem("empresa"))
-      if (
-        obj.empresaNombre.length > 0 &&
-        obj.empresaCnpj.length === 14 &&
-        obj.empresaId > 0 &&
-        obj.empresaMail.length > 0 &&
-        obj.tazaClicks >= 0 &&
-        obj.deuda >= 0 &&
-        obj.totalAnual >= 0 &&
-        obj.clicks.length >= 0 &&
-        obj.clicksMes.length >= 0 &&
-        (obj.activo === true || obj.activo === false)) {
-        return obj
-      } else {
-        return null
-      }
+        let obj = JSON.parse(sessionStorage.getItem("empresa"))
+        if (
+            obj.empresaNombre.length > 0 &&
+            obj.empresaCnpj.length === 14 &&
+            obj.empresaId > 0 &&
+            obj.empresaMail.length > 0 &&
+            obj.tazaClicks >= 0 &&
+            obj.deuda >= 0 &&
+            obj.totalAnual >= 0 &&
+            obj.clicks.length >= 0 &&
+            obj.clicksMes.length >= 0 &&
+            (obj.activo === true || obj.activo === false)) {
+            return obj
+        } else {
+            return null
+        }
     } catch (error) {
-      return null
+        return null
     }
-  }
+}
 
-export default withRouter({ Actualizar, Eliminar, Obtener, Validar })
+export default withRouter({ Actualizar, Eliminar, Obtener, Validar, Enviar })
 
 

@@ -7,6 +7,8 @@ import ItemEmpresa from './ItemEmpresa';
 import * as funciones from '../util/FuncionesEmpresas.js'
 import { default as DynamicTable } from '../util/DynamicTable.js'
 import InfoFacturas from './InfoFacturas';
+import { renderToString } from "react-dom/server";
+import FacturaWindow from '../util/FacturaWindow';
 
 const InfoEmpresas = ({ history }) => {
 
@@ -14,6 +16,7 @@ const InfoEmpresas = ({ history }) => {
     const [empresa, setEmpresa] = useState(funciones.default.Validar());
     const [ok, setOk] = useState(false);
     const [listClicks, setListClicks] = useState([]);
+    const [inProgress, setInProgress] = useState(false);
 
     const [fechaInicio, setInicio] = useState("");
     const [fechaFin, setFin] = useState("");
@@ -115,6 +118,12 @@ const InfoEmpresas = ({ history }) => {
         printWindow.print();
     }
 
+    const enviarFactura = (empresa) => {
+        setInProgress(true);
+        funciones.default.Enviar(empresa).then(result => setInProgress(result)); 
+    }
+
+
     const checkEnter = (e) => {
         const { key, keyCode } = e;
         if (keyCode === 13) {
@@ -141,8 +150,9 @@ const InfoEmpresas = ({ history }) => {
                         />
                         <div className='flex-column centerBox'>
                             <button className='btnRegistro' disabled={empresa.clicks.length > 0 ? false : true} onClick={() => printFactura(empresa)}>Imprimir factura</button>
-                            <button className='btnRegistro' onClick={() => actualizar(empresa)}>Actualizar datos</button>
-                            <button className='btnRegistro' onClick={() => eliminar(empresa.empresaCnpj)}>Deshabilitar empresa</button>
+                            <button className='btnRegistro' disabled={empresa.clicks.length > 0 ? false : true} onClick={() => enviarFactura(empresa.empresaCnpj)}>Enviar factura</button>
+                            <button className='btnRegistro'  disabled={inProgress?true:false} onClick={() => actualizar(empresa)}>Actualizar datos</button>
+                            <button className='btnRegistro'  disabled={inProgress?true:false} onClick={() => eliminar(empresa.empresaCnpj)}>Deshabilitar empresa</button>
                         </div>
                     </div>
                     <hr />
