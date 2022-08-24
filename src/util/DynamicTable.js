@@ -7,6 +7,19 @@ function DynamicTable({ TableData, num, facturas, update, inProgress }) {
   const [itemsPerPage, setItemsPerPage] = useState(num === undefined ? TableData.length : num);
 
   let sortedItems = [...TableData];
+
+  const getNumArray = () => {
+    let array = []
+    for (let i = 1; i <= Math.ceil(TableData.length / itemsPerPage); i++) {
+      array.push(i);
+    }
+    return array;
+  }
+
+  const [pageNumbers, setPageNumbers] = useState(getNumArray());
+
+
+
   useMemo(() => {
     if (sortedConfig !== null) {
       sortedItems.sort((a, b) => {
@@ -30,9 +43,8 @@ function DynamicTable({ TableData, num, facturas, update, inProgress }) {
   }, [sortedItems, sortedConfig]);
 
   useEffect(() => {
-    if (TableData.length <= itemsPerPage) {
-      setCurrentPage(1);
-    }
+    setCurrentPage(1);
+    setPageNumbers(getNumArray());
   }, [TableData])
 
 
@@ -89,7 +101,7 @@ function DynamicTable({ TableData, num, facturas, update, inProgress }) {
           }
           {facturas ?
             <>
-              <td><button disabled={inProgress?true:false} className="btnRegistro td" onClick={() => cambioEstado(data)}>Actualizar</button></td>
+              <td><button disabled={inProgress ? true : false} className="btnRegistro td" onClick={() => cambioEstado(data)}>Actualizar</button></td>
             </>
             : null}
         </tr>
@@ -110,10 +122,6 @@ function DynamicTable({ TableData, num, facturas, update, inProgress }) {
     setSortedConfig({ key, direction });
   }
 
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(TableData.length / itemsPerPage); i++) {
-    pageNumbers.push(i);
-  }
 
 
   const indexOfLastItem = currentPage * itemsPerPage;

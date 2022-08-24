@@ -15,7 +15,7 @@ const InfoEmpresas = ({ history }) => {
     const [listado, setListado] = useState([]);
     const [empresa, setEmpresa] = useState(funciones.default.Validar());
     const [ok, setOk] = useState(false);
-    const [listClicks, setListClicks] = useState([]);
+    const [listClicks, setListClicks] = useState(empresa!==null?empresa.clicks:[]);
     const [inProgress, setInProgress] = useState(false);
 
     const [fechaInicio, setInicio] = useState("");
@@ -55,6 +55,7 @@ const InfoEmpresas = ({ history }) => {
     const handleChangeEmpresa = ({ target: { value } }) => {
         let obj = JSON.parse(value);
         setEmpresa(obj);
+        setListClicks(obj.clicks);
         sessionStorage.setItem("empresa", value);
     };
 
@@ -178,7 +179,7 @@ const InfoEmpresas = ({ history }) => {
                                 <p className="mensaje-error">{mensajeError}</p>
                             </div>
                             <hr />
-                            <DynamicTable TableData={empresa.clicks} num={10} />
+                            <DynamicTable TableData={listClicks} num={10} />
                             <GraficaMeses empresa={empresa} />
                             <GraficaSemanas empresa={empresa} />
                         </div>

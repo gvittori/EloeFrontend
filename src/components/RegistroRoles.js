@@ -19,8 +19,21 @@ const RegistroRoles = ({ history }) => {
   const btnRegistrar = () => {
     const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
     setMensajeError('');
+    let msj="";
     if (authority.length == 0) {
-      setMensajeError(`Error: Ingrese nombre de rol`);
+      msj+=`Error: Ingrese nombre de rol\n`;
+    }
+    if(authority.length>0){
+      const result = authority.replace(/\W/g, '');
+      if(result!==authority){
+        msj+=`Error: Nombre de rol inválido\n`;
+      }
+    }
+    if (authority.length > 20) {
+      msj+=`Error: Rol no puede exceder 20 caractéres\n`;
+    }
+    if(msj.length>0){
+      setMensajeError(msj);
     }
     else {
       document.body.style.cursor = 'wait'

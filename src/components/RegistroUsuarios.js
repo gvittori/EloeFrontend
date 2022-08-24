@@ -50,49 +50,57 @@ const RegistroUsuarios = ({ history }) => {
   const btnRegistrar = () => {
     const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
     setMensajeError('');
+    let msj = "";
     if (username.length == 0) {
-      setMensajeError(`Error: Ingrese nombre de usuario`);
-    } else
-      if (password.length == 0) {
-        setMensajeError(`Error: Ingrese contraseña de usuario`);
-      } else
-        if (roles.length == 0) {
-          setMensajeError(`Error: Seleccione rol de usuario`);
-        } else {
-          document.body.style.cursor = 'wait'
-          const reqBody = {
-            username,
-            password,
-            roles,
-            usuario
-          };
-          fetch('/api/usuarios/create', {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-              'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-          }).then(res => {
-            if (!res.ok) {
-              return res.text().then(text => { throw new Error(text) })
-            }
-            else {
-              return res.text().then(
-                res => {
-                  document.body.style.cursor = 'default'
-                  setMensajeError(`Usuario "${res}" agregado correctamente`);
-                }
-              );
-            }
-          })
-            .catch(err => {
-              setMensajeError(err.toString());
-              document.body.style.cursor = 'default'
-            });
+      msj += `Error: Ingrese nombre de usuario\n`;
+    }
+    if (username.length > 30) {
+      msj += `Error: Nombre de usuario no puede exceder 30 caractéres\n`;
+    }
+    if (password.length == 0) {
+      msj += `Error: Ingrese contraseña de usuario\n`;
+    }
+    if (roles.length == 0) {
+      msj += `Error: Seleccione rol de usuario\n`;
+    }
+    if (msj.length > 0) {
+      setMensajeError(msj);
+    }
+    else {
+      document.body.style.cursor = 'wait'
+      const reqBody = {
+        username,
+        password,
+        roles,
+        usuario
+      };
+      fetch('/api/usuarios/create', {
+        method: 'POST',
+        withCredentials: true,
+        credentials: 'include',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(reqBody)
+      }).then(res => {
+        if (!res.ok) {
+          return res.text().then(text => { throw new Error(text) })
         }
+        else {
+          return res.text().then(
+            res => {
+              document.body.style.cursor = 'default'
+              setMensajeError(`Usuario "${res}" agregado correctamente`);
+            }
+          );
+        }
+      })
+        .catch(err => {
+          setMensajeError(err.toString());
+          document.body.style.cursor = 'default'
+        });
+    }
   };
 
   const checkClick = (item) => {

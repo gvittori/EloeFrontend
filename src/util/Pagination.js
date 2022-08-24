@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 const Pagination = ({ currentPage, pageNumbers, paginate, adelante, atras }) => {
     const [clickKey, setKey] = useState(0);
     const [changed, setChanged] = useState(false);
-    const totalPages = pageNumbers.length;
+    const [totalPages,setTotalPages] = useState(pageNumbers.length);
     let maxLength = 7; 
 
+    useEffect(()=>{
+        setTotalPages(pageNumbers.length);
+        setKey(0);
+        setChanged(!changed);
+    },[pageNumbers])
 
     const getPageItems = () => {
         if(maxLength<=5){

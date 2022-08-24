@@ -12,7 +12,10 @@ import Multiselect from "react-widgets/Multiselect";
 const UpdateUsuario = ({ history }) => {
     const location = useLocation();
     const [usr, setUsr] = useState(funciones.default.Validar());
-    const [listado, setListado] = useState(funciones.default.Obtener().then(result => { setListado(result) }));
+    const [listado, setListado] = useState([]);
+    useEffect(()=>{
+        funciones.default.Obtener().then(result => { setListado(result)})
+    },[])
 
     const [usernameUpdate, setUsername] = useState("");
     const [passwordUpdate, setPassword] = useState('');
@@ -73,45 +76,55 @@ const UpdateUsuario = ({ history }) => {
     const btnUpdate = () => {
         const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
         setMensajeError('');
-        document.body.style.cursor = 'wait'
-        const reqBody = {
-            username: usr.username,
-            passwordUpdate,
-            usernameUpdate,
-            passwordUpdate,
-            rolesUpdate,
-            usuario
-        };
-        fetch('/api/usuarios/update', {
-            method: 'PUT',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-        }).then(res => {
-            if (!res.ok) {
-                return res.text().then(text => { throw new Error(text) })
-            }
-            else {
-                return res.json().then(
-                    res => {
-                        document.body.style.cursor = 'default'
-                        setUsr(res);
-                        setMensajeError(`Usuario "${res.username}" actualizado correctamente`);
-                        if (!ver) { sessionStorage.setItem("usr", JSON.stringify(res)); }
-                        funciones.default.Obtener().then(result => { setListado(result) })
-                    }
-                );
-            }
-        })
-            .catch(err => {
-                document.body.style.cursor = 'default'
-                setMensajeError(err.toString());
-            });
-
+        let msj = "";
+        if(usr===null || usr.username===null){
+            msj += `Error: Seleccione usuario\n`;
+        }
+        if (usernameUpdate.length > 30) {
+            msj += `Error: Nombre de usuario no puede exceder 30 caractéres\n`;
+        }
+        if (msj.length > 0) {
+            setMensajeError(msj);
+        } else {
+            document.body.style.cursor = 'wait'
+            const reqBody = {
+                username: usr.username,
+                passwordUpdate,
+                usernameUpdate,
+                passwordUpdate,
+                rolesUpdate,
+                usuario
+            };
+            fetch('/api/usuarios/update', {
+                method: 'PUT',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reqBody)
+            }).then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error(text) })
+                }
+                else {
+                    return res.json().then(
+                        res => {
+                            document.body.style.cursor = 'default'
+                            setUsr(res);
+                            setMensajeError(`Usuario "${res.username}" actualizado correctamente`);
+                            if (!ver) { sessionStorage.setItem("usr", JSON.stringify(res)); }
+                            funciones.default.Obtener().then(result => { setListado(result) })
+                        }
+                    );
+                }
+            })
+                .catch(err => {
+                    document.body.style.cursor = 'default'
+                    setMensajeError(err.toString());
+                });
+        }
 
     };
 

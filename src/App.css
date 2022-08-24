@@ -517,3 +517,7 @@ hr {
 .multiselect{
   margin: 10px 0;
 }
+
+.mensaje-error{
+  white-space: pre-wrap;
+}
