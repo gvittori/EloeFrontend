@@ -40,7 +40,7 @@ const ItemUsuario = (props) => {
 
 
     return (
-        <div>
+        <div className='flex-column centerBox'>
             <p>• Nombre de usuario: {username}</p>
             <p>• Ultima accion realizada: {ultima!==null?ultima.accion:"No hay acciones"}</p>
             <ul>

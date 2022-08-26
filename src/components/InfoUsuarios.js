@@ -35,14 +35,16 @@ const InfoUsuarios = ({ history }) => {
             return <p>No hay selección</p>
         } else {
             return (
-                <>
+                <div className='flex-row'>
                     <ItemUsuario
                         username={usuario.username}
                         roles={usuario.roles} />
-                    <button onClick={() => actualizar(usuario)}>Actualizar datos</button>
-                    <button onClick={() => eliminar(usuario.username)}>Deshabilitar usuario</button>
-                    <hr />
-                </>)
+                    <div className='flex-column centerBox'>
+                        <button className='btnRegistro' onClick={() => actualizar(usuario)}>Actualizar datos</button>
+                        <button className='btnRegistro' onClick={() => eliminar(usuario.username)}>Deshabilitar usuario</button>
+                    </div>
+                </div>
+            )
         }
     }
 
@@ -52,7 +54,7 @@ const InfoUsuarios = ({ history }) => {
                 <h3>Información de usuarios</h3>
                 <hr />
                 <label htmlFor="slcTipo"><b>Listado de usuarios: </b></label>
-                {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={usuario?JSON.stringify(usuario) : 'Default'}>
+                {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={usuario ? JSON.stringify(usuario) : 'Default'}>
                     <option value="Default" disabled>Seleccione un usuario</option>
                     {listado.map((item, index) => (
                         <option key={index} value={JSON.stringify(item)}>{item.username}</option>

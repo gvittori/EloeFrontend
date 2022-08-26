@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { withRouter, useLocation } from 'react-router-dom';
 import GraficaClicks from '../util/GraficaClicks';
 import GraficaMeses from '../util/GraficaMeses';
@@ -9,13 +9,14 @@ import { default as DynamicTable } from '../util/DynamicTable.js'
 import InfoFacturas from './InfoFacturas';
 import { renderToString } from "react-dom/server";
 import FacturaWindow from '../util/FacturaWindow';
+import { useReactToPrint } from "react-to-print";
 
 const InfoEmpresas = ({ history }) => {
 
     const [listado, setListado] = useState([]);
     const [empresa, setEmpresa] = useState(funciones.default.Validar());
     const [ok, setOk] = useState(false);
-    const [listClicks, setListClicks] = useState(empresa!==null?empresa.clicks:[]);
+    const [listClicks, setListClicks] = useState(empresa !== null ? empresa.clicks : []);
     const [inProgress, setInProgress] = useState(false);
 
     const [fechaInicio, setInicio] = useState("");
@@ -112,16 +113,23 @@ const InfoEmpresas = ({ history }) => {
             });
     }
 
-    const printFactura = (data) => {
+    const componentRef = useRef();
+
+    const printFactura = useReactToPrint({
+        content: () => componentRef.current,
+        pageStyle: "@page { size: 210mm 297mm }" //"@page { size: 1150px 1200px }"
+    });
+
+    /*const printFactura = (data) => {
         sessionStorage.setItem("printEmp", JSON.stringify(data));
         var printWindow = window.open('/FacturaWindow', '', 'height=700,width=1050');
         sessionStorage.clear();
         printWindow.print();
-    }
+    }*/
 
     const enviarFactura = (empresa) => {
         setInProgress(true);
-        funciones.default.Enviar(empresa).then(result => setInProgress(result)); 
+        funciones.default.Enviar(empresa).then(result => setInProgress(result));
     }
 
 
@@ -152,8 +160,8 @@ const InfoEmpresas = ({ history }) => {
                         <div className='flex-column centerBox'>
                             <button className='btnRegistro' disabled={empresa.clicks.length > 0 ? false : true} onClick={() => printFactura(empresa)}>Imprimir factura</button>
                             <button className='btnRegistro' disabled={empresa.clicks.length > 0 ? false : true} onClick={() => enviarFactura(empresa.empresaCnpj)}>Enviar factura</button>
-                            <button className='btnRegistro'  disabled={inProgress?true:false} onClick={() => actualizar(empresa)}>Actualizar datos</button>
-                            <button className='btnRegistro'  disabled={inProgress?true:false} onClick={() => eliminar(empresa.empresaCnpj)}>Deshabilitar empresa</button>
+                            <button className='btnRegistro' disabled={inProgress ? true : false} onClick={() => actualizar(empresa)}>Actualizar datos</button>
+                            <button className='btnRegistro' disabled={inProgress ? true : false} onClick={() => eliminar(empresa.empresaCnpj)}>Deshabilitar empresa</button>
                         </div>
                     </div>
                     <hr />
@@ -182,6 +190,9 @@ const InfoEmpresas = ({ history }) => {
                             <DynamicTable TableData={listClicks} num={10} />
                             <GraficaMeses empresa={empresa} />
                             <GraficaSemanas empresa={empresa} />
+                            <div ref={componentRef} className="print-only">
+                                <FacturaWindow data={empresa} />
+                            </div>
                         </div>
                         : <h4>No existen clicks generados para esta empresa</h4>
                     }
@@ -194,11 +205,11 @@ const InfoEmpresas = ({ history }) => {
 
             <div className='seccion'>
                 <div className='flex-column'>
-                    <div>
+                    <div id='divToPrint'>
                         <h3>Información de empresas</h3>
                         <hr />
                         <label htmlFor="slcTipo"><b>Listado de empresas: </b></label>
-                        {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={empresa?JSON.stringify(empresa) : 'Default'}>
+                        {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={empresa ? JSON.stringify(empresa) : 'Default'}>
                             <option value="Default" disabled>Seleccione una empresa</option>
                             {listado.map((item, index) => (
                                 <option key={index} value={JSON.stringify(item)}>{item.empresaNombre}</option>
@@ -210,7 +221,10 @@ const InfoEmpresas = ({ history }) => {
 
                     </div>
                 </div>
+
+
             </div>
+
         </>
     );
 };

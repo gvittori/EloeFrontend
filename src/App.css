@@ -83,12 +83,12 @@ body {
   height: 30px;
   margin: 5px 5px;
   align-self: center;
-  cursor: pointer;
   transition: box-shadow ease-in .1s;
 }
 
 .btnRegistro:hover {
   box-shadow: 2px 3px 5px;
+  cursor:pointer;
 }
 
 .btnRegistro:disabled {
@@ -306,7 +306,6 @@ hr.lineaTop {
   box-shadow: 2px 3px 5px;
 }
 
-
 .table>tbody>tr>td {
   padding: 12px 8px;
   vertical-align: middle;
@@ -501,6 +500,26 @@ hr {
   margin: 0;
   overflow: hidden;
 }
+
+.print-only{
+  display: none;
+}
+
+@media print {
+  .no-print {
+      display: none;
+  }
+
+  .print-only{
+      display: block;
+  }
+}
+
+.facturaDiv{
+  padding: 0;
+  margin: 0;
+}
+
 
 .facturaDiv hr {
   border-bottom: 1px groove #3438357e;

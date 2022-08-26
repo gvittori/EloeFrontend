@@ -101,10 +101,15 @@ const ListadoEmpresas = ({ listado, num }) => {
         }
     }, [listado])
 
-    const pageNumbers = [];
-    for (let i = 1; i <= Math.ceil(listado.length / itemsPerPage); i++) {
-        pageNumbers.push(i);
-    }
+    const getNumArray = () => {
+        let array = []
+        for (let i = 1; i <= Math.ceil(listado.length / itemsPerPage); i++) {
+          array.push(i);
+        }
+        return array;
+      }
+    
+    const [pageNumbers, setPageNumbers] = useState(getNumArray());
 
 
     const indexOfLastItem = currentPage * itemsPerPage;

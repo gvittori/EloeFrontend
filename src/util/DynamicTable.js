@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import Pagination from "./Pagination";
 
-function DynamicTable({ TableData, num, facturas, update, inProgress }) {
+function DynamicTable({ TableData, num, facturas, update, inProgress, pdf }) {
   const [sortedConfig, setSortedConfig] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(num === undefined ? TableData.length : num);
@@ -147,7 +147,8 @@ function DynamicTable({ TableData, num, facturas, update, inProgress }) {
               {tdData()}
             </tbody>
           </table>
-          <Pagination currentPage={currentPage} pageNumbers={pageNumbers} paginate={paginate} adelante={paginateFront} atras={paginateBack} />
+          {!pdf?<Pagination currentPage={currentPage} pageNumbers={pageNumbers} paginate={paginate} adelante={paginateFront} atras={paginateBack}/>:null}
+          
         </>
         : <p>Cargando...</p>}
 
