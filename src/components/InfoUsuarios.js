@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import ItemUsuario from './ItemUsuario';
 import * as funciones from '../util/FuncionesUsuarios'
+import { decode } from '../util/decode';
 
 const InfoUsuarios = ({ history }) => {
     const [listado, setListado] = useState([]);
     const [usuario, setUsuario] = useState(funciones.default.Validar());
     const [ok, setOk] = useState(false);
+    const [actual, setActual] = useState(decode(localStorage.getItem("jwt")).sub)
 
 
     useEffect(() => {
@@ -40,8 +42,8 @@ const InfoUsuarios = ({ history }) => {
                         username={usuario.username}
                         roles={usuario.roles} />
                     <div className='flex-column centerBox'>
-                        <button className='btnRegistro' onClick={() => actualizar(usuario)}>Actualizar datos</button>
-                        <button className='btnRegistro' onClick={() => eliminar(usuario.username)}>Deshabilitar usuario</button>
+                        <button className='btnRegistro' disabled={usuario.username!==actual?false:true}onClick={() => actualizar(usuario)}>Actualizar datos</button>
+                        <button className='btnRegistro' disabled={usuario.username!==actual?false:true} onClick={() => eliminar(usuario.username)}>Deshabilitar usuario</button>
                     </div>
                 </div>
             )

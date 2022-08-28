@@ -11,11 +11,12 @@ import Multiselect from "react-widgets/Multiselect";
 
 const UpdateUsuario = ({ history }) => {
     const location = useLocation();
+    const [actual, setActual] = useState(decode(localStorage.getItem("jwt")).sub)
     const [usr, setUsr] = useState(funciones.default.Validar());
     const [listado, setListado] = useState([]);
-    useEffect(()=>{
-        funciones.default.Obtener().then(result => { setListado(result)})
-    },[])
+    useEffect(() => {
+        funciones.default.Obtener().then(result => { setListado(result) })
+    }, [])
 
     const [usernameUpdate, setUsername] = useState("");
     const [passwordUpdate, setPassword] = useState('');
@@ -27,13 +28,18 @@ const UpdateUsuario = ({ history }) => {
     const [ver, setVer] = useState(false);
 
     useEffect(() => {
-        if (usr) {
-            setUsername(usr.username);
-            setRoles(usr.roles);
-            setPassword("");
+        if (usr!== null && usr.username !== actual) {
+            if (usr) {
+                setUsername(usr.username);
+                setRoles(usr.roles);
+                setPassword("");
+            } else {
+                setVer(true);
+            }
         } else {
-            setVer(true);
+            setUsr(null);
         }
+
     }, [usr])
 
     useEffect(() => {
@@ -77,8 +83,11 @@ const UpdateUsuario = ({ history }) => {
         const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
         setMensajeError('');
         let msj = "";
-        if(usr===null || usr.username===null){
+        if (usr === null || usr.username === null) {
             msj += `Error: Seleccione usuario\n`;
+        }
+        if (usr.username === actual) {
+            msj += `Error: No se permite actualizar usuario logeado\n`;
         }
         if (usernameUpdate.length > 30) {
             msj += `Error: Nombre de usuario no puede exceder 30 caractéres\n`;
@@ -159,7 +168,8 @@ const UpdateUsuario = ({ history }) => {
                 {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={usr ? JSON.stringify(usr) : 'Default'}>
                     <option value="Default" disabled>Seleccione un usuario</option>
                     {listado.map((item, index) => (
-                        <option key={index} value={JSON.stringify(item)}>{item.username}</option>
+                        item.username!==actual?
+                        <option key={index} value={JSON.stringify(item)}>{item.username}</option>:null
                     ))}
                 </select> : <div><p>Cargando usuarios...</p></div>}
 

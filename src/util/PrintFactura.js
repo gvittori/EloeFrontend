@@ -1,4 +1,4 @@
-import { default as DynamicTable } from '../util/DynamicTable.js'
+import { default as DynamicTable } from './DynamicTable.js'
 import { renderToString } from 'react-dom/server'
 
 const PrintFactura = (data) => {

@@ -1,39 +1,53 @@
-import { withRouter, useHistory } from 'react-router-dom';
-import { decode } from '../util/decode';
+import { withRouter, useHistory, Redirect } from 'react-router-dom';
+import { decode } from './decode';
+
+
+
 
 async function Eliminar(empresaCnpj) {
-    const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
-    const reqBody = {
-        empresaCnpj,
-        usuario
-    }
-    if (window.confirm("Deshabilitar empresa?")) {
-        document.body.style.cursor = 'wait'
-        const ok = await fetch('/api/empresas/delete', {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-        }).then(res => {
-            if (!res.ok) {
-                return res.text().then(text => { throw new Error(text) })
+    try {
+        const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
+        const reqBody = {
+            empresaCnpj,
+            usuario
+        }
+        if (window.confirm("Deshabilitar empresa?")) {
+            document.body.style.cursor = 'wait'
+            const ok = await fetch('/api/empresas/delete', {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reqBody)
+            }).then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error(text) })
+                }
+                else {
+                    return res
+                }
+            })
+                .catch(err => {
+                    alert("Fallo en deshabilitación..."/*err.toString()*/);
+                });
+            //const data = await ok.json();
+            if (ok) {
+                alert("Empresa deshabilitada.")
+            } else {
+                alert("Empresa no deshabilitada.")
             }
-            else {
-                return res
-            }
-        })
-            .catch(err => {
-                alert(err.toString());
-            });
-        const data = await ok.json();
-        alert("Empresa deshabilitada...")
-        document.body.style.cursor = 'default'
-        return data;
+            document.body.style.cursor = 'default'
+            return ok;
+        }
+    } catch (error) {
+        alert("Token invalido");
     }
+
+
+
 }
 
 async function Obtener() {
@@ -53,45 +67,51 @@ async function Obtener() {
 }
 
 async function Enviar(empresaCnpj) {
-    const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
-    if (window.confirm("Enviar factura de empresa seleccionada?")) {
-        let condicion = false;
-        if(window.confirm("Generar nueva factura en base de datos?")){
-            condicion = true;
-        }
-        const reqBody = {
-            empresaCnpj,
-            usuario,
-            condicion
-        }
-        document.body.style.cursor = 'wait'
-        const ok = await fetch('/api/empresas/enviar', {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-        }).then(res => {
-            if (!res.ok) {
-                return res.text().then(text => { throw new Error(text) })
+    try {
+        const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
+        if (window.confirm("Enviar factura de empresa seleccionada?")) {
+            let condicion = false;
+            if (window.confirm("Generar nueva factura en base de datos?")) {
+                condicion = true;
             }
-            else {
-                return res
+            const reqBody = {
+                empresaCnpj,
+                usuario,
+                condicion
             }
-        }).catch(err => {
-            alert(err.toString());
-        });
-        if (ok) {
-            alert("Factura enviada...")
-        } else {
-            alert("Factura no enviada...")
+            document.body.style.cursor = 'wait'
+            const ok = await fetch('/api/empresas/enviar', {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reqBody)
+            }).then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error(text) })
+                }
+                else {
+                    return res
+                }
+            }).catch(err => {
+                alert("Fallo en envío de factura..."/*err.toString()*/);
+            });
+            if (ok) {
+                alert("Factura enviada.")
+            } else {
+                alert("Factura no enviada.")
+            }
+            document.body.style.cursor = 'default'
+            return false
         }
-        document.body.style.cursor = 'default'
-        return false
+    } catch (error) {
+        alert("Token inválido");
     }
+
+
 
 }
 

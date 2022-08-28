@@ -20,6 +20,7 @@ import RegistroRoles from './components/RegistroRoles';
 import InfoEmpresas from './components/InfoEmpresas';
 import InfoFacturas from './components/InfoFacturas';
 import FacturaWindow from './util/FacturaWindow'
+import PagoWindow from './util/PagoWindow'
 import { default as LogAcciones } from './components/LogAcciones'
 import InfoUsuarios from './components/InfoUsuarios';
 import { useSiteTracking } from "react-event-tracker";
@@ -57,7 +58,7 @@ const App = () => {
       sessionStorage.setItem('tipo', null);
     }*/
   const { SiteTracking } = useSiteTracking(trackingConfig);
-  
+
   const roles1 = ["ROLE_ADMIN", "ROLE_USER", "ROLE_MANTENIMIENTO"];
   const roles2 = ["ROLE_ADMIN", "ROLE_MANTENIMIENTO"];
   const roles3 = ["ROLE_ADMIN"];
@@ -65,7 +66,7 @@ const App = () => {
   return (
     <SiteTracking>
       <div className="App">
-        
+
         <div className="App-content">
           <Router>
             <Switch>
@@ -73,19 +74,19 @@ const App = () => {
               </Route>
 
               <Route path={"/Login"} exact><Login /></Route>
-              <Route path={"/RegistroUsuarios"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><RegistroUsuarios/></PrivateRoute></Route>
+              <Route path={"/RegistroUsuarios"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><RegistroUsuarios /></PrivateRoute></Route>
 
-              <Route path={"/RegistroEmpresas"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><RegistroEmpresas/></PrivateRoute></Route>
+              <Route path={"/RegistroEmpresas"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><RegistroEmpresas /></PrivateRoute></Route>
 
-              <Route path={"/RegistroRoles"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><RegistroRoles/></PrivateRoute></Route>
+              <Route path={"/RegistroRoles"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><RegistroRoles /></PrivateRoute></Route>
 
-              <Route path={"/ClientesInfo"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><InfoEmpresas/></PrivateRoute></Route>
+              <Route path={"/ClientesInfo"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><InfoEmpresas /></PrivateRoute></Route>
 
-              <Route path={"/ClientesFacturas"} exact><PrivateRoute allowedRoles={roles3} homeRoles={roles1}><Secciones /><InfoFacturas/></PrivateRoute></Route>
+              <Route path={"/ClientesFacturas"} exact><PrivateRoute allowedRoles={roles3} homeRoles={roles1}><Secciones /><InfoFacturas /></PrivateRoute></Route>
 
-              <Route path={"/UsuariosInfo"} exact><PrivateRoute allowedRoles={roles3} homeRoles={roles1}><Secciones /><InfoUsuarios/></PrivateRoute></Route>
+              <Route path={"/UsuariosInfo"} exact><PrivateRoute allowedRoles={roles3} homeRoles={roles1}><Secciones /><InfoUsuarios /></PrivateRoute></Route>
 
-              <Route path={"/UsuariosAcciones"} exact><PrivateRoute allowedRoles={roles3} homeRoles={roles1}><Secciones /> <LogAcciones/></PrivateRoute></Route>
+              <Route path={"/UsuariosAcciones"} exact><PrivateRoute allowedRoles={roles3} homeRoles={roles1}><Secciones /> <LogAcciones /></PrivateRoute></Route>
 
               <Route path={"/Configuracion"} exact><PrivateRoute allowedRoles={roles1} homeRoles={roles1}><Secciones /><Configuracion /></PrivateRoute></Route>
 
@@ -93,7 +94,9 @@ const App = () => {
 
               <Route path={"/UpdateEmpresa"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><Secciones /><UpdateEmpresa /></PrivateRoute></Route>
 
-              <Route path={"/facturaWindow"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><FacturaWindow /></PrivateRoute></Route>
+              {/*<Route path={"/facturaWindow"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><FacturaWindow /></PrivateRoute></Route>*/}
+
+              <Route path={"/Pago"} exact><PagoWindow/></Route>
 
               <Route path={"*"} exact><PrivateRoute allowedRoles={roles1} homeRoles={roles1}><Secciones /><Home /></PrivateRoute>
               </Route>

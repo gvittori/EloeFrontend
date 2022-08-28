@@ -1,5 +1,5 @@
 import { withRouter, useHistory } from 'react-router-dom';
-import { decode } from '../util/decode';
+import { decode } from './decode';
 
 async function Eliminar(username) {
     const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
@@ -45,6 +45,9 @@ async function Obtener() {
         }
     }).then((response) => Promise.all([response.json()]))
         .then(([body]) => {
+            body.forEach(usr => {
+                delete usr["password"];
+            })
             return body;
         });
     return res;
@@ -69,7 +72,7 @@ const Validar = () => {
             (obj.enabled===true||obj.enabled===false)&&
             obj.username.length>0&&
             obj.usuId>0&&
-            obj.password.length>0&&
+            //obj.password.length>0&&
             obj.authorities.length>0&&
             obj.roles.length>0
            ) {

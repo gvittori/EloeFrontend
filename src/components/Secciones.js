@@ -6,15 +6,12 @@ import { decode } from '../util/decode';
 
 const Secciones = ({ history }) => {
   const [inactivo, setInactivo] = useState(true);
-  const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
 
   const btnLogout = () => {
     localStorage.setItem('jwt', '""');
     sessionStorage.clear();
     return <Redirect to='/Login' />
   };
-
-
 
   const checkDisponible = (disponible) => {
     const array = decode(localStorage.getItem('jwt').slice(1, -1)).roles;
@@ -64,7 +61,7 @@ const Secciones = ({ history }) => {
 
 
   return (
-    <>
+    <>{decode(localStorage.getItem('jwt'))!==null?
       <div className={`menuSecciones ${inactivo ? "inactivo" : ""}`}>
         <div className="top">
           <button onClick={() => setInactivo(!inactivo)} className="iconoMenu">
@@ -76,7 +73,7 @@ const Secciones = ({ history }) => {
         </div>
         <hr className="lineaTop"></hr>
         <div className={`menuText menuText-ltr ${inactivo ? "inactivo" : ""}`}>
-          <p>Logeado como: {usuario}</p>
+          <p>Logeado como: {decode(localStorage.getItem('jwt').slice(1, -1)).sub}</p>
         </div>
         <hr className="lineaTop"></hr>
         <div className="listado">
@@ -96,7 +93,7 @@ const Secciones = ({ history }) => {
             ))}
           </ul>
         </div>
-      </div>
+      </div>:<Redirect to='/Login' />}
     </>);
 };
 

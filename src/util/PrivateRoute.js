@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 import { useLocalState } from "./useLocalStorage";
 import { useHistory } from "react-router-dom";
-import { decode } from '../util/decode';
+import { decode } from './decode';
 
 
 const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
