@@ -2,7 +2,7 @@ import React, { useState, useEffect, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useHistory, useLocation } from "react-router-dom";
 import { decode } from '../util/decode';
-import { setDataEmp } from '../util/FuncionesBroadcast';
+import { refresh, setDataEmp } from '../util/FuncionesBroadcast';
 import * as funciones from '../util/FuncionesEmpresas.js'
 
 const UpdateEmpresa = () => {
@@ -11,10 +11,10 @@ const UpdateEmpresa = () => {
     const [empresa, setEmpresa] = useState(funciones.default.Validar());
 
     const [listado, setListado] = useState([]);
-    useEffect(()=>{
+    useEffect(() => {
         funciones.default.Obtener().then(result => { setListado(result) })
-    },[])
-    
+    }, [])
+
     const [nombreUpdate, setNombre] = useState("");
     const [emailUpdate, setEmail] = useState("");
     const [cnpjUpdate, setCnpj] = useState("");
@@ -53,71 +53,76 @@ const UpdateEmpresa = () => {
     };
 
     const btnUpdate = () => {
-        const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
-        setMensajeError('');
-        let msj = "";
-        if(empresa===null || empresa.empresaCnpj===null){
-            msj += `Error: Seleccione una empresa\n`;
-        }
-        if (nombreUpdate.length > 30) {
-            msj += `Error: Nombre de empresa no puede exceder 30 caractéres\n`;
-        }
-        if (emailUpdate.length > 50) {
-            msj += `Error: Error: Email no puede exceder 50 caractéres\n`;
-        }
-        /*const valido =  cnpjUpdate.replace(/\D/g, '');
-        if (cnpjUpdate.length !== 14 || cnpjUpdate!==valido) {
-            msj += `Error: Ingrese CNPJ valido\n`;
-        }*/
-        if (tazaUpdate < 0) {
-            msj += `Error: Valor de taza inválido\n`;
-        }
-        if (msj.length > 0) {
-            setMensajeError(msj);
-        } else {
-            document.body.style.cursor = 'wait'
-            const reqBody = {
-                cnpj: empresa.empresaCnpj,
-                nombreUpdate,
-                emailUpdate,
-                cnpjUpdate,
-                tazaUpdate,
-                usuario
-            };
-            fetch('/api/empresas/update', {
-                method: 'PUT',
-                withCredentials: true,
-                credentials: 'include',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(reqBody)
-            }).then(res => {
-                if (!res.ok) {
-                    return res.text().then(text => { throw new Error(text) })
+        try {
+            const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
+            setMensajeError('');
+            let msj = "";
+            if (empresa === null || empresa.empresaCnpj === null) {
+                msj += `Error: Seleccione una empresa\n`;
+                setMensajeError(msj);
+            } else {
+                if (nombreUpdate.length > 30) {
+                    msj += `Error: Nombre de empresa no puede exceder 30 caractéres\n`;
                 }
-                else {
-                    return res.json().then(
-                        res => {
-                            document.body.style.cursor = 'default'
-                            setEmpresa(res);
-                            setMensajeError(`Empresa "${res.empresaNombre}" actualizada correctamente`);
-                            if (!ver) { sessionStorage.setItem("empresa", JSON.stringify(res)); }
-                            funciones.default.Obtener().then(result => { setListado(result) })
-                            setDataEmp(res);
+                if (emailUpdate.length > 50) {
+                    msj += `Error: Error: Email no puede exceder 50 caractéres\n`;
+                }
+                /*const valido =  cnpjUpdate.replace(/\D/g, '');
+                if (cnpjUpdate.length !== 14 || cnpjUpdate!==valido) {
+                    msj += `Error: Ingrese CNPJ valido\n`;
+                }*/
+                if (tazaUpdate < 0) {
+                    msj += `Error: Valor de taza inválido\n`;
+                }
+                if (msj.length > 0) {
+                    setMensajeError(msj);
+                } else {
+                    document.body.style.cursor = 'wait'
+                    const reqBody = {
+                        cnpj: empresa.empresaCnpj,
+                        nombreUpdate,
+                        emailUpdate,
+                        cnpjUpdate,
+                        tazaUpdate,
+                        usuario
+                    };
+                    fetch('/api/empresas/update', {
+                        method: 'PUT',
+                        withCredentials: true,
+                        credentials: 'include',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(reqBody)
+                    }).then(res => {
+                        if (!res.ok) {
+                            return res.text().then(text => { throw new Error("Token inválido.") })
                         }
-                    );
+                        else {
+                            return res.json().then(
+                                res => {
+                                    document.body.style.cursor = 'default'
+                                    setEmpresa(res);
+                                    setMensajeError(`Empresa "${res.empresaNombre}" actualizada correctamente`);
+                                    if (!ver) { sessionStorage.setItem("empresa", JSON.stringify(res)); }
+                                    funciones.default.Obtener().then(result => { setListado(result) })
+                                    setDataEmp(res);
+                                }
+                            );
+                        }
+                    })
+                        .catch(err => {
+                            document.body.style.cursor = 'default'
+                            setMensajeError(err.toString());
+                        });
+
                 }
-            })
-                .catch(err => {
-                    document.body.style.cursor = 'default'
-                    setMensajeError(err.toString());
-                });
-
+            }
+        } catch (error) {
+            alert("Token inválido.")
+            refresh();
         }
-
-
     };
 
     const checkEnter = (e) => {
@@ -161,7 +166,7 @@ const UpdateEmpresa = () => {
                 <input className="texto" type="number" onChange={handleChangeTaza} placeholder={tazaUpdate} value={tazaUpdate} onKeyDown={checkEnter}
                     name="txtTaza" />
 
-                <input type="button" value="Actualizar" disabled={empresa===null?true:false} onClick={btnUpdate} className="btnRegistro" />
+                <input type="button" value="Actualizar" disabled={empresa === null ? true : false} onClick={btnUpdate} className="btnRegistro" />
                 <p className="mensaje-error">{mensajeError}</p>
             </div>
         </>

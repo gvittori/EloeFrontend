@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import Multiselect from "react-widgets/Multiselect";
 import "react-widgets/styles.css";
+import { refresh } from '../util/FuncionesBroadcast';
+import { decode } from '../util/decode';
 
 const MailConfig = ({ history }) => {
     const [active, setActive] = useState(false);
@@ -24,38 +26,47 @@ const MailConfig = ({ history }) => {
     }
 
     const guardarConfig = () => {
-        document.body.style.cursor = 'wait'
-        const reqBody = {
-            opcion,
-            dias
-        };
-        fetch('/api/mail/setconfig', {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-        })
-            .then(res => {
-                if (!res.ok) {
-                    return res.text().then(text => { throw new Error(text) })
-                }
-                else {
-                    return res.text().then(
-                        res => {
-                            document.body.style.cursor = 'default'
-                            setMensajeError(`Día de envio seteado como: ${res}`);
-                        }
-                    );
-                }
+        try {
+            const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
+            document.body.style.cursor = 'wait'
+            const reqBody = {
+                opcion,
+                dias,
+                usuario
+            };
+            fetch('/api/mail/setconfig', {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reqBody)
             })
-            .catch(err => {
-                document.body.style.cursor = 'default'
-                setMensajeError(err.toString());
-            })
+                .then(res => {
+                    if (!res.ok) {
+                        return res.text().then(text => { throw new Error("Token Inválido.") })
+                    }
+                    else {
+                        return res.text().then(
+                            res => {
+                                document.body.style.cursor = 'default'
+                                setMensajeError(`Día de envio seteado como: ${res}`);
+                                refresh();
+                            }
+                        );
+                    }
+                })
+                .catch(err => {
+                    document.body.style.cursor = 'default'
+                    setMensajeError(err.toString());
+                })
+        } catch (error) {
+            alert("Token inválido.");
+            refresh();
+        }
+
     }
 
     const checkEnter = (e) => {

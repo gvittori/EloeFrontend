@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import DynamicTable from '../util/DynamicTable';
 import { decode } from '../util/decode';
+import { refresh } from '../util/FuncionesBroadcast';
 
 const InfoFacturas = () => {
     const [facturas, setFacturas] = useState([]);
@@ -17,25 +18,31 @@ const InfoFacturas = () => {
 
 
     useEffect(() => {
-        fetch('/api/facturas', {
-            method: 'GET',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                'Content-Type': 'application/json'
-            },
-        }).then(res => {
-            if (!res.ok) {
-                return res.text().then(text => { throw new Error(text) })
-            }
-            else {
-                Promise.all([res.json()])
-                    .then(([body]) => {
-                        setFacturas(body);
-                    });
-            }
-        })
+        try {
+            fetch('/api/facturas', {
+                method: 'GET',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                },
+            }).then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error(text) })
+                }
+                else {
+                    Promise.all([res.json()])
+                        .then(([body]) => {
+                            setFacturas(body);
+                        });
+                }
+            })
+        } catch (error) {
+            alert("Token inválido.")
+            refresh();
+        }
+
     }, []);
 
     const handleChangeFiltro = ({ target: { value } }) => {
@@ -55,43 +62,49 @@ const InfoFacturas = () => {
     }
 
     const buscar = () => {
-        document.body.style.cursor = 'wait'
-        const reqBody = {
-            filtro,
-            busqueda,
-            fechaInicio,
-            fechaFin
+        try {
+            document.body.style.cursor = 'wait'
+            const reqBody = {
+                filtro,
+                busqueda,
+                fechaInicio,
+                fechaFin
+            }
+            fetch('/api/facturas/busqueda', {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reqBody)
+            }).then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error("Token inválido.") })
+                }
+                else {
+                    Promise.all([res.json()])
+                        .then(([body]) => {
+                            document.body.style.cursor = 'default'
+                            if (body.length <= 0) {
+                                setMensajeError("No hay resultados para la busqueda");
+                            } else {
+                                setMensajeError("");
+                                setFacturas(body);
+                            }
+                        });
+                }
+            })
+                .catch(err => {
+                    document.body.style.cursor = 'default'
+                    setMensajeError(err.toString());
+                });
+        } catch (error) {
+            alert("Token inválido.")
+            refresh();
         }
-        fetch('/api/facturas/busqueda', {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-        }).then(res => {
-            if (!res.ok) {
-                return res.text().then(text => { throw new Error(text) })
-            }
-            else {
-                Promise.all([res.json()])
-                    .then(([body]) => {
-                        document.body.style.cursor = 'default'
-                        if (body.length <= 0) {
-                            setMensajeError("No hay resultados para la busqueda");
-                        } else {
-                            setMensajeError("");
-                            setFacturas(body);
-                        }
-                    });
-            }
-        })
-            .catch(err => {
-                document.body.style.cursor = 'default'
-                console.log(err);
-            });
+
     }
 
     const checkEnter = (e) => {
@@ -102,41 +115,47 @@ const InfoFacturas = () => {
     };
 
     const updateFactura = (data) => {
-        setInProgress(true)
-        document.body.style.cursor = 'wait'
-        let id = data.empresa.split(/[\s]/)[2];
-        const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
-        let reqBody = {
-            fechaGenerada: data.fechaGenerada,
-            empresaId: id,
-            usuario
+        try {
+            const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
+            setInProgress(true)
+            document.body.style.cursor = 'wait'
+            let id = data.empresa.split(/[\s]/)[2];
+            let reqBody = {
+                fechaGenerada: data.fechaGenerada,
+                empresaId: id,
+                usuario
+            }
+            fetch('/api/facturas/update', {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reqBody)
+            }).then(res => {
+                if (!res.ok) {
+                    document.body.style.cursor = 'default'
+                    return res.text().then(text => { throw new Error("Token inválido.") })
+                }
+                else {
+                    Promise.all([res.json()])
+                        .then(([body]) => {
+                            let copy = JSON.parse(JSON.stringify(facturas))
+                            let index = facturas.indexOf(data)
+                            copy[index] = body
+                            setFacturas(copy)
+                            document.body.style.cursor = 'default'
+                            setInProgress(false)
+                        });
+                }
+            })
+        } catch (error) {
+            alert("Token inválido.");
+            refresh();
         }
-        fetch('/api/facturas/update', {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-        }).then(res => {
-            if (!res.ok) {
-                document.body.style.cursor = 'default'
-                return res.text().then(text => { throw new Error(text) })
-            }
-            else {
-                Promise.all([res.json()])
-                    .then(([body]) => {
-                        let copy = JSON.parse(JSON.stringify(facturas))
-                        let index = facturas.indexOf(data)
-                        copy[index]=body
-                        setFacturas(copy)
-                        document.body.style.cursor = 'default'
-                        setInProgress(false)
-                    });
-            }
-        })
+
     }
 
     return (
@@ -173,7 +192,7 @@ const InfoFacturas = () => {
                                 <p className="mensaje-error">{mensajeError}</p>
                             </div>
                             <div>
-                                <DynamicTable TableData={facturas} num={10} facturas={true} update={updateFactura} inProgress={inProgress}/>
+                                <DynamicTable TableData={facturas} num={10} facturas={true} update={updateFactura} inProgress={inProgress} />
                             </div></> : <p>Cargando...</p>}
                 </div>
             </div>

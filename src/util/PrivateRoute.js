@@ -3,12 +3,14 @@ import { Redirect } from "react-router-dom";
 import { useLocalState } from "./useLocalStorage";
 import { useHistory } from "react-router-dom";
 import { decode } from './decode';
+import { logout } from "./FuncionesBroadcast";
 
 
 const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
-    const [jwt, setJwt] = useLocalState("", "jwt");
+    //const [jwt, setJwt] = useLocalState("", "jwt");
+    const jwt = localStorage.getItem("jwt");
     const history = useHistory();
-    if (jwt.length > 0) {
+    if (jwt!== null && jwt.length > 0) {
         var tokenDecodificado = decode(jwt);
         if (tokenDecodificado !== null) {
             if (!esVencido(tokenDecodificado)) {
@@ -21,13 +23,13 @@ const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
                     } else {
                         localStorage.setItem('jwt', '""');
                         alert("Permisos de rol no implementados. Redireccionando a Login");
-                        return <Redirect to="/Login" />
+                        logout();
                     }
                 }
             }
         }
     }
-    return <Redirect to="/Login" />
+    logout();
 
 
     /*if (jwt.length > 0) {

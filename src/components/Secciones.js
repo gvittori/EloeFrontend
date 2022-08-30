@@ -94,7 +94,7 @@ const Secciones = ({ history }) => {
             ))}
           </ul>
         </div>
-      </div> : <Redirect to='/Login' />}
+      </div> : logout()}
     </>);
 };
 

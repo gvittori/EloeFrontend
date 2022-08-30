@@ -33,6 +33,30 @@ export const setDataUsr = (object) => {
     window.location.reload();
 }
 
+
+export const setDataClearEmp = (object) => {
+    refreshChannel.postMessage({type:"DELETE_EMP", object:object});
+    let emp = funcionesEmp.default.Validar();
+    if(emp!==null && object!==null){
+        if(emp.empresaId===object.empresaId){
+            sessionStorage.removeItem("empresa");
+        }
+    }
+    window.location.reload();
+}
+
+export const setDataClearUsr = (object) => {
+    refreshChannel.postMessage({type:"DELETE_USR", object:object});
+    let usr = funcionesUsr.default.Validar();
+    if(usr!==null && object!==null){
+        if(usr.usuId===object.usuId){
+            sessionStorage.removeItem("usr");
+        }
+    }
+    window.location.reload();
+}
+
+
 export const refreshAllTabs = () => {
     refreshChannel.onmessage = (data) => {
         switch (data.type) {
@@ -48,6 +72,16 @@ export const refreshAllTabs = () => {
             }
             case "UPDATE_USR":{
                 setDataUsr(data.object);
+                refreshChannel.close();
+                break;
+            }
+            case "DELETE_EMP":{
+                setDataClearEmp(data.object);
+                refreshChannel.close();
+                break;
+            }
+            case "DELETE_USR":{
+                setDataClearUsr(data.object);
                 refreshChannel.close();
                 break;
             }
@@ -73,7 +107,7 @@ export const logout = () => {
     logoutChannel.postMessage("Logout")
     localStorage.setItem('jwt', '""');
     sessionStorage.clear();
-    window.location.href = window.location.origin + "/";
+    window.location.href = window.location.origin + "/Login";
 }
 
 export const logoutAllTabs = () => {

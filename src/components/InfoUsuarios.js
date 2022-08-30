@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import ItemUsuario from './ItemUsuario';
 import * as funciones from '../util/FuncionesUsuarios'
 import { decode } from '../util/decode';
+import { setDataClearUsr } from '../util/FuncionesBroadcast';
 
 const InfoUsuarios = ({ history }) => {
     const [listado, setListado] = useState([]);
@@ -25,7 +26,7 @@ const InfoUsuarios = ({ history }) => {
         return funciones.default.Actualizar(usuario, history);
     }
     const eliminar = (username) => {
-        funciones.default.Eliminar(username).then(result => setOk(result));
+        funciones.default.Eliminar(username).then(result => setDataClearUsr(usuario)/*setOk(result)*/);
         /*if(funciones.default.Eliminar(empresaNombre)){
             handleChangeListado(empresaNombre);
         }  */

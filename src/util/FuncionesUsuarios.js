@@ -1,56 +1,73 @@
 import { withRouter, useHistory } from 'react-router-dom';
 import { decode } from './decode';
+import { refresh } from './FuncionesBroadcast';
 
 async function Eliminar(username) {
-    const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
-    const reqBody = {
-        username,
-        usuario
+    try {
+        const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
+        const reqBody = {
+            username,
+            usuario
+        }
+        if (window.confirm("Deshabilitar usuario?")) {
+            const ok = await fetch('/api/usuarios/delete', {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reqBody)
+            }).then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error(text) })
+                }
+                else {
+                    return res
+                }
+            })
+                .catch(err => {
+                    alert("Fallo en deshabilitación..."/*err.toString()*/);
+                });
+            //const data = await ok.json();
+            if (ok) {
+                alert("Usuario deshabilitadp.")
+            } else {
+                alert("Usuario no deshabilitado.")
+            }
+            document.body.style.cursor = 'default'
+            return ok;
+        }
+    } catch (error) {
+        alert("Token invalido");
     }
-    if (window.confirm("Deshabilitar usuario?")) {
-        const ok = await fetch('/api/usuarios/delete', {
-            method: 'POST',
+
+}
+
+async function Obtener() {
+    try {
+        const res = fetch('/api/usuarios', {
+            method: 'GET',
             withCredentials: true,
             credentials: 'include',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-        }).then(res => {
-            if (!res.ok) {
-                return res.text().then(text => { throw new Error(text) })
             }
-            else {
-                return res
-            }
-        })
-            .catch(err => {
-                alert(err.toString());
+        }).then((response) => Promise.all([response.json()]))
+            .then(([body]) => {
+                body.forEach(usr => {
+                    delete usr["password"];
+                })
+                return body;
             });
-        const data = await ok.json();
-        alert("Usuario deshabilitado.");
-        return data;
+        return res;
+    } catch (error) {
+        alert("Token inválido.");
+        refresh();
     }
-}
-
-async function Obtener() {
-    const res = fetch('/api/usuarios', {
-        method: 'GET',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-            'Content-Type': 'application/json'
-        }
-    }).then((response) => Promise.all([response.json()]))
-        .then(([body]) => {
-            body.forEach(usr => {
-                delete usr["password"];
-            })
-            return body;
-        });
-    return res;
+   
 }
 
 const Actualizar = (usuario, history) => {
@@ -65,17 +82,17 @@ const Validar = () => {
     try {
         let obj = JSON.parse(sessionStorage.getItem("usr"));
         if (
-            (obj.accountNonExpired===true||obj.accountNonExpired===false)&&
-            (obj.accountNonLocked===true||obj.accountNonLocked===false)&&
-            (obj.activo===true||obj.activo===false)&&
-            (obj.credentialsNonExpired===true||obj.credentialsNonExpired===false)&&
-            (obj.enabled===true||obj.enabled===false)&&
-            obj.username.length>0&&
-            obj.usuId>0&&
+            (obj.accountNonExpired === true || obj.accountNonExpired === false) &&
+            (obj.accountNonLocked === true || obj.accountNonLocked === false) &&
+            (obj.activo === true || obj.activo === false) &&
+            (obj.credentialsNonExpired === true || obj.credentialsNonExpired === false) &&
+            (obj.enabled === true || obj.enabled === false) &&
+            obj.username.length > 0 &&
+            obj.usuId > 0 &&
             //obj.password.length>0&&
-            obj.authorities.length>0&&
-            obj.roles.length>0
-           ) {
+            obj.authorities.length > 0 &&
+            obj.roles.length > 0
+        ) {
             return obj
         } else {
             return null

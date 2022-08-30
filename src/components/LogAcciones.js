@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { default as DynamicTable } from '../util/DynamicTable.js'
+import { refresh } from '../util/FuncionesBroadcast.js';
 
 
 const LogAcciones = () => {
@@ -14,28 +15,34 @@ const LogAcciones = () => {
     const opcionesFiltro = ["Usuario", "Accion", "Sujeto", "Fecha"]
 
     useEffect(() => {
-        fetch('/api/acciones', {
-            method: 'GET',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                'Content-Type': 'application/json'
-            }
-        }).then(res => {
-            if (!res.ok) {
-                return res.text().then(text => { throw new Error(text) })
-            }
-            else {
-                Promise.all([res.json()])
-                    .then(([body]) => {
-                        setAcciones(body);
-                    });
-            }
-        })
-            .catch(err => {
-                console.log(err);
-            });
+        try {
+            fetch('/api/acciones', {
+                method: 'GET',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                }
+            }).then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error(text) })
+                }
+                else {
+                    Promise.all([res.json()])
+                        .then(([body]) => {
+                            setAcciones(body);
+                        });
+                }
+            })
+                .catch(err => {
+                    console.log(err);
+                });
+        } catch (error) {
+            alert("Token inválido");
+            refresh();
+        }
+
     }, []);
 
     const handleChangeFiltro = ({ target: { value } }) => {
@@ -55,51 +62,57 @@ const LogAcciones = () => {
     }
 
     const buscar = () => {
-        document.body.style.cursor = 'wait'
-        const reqBody = {
-            filtro,
-            busqueda,
-            fechaInicio,
-            fechaFin
+        try {
+            document.body.style.cursor = 'wait'
+            const reqBody = {
+                filtro,
+                busqueda,
+                fechaInicio,
+                fechaFin
+            }
+            fetch('/api/acciones/busqueda', {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reqBody)
+            }).then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error("Token inválido.") })
+                }
+                else {
+                    Promise.all([res.json()])
+                        .then(([body]) => {
+                            document.body.style.cursor = 'default'
+                            if (body.length <= 0) {
+                                setMensajeError("No hay resultados para la busqueda");
+                            } else {
+                                setMensajeError("");
+                                setAcciones(body);
+                            }
+                        });
+                }
+            })
+                .catch(err => {
+                    document.body.style.cursor = 'default'
+                    setMensajeError(err.toString());
+                });
+        } catch (error) {
+            alert("Token inválido.");
+            refresh();
         }
-        fetch('/api/acciones/busqueda', {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-        }).then(res => {
-            if (!res.ok) {
-                return res.text().then(text => { throw new Error(text) })
-            }
-            else {
-                Promise.all([res.json()])
-                    .then(([body]) => {
-                        document.body.style.cursor = 'default'
-                        if (body.length <= 0) {
-                            setMensajeError("No hay resultados para la busqueda");
-                        } else {
-                            setMensajeError("");
-                            setAcciones(body);
-                        }
-                    });
-            }
-        })
-            .catch(err => {
-                document.body.style.cursor = 'default'
-                console.log(err);
-            });
+
     }
 
     const checkEnter = (e) => {
         const { key, keyCode } = e;
         if (keyCode === 13) {
-          buscar();
+            buscar();
         }
-      };
+    };
 
     return (
         <>
@@ -118,18 +131,18 @@ const LogAcciones = () => {
                             {filtro === "Fecha" ?
                                 <div>
                                     <label htmlFor='inputInicio'>Desde: </label>
-                                    <input type="date" id="inputInicio" onKeyDown={checkEnter}   onChange={handleChangeInicio}></input>
+                                    <input type="date" id="inputInicio" onKeyDown={checkEnter} onChange={handleChangeInicio}></input>
                                     <label htmlFor='inputFin'>Hasta: </label>
-                                    <input type="date" id="inputFin" onKeyDown={checkEnter}   onChange={handleChangeFin}></input>
+                                    <input type="date" id="inputFin" onKeyDown={checkEnter} onChange={handleChangeFin}></input>
                                 </div>
                                 :
-                                <input type="text" onKeyDown={checkEnter}  onChange={handleChangeBusqueda}></input>
+                                <input type="text" onKeyDown={checkEnter} onChange={handleChangeBusqueda}></input>
                             }
                             <button onClick={() => buscar()}>Buscar</button>
                             <p className="mensaje-error">{mensajeError}</p>
                         </div>
                         <hr />
-                        <DynamicTable TableData={acciones} num={10}/>
+                        <DynamicTable TableData={acciones} num={10} />
                     </div> : <p>Cargando...</p>}
             </div>
         </>

@@ -10,6 +10,7 @@ import InfoFacturas from './InfoFacturas';
 import { renderToString } from "react-dom/server";
 import FacturaWindow from '../util/FacturaWindow';
 import { useReactToPrint } from "react-to-print";
+import { refresh, setDataClearEmp } from '../util/FuncionesBroadcast';
 
 const InfoEmpresas = ({ history }) => {
 
@@ -50,7 +51,7 @@ const InfoEmpresas = ({ history }) => {
 
 
     useEffect(() => {
-        funciones.default.Obtener().then(result => { setListado(result); /*setEmpresa(null);*/ setOk(false); });
+        funciones.default.Obtener().then(result => { setListado(result);/*setEmpresa(null);*/ setOk(false); });
     }, [ok ? ok : null]);
 
     const handleChangeEmpresa = ({ target: { value } }) => {
@@ -64,7 +65,7 @@ const InfoEmpresas = ({ history }) => {
         return funciones.default.Actualizar(empresa, history);
     }
     const eliminar = (empresaCnpj) => {
-        funciones.default.Eliminar(empresaCnpj).then(result => setOk(result));
+        funciones.default.Eliminar(empresaCnpj).then(result => {/*setOk(result);*/ setDataClearEmp(empresa); });
         /*if(funciones.default.Eliminar(empresaNombre)){
             handleChangeListado(empresaNombre);
         }  */
@@ -72,45 +73,51 @@ const InfoEmpresas = ({ history }) => {
 
 
     const buscar = () => {
-        const empresaNom = empresa.empresaNombre;
-        document.body.style.cursor = 'wait'
-        const reqBody = {
-            empresaNom,
-            filtro,
-            busqueda,
-            fechaInicio,
-            fechaFin
+        try {
+            const empresaNom = empresa.empresaNombre;
+            document.body.style.cursor = 'wait'
+            const reqBody = {
+                empresaNom,
+                filtro,
+                busqueda,
+                fechaInicio,
+                fechaFin
+            }
+            fetch('/api/clicks/busqueda', {
+                method: 'POST',
+                withCredentials: true,
+                credentials: 'include',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reqBody)
+            }).then(res => {
+                if (!res.ok) {
+                    return res.text().then(text => { throw new Error("Token inválido.") })
+                }
+                else {
+                    Promise.all([res.json()])
+                        .then(([body]) => {
+                            document.body.style.cursor = 'default'
+                            if (body.length <= 0) {
+                                setMensajeError("No hay resultados para la busqueda");
+                            } else {
+                                setMensajeError("");
+                                setListClicks(body);
+                            }
+                        });
+                }
+            })
+                .catch(err => {
+                    document.body.style.cursor = 'default';
+                    setMensajeError(err.toString());
+                });
+        } catch (error) {
+            alert("Token inválido.");
+            refresh();
         }
-        fetch('/api/clicks/busqueda', {
-            method: 'POST',
-            withCredentials: true,
-            credentials: 'include',
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(reqBody)
-        }).then(res => {
-            if (!res.ok) {
-                return res.text().then(text => { throw new Error(text) })
-            }
-            else {
-                Promise.all([res.json()])
-                    .then(([body]) => {
-                        document.body.style.cursor = 'default'
-                        if (body.length <= 0) {
-                            setMensajeError("No hay resultados para la busqueda");
-                        } else {
-                            setMensajeError("");
-                            setListClicks(body);
-                        }
-                    });
-            }
-        })
-            .catch(err => {
-                document.body.style.cursor = 'default'
-                console.log(err);
-            });
+
     }
 
     const componentRef = useRef();

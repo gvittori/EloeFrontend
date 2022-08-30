@@ -1,5 +1,6 @@
 import { withRouter, useHistory, Redirect } from 'react-router-dom';
 import { decode } from './decode';
+import { refresh } from './FuncionesBroadcast';
 
 
 
@@ -46,24 +47,27 @@ async function Eliminar(empresaCnpj) {
         alert("Token invalido");
     }
 
-
-
 }
 
 async function Obtener() {
-    const res = fetch('/api/empresas', {
-        method: 'GET',
-        withCredentials: true,
-        credentials: 'include',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
-            'Content-Type': 'application/json'
-        }
-    }).then((response) => Promise.all([response.json()]))
-        .then(([body]) => {
-            return body;
-        });
-    return res;
+    try {
+        const res = fetch('/api/empresas', {
+            method: 'GET',
+            withCredentials: true,
+            credentials: 'include',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt').slice(1, -1)}`,
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => Promise.all([response.json()]))
+            .then(([body]) => {
+                return body;
+            });
+        return res;
+    } catch (error) {
+        alert("Token inválido.");
+        refresh();
+    }
 }
 
 async function Enviar(empresaCnpj) {
