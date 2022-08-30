@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Titulo from './components/Titulo';
 import Login from './components/Login';
@@ -24,6 +24,7 @@ import PagoWindow from './util/PagoWindow'
 import { default as LogAcciones } from './components/LogAcciones'
 import InfoUsuarios from './components/InfoUsuarios';
 import { useSiteTracking } from "react-event-tracker";
+import { loginAllTabs, logoutAllTabs, refreshAllTabs } from './util/FuncionesBroadcast';
 
 const trackingConfig = {
   siteData: {
@@ -57,11 +58,18 @@ const App = () => {
       sessionStorage.setItem('userId', null);
       sessionStorage.setItem('tipo', null);
     }*/
+
   const { SiteTracking } = useSiteTracking(trackingConfig);
 
   const roles1 = ["ROLE_ADMIN", "ROLE_USER", "ROLE_MANTENIMIENTO"];
   const roles2 = ["ROLE_ADMIN", "ROLE_MANTENIMIENTO"];
   const roles3 = ["ROLE_ADMIN"];
+
+  useEffect(() => {
+    refreshAllTabs();
+    loginAllTabs();
+    logoutAllTabs();
+   }, [])
 
   return (
     <SiteTracking>
@@ -96,7 +104,7 @@ const App = () => {
 
               {/*<Route path={"/facturaWindow"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><FacturaWindow /></PrivateRoute></Route>*/}
 
-              <Route path={"/Pago"} exact><PagoWindow/></Route>
+              <Route path={"/Pago"} exact><PagoWindow /></Route>
 
               <Route path={"*"} exact><PrivateRoute allowedRoles={roles1} homeRoles={roles1}><Secciones /><Home /></PrivateRoute>
               </Route>

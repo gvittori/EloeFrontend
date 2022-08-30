@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { withRouter, Link, useLocation, useHistory } from 'react-router-dom';
+import { login } from '../util/FuncionesBroadcast';
 import { useLocalState } from '../util/useLocalStorage';
 import Titulo from './Titulo';
 
@@ -54,8 +55,8 @@ const Login = () => {
               Promise.all([res.json(), res.headers])
                 .then(([body, headers]) => {
                   setJwt(headers.get("authorization"));
-                  history.push("/");
                   document.body.style.cursor = 'default'
+                  login();    
                 });
             }
           })

@@ -3,15 +3,16 @@ import { Redirect } from 'react-router-dom';
 import ItemSecciones from './ItemSecciones';
 import { useLocalState } from '../util/useLocalStorage';
 import { decode } from '../util/decode';
+import { logout } from '../util/FuncionesBroadcast';
 
 const Secciones = ({ history }) => {
   const [inactivo, setInactivo] = useState(true);
 
-  const btnLogout = () => {
+  /*const logout = () => {
     localStorage.setItem('jwt', '""');
     sessionStorage.clear();
     return <Redirect to='/Login' />
-  };
+  };*/
 
   const checkDisponible = (disponible) => {
     const array = decode(localStorage.getItem('jwt').slice(1, -1)).roles;
@@ -50,18 +51,18 @@ const Secciones = ({ history }) => {
       ],
     },
     { nombre: "Configuración", icono: "bi bi-gear", to: "/Configuracion", exact: true, disponible: ["TODOS"] },
-    { nombre: "Logout", icono: "bi bi-box-arrow-right", to: "/Login", exact: true, click: btnLogout, disponible: ["TODOS"] }
+    { nombre: "Logout", icono: "bi bi-box-arrow-right", to: "/Login", exact: true, click: logout, disponible: ["TODOS"] }
   ]
 
   const listItemSetInactivo = () => {
-    if(inactivo){
+    if (inactivo) {
       setInactivo(false);
     }
   }
 
 
   return (
-    <>{decode(localStorage.getItem('jwt'))!==null?
+    <>{decode(localStorage.getItem('jwt')) !== null ?
       <div className={`menuSecciones ${inactivo ? "inactivo" : ""}`}>
         <div className="top">
           <button onClick={() => setInactivo(!inactivo)} className="iconoMenu">
@@ -89,11 +90,11 @@ const Secciones = ({ history }) => {
                   onClick={item.click}
                   subMenus={item.subMenus}
                   inactivo={inactivo}
-                  open={listItemSetInactivo}/>) : null
+                  open={listItemSetInactivo} />) : null
             ))}
           </ul>
         </div>
-      </div>:<Redirect to='/Login' />}
+      </div> : <Redirect to='/Login' />}
     </>);
 };
 

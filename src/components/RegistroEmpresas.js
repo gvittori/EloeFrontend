@@ -2,6 +2,7 @@ import React, { useState, useEffect, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import Select from 'react-select';
 import { decode } from '../util/decode';
+import { refresh } from '../util/FuncionesBroadcast';
 
 
 
@@ -92,6 +93,7 @@ const RegistroEmpresas = ({ history }) => {
             res => {
               document.body.style.cursor = 'default'
               setMensajeError(`Empresa "${res}" agregado correctamente`);
+              refresh();
             }
           );
         }

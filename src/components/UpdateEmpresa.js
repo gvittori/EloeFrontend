@@ -2,6 +2,7 @@ import React, { useState, useEffect, Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { useHistory, useLocation } from "react-router-dom";
 import { decode } from '../util/decode';
+import { setDataEmp } from '../util/FuncionesBroadcast';
 import * as funciones from '../util/FuncionesEmpresas.js'
 
 const UpdateEmpresa = () => {
@@ -104,6 +105,7 @@ const UpdateEmpresa = () => {
                             setMensajeError(`Empresa "${res.empresaNombre}" actualizada correctamente`);
                             if (!ver) { sessionStorage.setItem("empresa", JSON.stringify(res)); }
                             funciones.default.Obtener().then(result => { setListado(result) })
+                            setDataEmp(res);
                         }
                     );
                 }

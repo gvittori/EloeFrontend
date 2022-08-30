@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Select from 'react-select'
 import { decode } from '../util/decode';
 import Multiselect from "react-widgets/Multiselect";
+import { refresh } from '../util/FuncionesBroadcast';
 
 
 
@@ -92,6 +93,7 @@ const RegistroUsuarios = ({ history }) => {
             res => {
               document.body.style.cursor = 'default'
               setMensajeError(`Usuario "${res}" agregado correctamente`);
+              refresh();
             }
           );
         }

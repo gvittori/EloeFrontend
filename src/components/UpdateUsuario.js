@@ -5,6 +5,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { decode } from '../util/decode';
 import * as funciones from '../util/FuncionesUsuarios'
 import Multiselect from "react-widgets/Multiselect";
+import { setDataUsr } from '../util/FuncionesBroadcast';
 
 
 
@@ -125,6 +126,7 @@ const UpdateUsuario = ({ history }) => {
                             setMensajeError(`Usuario "${res.username}" actualizado correctamente`);
                             if (!ver) { sessionStorage.setItem("usr", JSON.stringify(res)); }
                             funciones.default.Obtener().then(result => { setListado(result) })
+                            setDataUsr(res);
                         }
                     );
                 }
