@@ -6,9 +6,16 @@ import { useHistory, withRouter } from 'react-router';
 const FacturaWindow = ({data}) => {
     const fechaMes = new Date();
     const fechaV = new Date();
+    const valida = ()=>{
+        if(data!==null && data.clicksMes.length>0){
+            return true;
+        } else {
+            return false;
+        }
+    }
     return (
         <>
-        {data!==null?<div className='seccion flex-column facturaDiv'>
+        {valida()?<div className='seccion flex-column facturaDiv'>
                 <h1>Eloe Energy</h1>
                 <hr />
                 <div className='flex-column centerBox whiteBox'>
@@ -38,7 +45,7 @@ const FacturaWindow = ({data}) => {
                 <div>
                     <DynamicTable TableData={data.clicksMes} pdf={true}/>
                 </div>
-            </div>:<h3>No hay empresa</h3>}
+            </div>:<h3>No hay clicks generados</h3>}
             
         </>
     )

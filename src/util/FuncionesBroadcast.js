@@ -7,38 +7,50 @@ const loginChannel = new BroadcastChannel('login');
 const refreshChannel = new BroadcastChannel('refresh');
 
 export const refresh = () => {
-    refreshChannel.postMessage({type:"REFRESH"})
-    window.location.reload();
+    refreshChannel.postMessage({ type: "REFRESH" })
+    if (!document.hasFocus()) {
+        window.location.reload();
+        refreshChannel.close();
+    }
+    //window.location.reload();
+   
 }
 
+
 export const setDataEmp = (object) => {
-    refreshChannel.postMessage({type:"UPDATE_EMP", object:object});
+    refreshChannel.postMessage({ type: "UPDATE_EMP", object: object });
     let emp = funcionesEmp.default.Validar();
-    if(emp!==null && object!==null){
-        if(emp.empresaId===object.empresaId){
-            sessionStorage.setItem("empresa",JSON.stringify(object));
+    if (emp !== null && object !== null) {
+        if (emp.empresaId === object.empresaId) {
+            sessionStorage.setItem("empresa", JSON.stringify(object));
         }
     }
-    window.location.reload();
+    if (!document.hasFocus()) {
+        window.location.reload();
+        refreshChannel.close();
+    }
 }
 
 export const setDataUsr = (object) => {
-    refreshChannel.postMessage({type:"UPDATE_USR", object:object});
+    refreshChannel.postMessage({ type: "UPDATE_USR", object: object });
     let usr = funcionesUsr.default.Validar();
-    if(usr!==null && object!==null){
-        if(usr.usuId===object.usuId){
-            sessionStorage.setItem("usr",JSON.stringify(object));
+    if (usr !== null && object !== null) {
+        if (usr.usuId === object.usuId) {
+            sessionStorage.setItem("usr", JSON.stringify(object));
         }
     }
-    window.location.reload();
+    if (!document.hasFocus()) {
+        window.location.reload();
+        refreshChannel.close();
+    }
 }
 
 
 export const setDataClearEmp = (object) => {
-    refreshChannel.postMessage({type:"DELETE_EMP", object:object});
+    refreshChannel.postMessage({ type: "DELETE_EMP", object: object });
     let emp = funcionesEmp.default.Validar();
-    if(emp!==null && object!==null){
-        if(emp.empresaId===object.empresaId){
+    if (emp !== null && object !== null) {
+        if (emp.empresaId === object.empresaId) {
             sessionStorage.removeItem("empresa");
         }
     }
@@ -46,10 +58,10 @@ export const setDataClearEmp = (object) => {
 }
 
 export const setDataClearUsr = (object) => {
-    refreshChannel.postMessage({type:"DELETE_USR", object:object});
+    refreshChannel.postMessage({ type: "DELETE_USR", object: object });
     let usr = funcionesUsr.default.Validar();
-    if(usr!==null && object!==null){
-        if(usr.usuId===object.usuId){
+    if (usr !== null && object !== null) {
+        if (usr.usuId === object.usuId) {
             sessionStorage.removeItem("usr");
         }
     }
@@ -62,25 +74,25 @@ export const refreshAllTabs = () => {
         switch (data.type) {
             case "REFRESH": {
                 refresh();
-                refreshChannel.close();
+                //refreshChannel.close();
                 break;
             }
-            case "UPDATE_EMP":{
+            case "UPDATE_EMP": {
                 setDataEmp(data.object);
-                refreshChannel.close();
+                //refreshChannel.close();
                 break;
             }
-            case "UPDATE_USR":{
+            case "UPDATE_USR": {
                 setDataUsr(data.object);
-                refreshChannel.close();
+                //refreshChannel.close();
                 break;
             }
-            case "DELETE_EMP":{
+            case "DELETE_EMP": {
                 setDataClearEmp(data.object);
                 refreshChannel.close();
                 break;
             }
-            case "DELETE_USR":{
+            case "DELETE_USR": {
                 setDataClearUsr(data.object);
                 refreshChannel.close();
                 break;

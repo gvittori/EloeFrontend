@@ -10,6 +10,7 @@ async function Eliminar(username) {
             usuario
         }
         if (window.confirm("Deshabilitar usuario?")) {
+            document.body.style.cursor = 'wait'
             const ok = await fetch('/api/usuarios/delete', {
                 method: 'POST',
                 withCredentials: true,
@@ -35,7 +36,7 @@ async function Eliminar(username) {
                 });
             //const data = await ok.json();
             if (ok) {
-                alert("Usuario deshabilitadp.")
+                alert("Usuario deshabilitado.")
             } else {
                 alert("Usuario no deshabilitado.")
             }

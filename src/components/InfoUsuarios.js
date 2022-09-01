@@ -9,7 +9,8 @@ const InfoUsuarios = ({ history }) => {
     const [listado, setListado] = useState([]);
     const [usuario, setUsuario] = useState(funciones.default.Validar());
     const [ok, setOk] = useState(false);
-    const [actual, setActual] = useState(decode(localStorage.getItem("jwt")).sub)
+    const [actual, setActual] = useState(decode(localStorage.getItem("jwt")).sub);
+    const [inProgress, setInProgress] = useState(false);
 
 
     useEffect(() => {
@@ -26,12 +27,12 @@ const InfoUsuarios = ({ history }) => {
         return funciones.default.Actualizar(usuario, history);
     }
     const eliminar = (username) => {
+        setInProgress(true);
         funciones.default.Eliminar(username).then(result => setDataClearUsr(usuario)/*setOk(result)*/);
         /*if(funciones.default.Eliminar(empresaNombre)){
             handleChangeListado(empresaNombre);
         }  */
     }
-
 
     const verUsuario = () => {
         if (usuario === null) {
@@ -43,8 +44,8 @@ const InfoUsuarios = ({ history }) => {
                         username={usuario.username}
                         roles={usuario.roles} />
                     <div className='flex-column centerBox'>
-                        <button className='btnRegistro' disabled={usuario.username!==actual?false:true}onClick={() => actualizar(usuario)}>Actualizar datos</button>
-                        <button className='btnRegistro' disabled={usuario.username!==actual?false:true} onClick={() => eliminar(usuario.username)}>Deshabilitar usuario</button>
+                        <button className='btnRegistro' disabled={inProgress?true:usuario.username!==actual?false:true}onClick={() => actualizar(usuario)}>Actualizar datos</button>
+                        <button className='btnRegistro' disabled={inProgress?true:usuario.username!==actual?false:true} onClick={() => eliminar(usuario.username)}>Deshabilitar usuario</button>
                     </div>
                 </div>
             )
