@@ -46,7 +46,7 @@ const MailConfig = ({ history }) => {
             })
                 .then(res => {
                     if (!res.ok) {
-                        return res.text().then(text => { throw new Error("Token Inválido.") })
+                        return res.text().then(text => { throw new Error(text) })
                     }
                     else {
                         return res.text().then(
@@ -60,7 +60,10 @@ const MailConfig = ({ history }) => {
                 })
                 .catch(err => {
                     document.body.style.cursor = 'default'
-                    setMensajeError(err.toString());
+                    if (err.toString().includes('"status":500')) {
+                        setMensajeError("Error: Token inválido o error interno");
+                    }
+                    else setMensajeError(err.toString());
                 })
         } catch (error) {
             alert("Token inválido.");

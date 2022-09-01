@@ -36,7 +36,10 @@ const LogAcciones = () => {
                 }
             })
                 .catch(err => {
-                    console.log(err);
+                    if (err.toString().includes('"status":500')) {
+                        console.log("Error: Token inválido o error interno");
+                    }
+                    else console.log(err);
                 });
         } catch (error) {
             alert("Token inválido");
@@ -81,7 +84,7 @@ const LogAcciones = () => {
                 body: JSON.stringify(reqBody)
             }).then(res => {
                 if (!res.ok) {
-                    return res.text().then(text => { throw new Error("Token inválido.") })
+                    return res.text().then(text => { throw new Error(text) })
                 }
                 else {
                     Promise.all([res.json()])
@@ -98,7 +101,10 @@ const LogAcciones = () => {
             })
                 .catch(err => {
                     document.body.style.cursor = 'default'
-                    setMensajeError(err.toString());
+                    if (err.toString().includes('"status":500')) {
+                        setMensajeError("Error: Token inválido o error interno");
+                    }
+                    else setMensajeError(err.toString());
                 });
         } catch (error) {
             alert("Token inválido.");

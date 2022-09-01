@@ -21,7 +21,7 @@ const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
                     if (homeValid(roles, homeRoles)) {
                         return <Redirect to="/" />
                     } else {
-                        localStorage.setItem('jwt', '""');
+                        localStorage.setItem('jwt', "");
                         alert("Permisos de rol no implementados. Redireccionando a Login");
                         logout();
                     }
@@ -32,7 +32,7 @@ const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
     logout();
 
 
-    /*if (jwt.length > 0) {
+    /*if (jwt !== null && jwt.length > 0) {
         var tokenDecodificado = decode(jwt);
         if (tokenDecodificado !== null) {
             var val = esVencido(tokenDecodificado);
@@ -44,19 +44,20 @@ const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
                     if (homeValid(roles, homeRoles)) {
                         history.push("/");
                     } else {
-                        asyncLocalStorage.setItem('jwt', '""').then(function () {
+                        asyncLocalStorage.setItem('jwt', "").then(function () {
                             alert("Permisos de rol no implementados. Redireccionando a Login");
-                            history.push("/Login")
+                            logout();
+                            //history.push("/Login")
                         });
-                    }    
+                    }
                 }
-            }else{
-                asyncLocalStorage.setItem('jwt', '""').then(function () {history.push("/Login")});
+            } else {
+                asyncLocalStorage.setItem('jwt', "").then(logout()/*function () {history.push("/Login")});
             }
         }
-    } else{
-        asyncLocalStorage.setItem('jwt', '""').then(function () {history.push("/Login")});
-    }*/
+    }
+    asyncLocalStorage.setItem('jwt', "").then(logout()/*function () {history.push("/Login")});*/
+
 }
 
 const asyncLocalStorage = {
@@ -77,7 +78,7 @@ const esVencido = (token) => {
     var fecha = new Date();
     if (parseInt(fecha.getTime().toString().slice(0, -3)) > token.exp) {
         vencido = true;
-        localStorage.setItem('jwt', '""');
+        localStorage.setItem('jwt', "");
     }
     return vencido;
 }

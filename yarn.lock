@@ -10030,6 +10030,11 @@
   dependencies:
     "punycode" "^2.1.0"
 
+"use-window-focus@^1.4.1":
+  "integrity" "sha512-GqBxPfh/0qvwODQfAkMaXkufv1sNUtgrZXrPXsyEjd1v4YrOmVCfK5axGiJimv6x6TFvUwnQWJUG4nzE1lWdQQ=="
+  "resolved" "https://registry.npmjs.org/use-window-focus/-/use-window-focus-1.4.1.tgz"
+  "version" "1.4.1"
+
 "util-deprecate@^1.0.1", "util-deprecate@^1.0.2", "util-deprecate@~1.0.1":
   "integrity" "sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw=="
   "resolved" "https://registry.npmjs.org/util-deprecate/-/util-deprecate-1.0.2.tgz"

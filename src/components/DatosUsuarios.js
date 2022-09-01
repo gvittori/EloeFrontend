@@ -32,6 +32,10 @@ const DatosUsuarios = ({ history }) => {
         }
       })
         .catch(err => {
+          if (err.toString().includes('"status":500')) {
+            console.log("Error: Token inválido o error interno");
+          }
+          else  
           console.log(err);
         });
     } catch (error) {

@@ -27,12 +27,12 @@ const RegistroUsuarios = ({ history }) => {
       }).then((response) => Promise.all([response.json()]))
         .then(([body]) => {
           setListaRoles(body);
-        });
+        })
     } catch (error) {
       alert("Token inválido.");
       refresh();
     }
-    
+
   }, []);
 
 
@@ -91,7 +91,7 @@ const RegistroUsuarios = ({ history }) => {
           body: JSON.stringify(reqBody)
         }).then(res => {
           if (!res.ok) {
-            return res.text().then(text => { throw new Error("Token inválido.") })
+            return res.text().then(text => { throw new Error(text) })
           }
           else {
             return res.text().then(
@@ -104,8 +104,11 @@ const RegistroUsuarios = ({ history }) => {
           }
         })
           .catch(err => {
-            setMensajeError(err.toString());
-            document.body.style.cursor = 'default'
+            document.body.style.cursor = 'default';
+            if (err.toString().includes('"status":500')) {
+              setMensajeError("Error: Token inválido o error interno");
+            }
+            else setMensajeError(err.toString());
           });
       }
     } catch (error) {

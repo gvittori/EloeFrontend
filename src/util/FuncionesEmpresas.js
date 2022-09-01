@@ -2,9 +2,6 @@ import { withRouter, useHistory, Redirect } from 'react-router-dom';
 import { decode } from './decode';
 import { refresh } from './FuncionesBroadcast';
 
-
-
-
 async function Eliminar(empresaCnpj) {
     try {
         const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
@@ -32,7 +29,10 @@ async function Eliminar(empresaCnpj) {
                 }
             })
                 .catch(err => {
-                    alert("Fallo en deshabilitación..."/*err.toString()*/);
+                    if (err.toString().includes('"status":500')) {
+                        alert("Fallo en deshabilitación: Token inválido o error interno." );
+                    }
+                    else alert("Fallo en deshabilitación: " + err.toString());
                 });
             //const data = await ok.json();
             if (ok) {
@@ -101,7 +101,10 @@ async function Enviar(empresaCnpj) {
                     return res
                 }
             }).catch(err => {
-                alert("Fallo en envío de factura..."/*err.toString()*/);
+                if (err.toString().includes('"status":500')) {
+                    alert("Fallo en envío de factura: Token inválido o error interno." );
+                }
+                else alert("Fallo en envío de factura: " + err.toString());
             });
             if (ok) {
                 alert("Factura enviada.")

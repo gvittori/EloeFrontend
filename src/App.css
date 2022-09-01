@@ -540,3 +540,7 @@ hr {
 .mensaje-error{
   white-space: pre-wrap;
 }
+
+.centered{
+  align-self: center;
+}

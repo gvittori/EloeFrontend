@@ -123,7 +123,7 @@ const UpdateUsuario = ({ history }) => {
                         body: JSON.stringify(reqBody)
                     }).then(res => {
                         if (!res.ok) {
-                            return res.text().then(text => { throw new Error("Token invalido") })
+                            return res.text().then(text => { throw new Error(text) })
                         }
                         else {
                             return res.json().then(
@@ -140,7 +140,10 @@ const UpdateUsuario = ({ history }) => {
                     })
                         .catch(err => {
                             document.body.style.cursor = 'default'
-                            setMensajeError(err.toString());
+                            if (err.toString().includes('"status":500')) {
+                                setMensajeError("Error: Token inválido o error interno");
+                            }
+                            else setMensajeError(err.toString());
                         });
                 }
 

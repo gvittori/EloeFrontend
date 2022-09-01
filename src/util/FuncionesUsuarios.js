@@ -28,7 +28,10 @@ async function Eliminar(username) {
                 }
             })
                 .catch(err => {
-                    alert("Fallo en deshabilitación..."/*err.toString()*/);
+                    if (err.toString().includes('"status":500')) {
+                        alert("Fallo en deshabilitación: Token inválido o error interno.");
+                    }
+                    else alert("Fallo en deshabilitación: " + err.toString());
                 });
             //const data = await ok.json();
             if (ok) {
@@ -67,7 +70,7 @@ async function Obtener() {
         alert("Token inválido.");
         refresh();
     }
-   
+
 }
 
 const Actualizar = (usuario, history) => {

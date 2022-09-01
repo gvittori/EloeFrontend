@@ -55,7 +55,7 @@ const RegistroRoles = ({ history }) => {
         })
           .then(res => {
             if (!res.ok) {
-              return res.text().then(text => { throw new Error("Token inválido") })
+              return res.text().then(text => { throw new Error(text) })
             }
             else {
               return res.text().then(
@@ -69,7 +69,10 @@ const RegistroRoles = ({ history }) => {
           })
           .catch(err => {
             document.body.style.cursor = 'default'
-            setMensajeError(err.toString());
+            if (err.toString().includes('"status":500')) {
+              setMensajeError("Error: Token inválido o error interno");
+            }
+            else setMensajeError(err.toString());
           })
       }
     } catch (error) {
@@ -91,9 +94,15 @@ const RegistroRoles = ({ history }) => {
       <div className="seccion registroBox">
         <h2>Registro de roles</h2>
         <hr />
-        <label htmlFor="txtNom"><b>Nombre de rol</b></label>
-        <input className="texto" type="text" placeholder="Ingrese nombre de rol..." onChange={handleChangeAuthority} onKeyDown={checkEnter}
-          name="txtNom" />
+        <h4>Ingrese nombre de rol:</h4>
+        <div className='flex-row'>
+          <b className='centered'>ROLE_</b>
+          <input id="txtNom" className="texto" type="text" placeholder="EJEMPLO" onChange={handleChangeAuthority} onKeyDown={checkEnter}
+            name="txtNom" />
+        </div>
+
+
+
         <input type="button" value="Registrar" onClick={btnRegistrar} className="btnRegistro" />
         <p className="mensaje-error">{mensajeError}</p>
       </div>

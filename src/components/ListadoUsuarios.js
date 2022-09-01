@@ -31,7 +31,11 @@ const ListadoUsuarios = ({ history }) => {
                 }
             })
                 .catch(err => {
-                    console.log(err);
+                    if (err.toString().includes('"status":500')) {
+                        console.log("Error: Token inválido o error interno");
+                    }
+                    else
+                        console.log(err);
                 });
         } catch (error) {
             alert("Token inválido.");
@@ -100,7 +104,11 @@ const ListadoUsuarios = ({ history }) => {
                     }
                 })
                     .catch(err => {
-                        alert(err.toString());
+                        if (err.toString().includes('"status":500')) {
+                            alert("Error: Token inválido o error interno");
+                        }
+                        else
+                            alert(err.toString());
                     });
             }
         } catch (error) {

@@ -6,6 +6,8 @@ import * as funciones from '../util/FuncionesEmpresas.js'
 import { usePageTracking } from "react-event-tracker";
 
 
+
+
 const Home = ({ props, history }) => {
   /*usePageTracking({
     page: "Home",
