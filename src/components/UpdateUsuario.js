@@ -6,6 +6,7 @@ import { decode } from '../util/decode';
 import * as funciones from '../util/FuncionesUsuarios'
 import Multiselect from "react-widgets/Multiselect";
 import { refresh, setDataUsr } from '../util/FuncionesBroadcast';
+import DropdownList from "react-widgets/DropdownList";
 
 
 
@@ -77,10 +78,12 @@ const UpdateUsuario = ({ history }) => {
         setRoles([obj]);
     };
 
-    const handleChangeUsuario = ({ target: { value } }) => {
-        let obj = JSON.parse(value);
-        setUsr(obj);
+    const handleChangeUsuario = (value/*{ target: { value } }*/) => {
+        setUsr(value);
         setMensajeError("");
+        /*let obj = JSON.parse(value);
+        setUsr(obj);
+        setMensajeError("");*/
     };
 
 
@@ -184,13 +187,19 @@ const UpdateUsuario = ({ history }) => {
                 <h2>Update de usuarios</h2>
                 <hr />
                 <label htmlFor="slcTipo"><b>Listado de usuarios: </b></label>
-                {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={usr ? JSON.stringify(usr) : 'Default'}>
-                    <option value="Default" disabled>Seleccione un usuario</option>
-                    {listado.map((item, index) => (
-                        item.username !== actual ?
-                            <option key={index} value={JSON.stringify(item)}>{item.username}</option> : null
-                    ))}
-                </select> : <div><p>Cargando usuarios...</p></div>}
+                {listado.length > 0 ?
+                    <div className='dropdown'>
+                        <DropdownList
+                            placeholder='Seleccione un usuario'
+                            dataKey="usuId"
+                            textField="username"
+                            data={listado}
+                            filter='contains'
+                            onChange={value => handleChangeUsuario(value)}
+                            disabled={[listado.find(obj=>obj.username===actual)]}
+                        />
+                    </div>
+                    : <div><p>Cargando usuarios...</p></div>}
 
                 <hr />
                 <label htmlFor="txtUsu"><b>Nombre de usuario</b></label>
@@ -235,3 +244,11 @@ export default withRouter(UpdateUsuario);
 <option key={index} value={JSON.stringify(item)}>{item.authority}</option>
 ))}
 </select>                        {console.log(roles.includes(item))}*/
+
+/*<select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={usr ? JSON.stringify(usr) : 'Default'}>
+                    <option value="Default" disabled>Seleccione un usuario</option>
+                    {listado.map((item, index) => (
+                        item.username !== actual ?
+                            <option key={index} value={JSON.stringify(item)}>{item.username}</option> : null
+                    ))}
+                </select>*/

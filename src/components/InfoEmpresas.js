@@ -11,6 +11,8 @@ import { renderToString } from "react-dom/server";
 import FacturaWindow from '../util/FacturaWindow';
 import { useReactToPrint } from "react-to-print";
 import { refresh, setDataClearEmp } from '../util/FuncionesBroadcast';
+import DropdownList from "react-widgets/DropdownList";
+
 
 const InfoEmpresas = ({ history }) => {
 
@@ -54,11 +56,15 @@ const InfoEmpresas = ({ history }) => {
         funciones.default.Obtener().then(result => { setListado(result);/*setEmpresa(null);*/ setOk(false); });
     }, [ok ? ok : null]);
 
-    const handleChangeEmpresa = ({ target: { value } }) => {
-        let obj = JSON.parse(value);
+    const handleChangeEmpresa = (value/*{ target: { value } }*/) => {
+        setEmpresa(value);
+        setListClicks(value.clicks);
+        let string = JSON.stringify(value);
+        sessionStorage.setItem("empresa", string);
+        /*let obj = JSON.parse(value);
         setEmpresa(obj);
         setListClicks(obj.clicks);
-        sessionStorage.setItem("empresa", value);
+        sessionStorage.setItem("empresa", value);*/
     };
 
     const actualizar = (empresa) => {
@@ -66,7 +72,7 @@ const InfoEmpresas = ({ history }) => {
     }
     const eliminar = (empresaCnpj) => {
         setInProgress(true);
-        funciones.default.Eliminar(empresaCnpj).then(result => {setDataClearEmp(empresa); });
+        funciones.default.Eliminar(empresaCnpj).then(result => { setDataClearEmp(empresa); });
         /*if(funciones.default.Eliminar(empresaNombre)){
             handleChangeListado(empresaNombre);
         }  */
@@ -220,13 +226,18 @@ const InfoEmpresas = ({ history }) => {
                         <h3>Información de empresas</h3>
                         <hr />
                         <label htmlFor="slcTipo"><b>Listado de empresas: </b></label>
-                        {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={empresa ? JSON.stringify(empresa) : 'Default'}>
-                            <option value="Default" disabled>Seleccione una empresa</option>
-                            {listado.map((item, index) => (
-                                <option key={index} value={JSON.stringify(item)}>{item.empresaNombre}</option>
-                            ))}
-                        </select> : <div><p>Cargando empresas...</p></div>}
-
+                        {listado.length > 0 ?
+                            <div className='dropdown'>
+                                <DropdownList
+                                    placeholder='Seleccione una empresa'
+                                    dataKey="empresaId"
+                                    textField="empresaNombre"
+                                    data={listado}
+                                    filter='contains'
+                                    onChange={value => handleChangeEmpresa(value)}
+                                />
+                            </div>
+                            : <div><p>Cargando empresas...</p></div>}
                         <hr />
                         {verEmpresa()}
 
@@ -242,3 +253,9 @@ const InfoEmpresas = ({ history }) => {
 
 InfoEmpresas.propTypes = {};
 export default withRouter(InfoEmpresas);
+/*<select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={empresa ? JSON.stringify(empresa) : 'Default'}>
+                            <option value="Default" disabled>Seleccione una empresa</option>
+                            {listado.map((item, index) => (
+                                <option key={index} value={JSON.stringify(item)}>{item.empresaNombre}</option>
+                            ))}
+                        </select>*/

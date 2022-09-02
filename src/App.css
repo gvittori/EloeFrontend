@@ -443,7 +443,7 @@ hr.lineaTop {
 }
 
 .listaEmpresas li:hover{
-  background-color: #0ed450;
+  background-color: #0ed450;/*#46e77c*/
   cursor: pointer;
 }
 
@@ -456,6 +456,7 @@ hr.lineaTop {
   padding: 5px;
   box-shadow: 2px 3px 5px;
 }
+
 
 .centerBox {
   max-height: 400px;
@@ -543,4 +544,8 @@ hr {
 
 .centered{
   align-self: center;
+}
+
+.dropdown{
+  width: 300px;
 }

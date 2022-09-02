@@ -4,6 +4,7 @@ import ItemUsuario from './ItemUsuario';
 import * as funciones from '../util/FuncionesUsuarios'
 import { decode } from '../util/decode';
 import { setDataClearUsr } from '../util/FuncionesBroadcast';
+import DropdownList from "react-widgets/DropdownList";
 
 const InfoUsuarios = ({ history }) => {
     const [listado, setListado] = useState([]);
@@ -17,10 +18,13 @@ const InfoUsuarios = ({ history }) => {
         funciones.default.Obtener().then(result => { setListado(result); /*setUsuario(null); */setOk(false); });
     }, [ok ? ok : null]);
 
-    const handleChangeUsuario = ({ target: { value } }) => {
-        let obj = JSON.parse(value);
+    const handleChangeUsuario = (value/*{ target: { value } }*/) => {
+        setUsuario(value);
+        let string = JSON.stringify(value);
+        sessionStorage.setItem("usr", string);
+        /*let obj = JSON.parse(value);
         setUsuario(obj);
-        sessionStorage.setItem("usr", value);
+        sessionStorage.setItem("usr", value);*/
     };
 
     const actualizar = (usuario) => {
@@ -44,8 +48,8 @@ const InfoUsuarios = ({ history }) => {
                         username={usuario.username}
                         roles={usuario.roles} />
                     <div className='flex-column centerBox'>
-                        <button className='btnRegistro' disabled={inProgress?true:usuario.username!==actual?false:true}onClick={() => actualizar(usuario)}>Actualizar datos</button>
-                        <button className='btnRegistro' disabled={inProgress?true:usuario.username!==actual?false:true} onClick={() => eliminar(usuario.username)}>Deshabilitar usuario</button>
+                        <button className='btnRegistro' disabled={inProgress ? true : usuario.username !== actual ? false : true} onClick={() => actualizar(usuario)}>Actualizar datos</button>
+                        <button className='btnRegistro' disabled={inProgress ? true : usuario.username !== actual ? false : true} onClick={() => eliminar(usuario.username)}>Deshabilitar usuario</button>
                     </div>
                 </div>
             )
@@ -58,12 +62,18 @@ const InfoUsuarios = ({ history }) => {
                 <h3>Información de usuarios</h3>
                 <hr />
                 <label htmlFor="slcTipo"><b>Listado de usuarios: </b></label>
-                {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={usuario ? JSON.stringify(usuario) : 'Default'}>
-                    <option value="Default" disabled>Seleccione un usuario</option>
-                    {listado.map((item, index) => (
-                        <option key={index} value={JSON.stringify(item)}>{item.username}</option>
-                    ))}
-                </select> : <div><p>Cargando usuarios...</p></div>}
+                {listado.length > 0 ?
+                    <div className='dropdown'>
+                        <DropdownList
+                            placeholder='Seleccione un usuario'
+                            dataKey="usuId"
+                            textField="username"
+                            data={listado}
+                            filter='contains'
+                            onChange={value => handleChangeUsuario(value)}
+                        />
+                    </div>
+                    : <div><p>Cargando usuarios...</p></div>}
 
                 <hr />
                 {verUsuario()}
@@ -75,3 +85,10 @@ const InfoUsuarios = ({ history }) => {
 
 InfoUsuarios.propTypes = {};
 export default withRouter(InfoUsuarios);
+
+/*<select className='select' name="slcTipo" onChange={handleChangeUsuario} defaultValue={usuario ? JSON.stringify(usuario) : 'Default'}>
+                    <option value="Default" disabled>Seleccione un usuario</option>
+                    {listado.map((item, index) => (
+                        <option key={index} value={JSON.stringify(item)}>{item.username}</option>
+                    ))}
+                </select> */

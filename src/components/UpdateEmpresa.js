@@ -4,6 +4,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { decode } from '../util/decode';
 import { refresh, setDataEmp } from '../util/FuncionesBroadcast';
 import * as funciones from '../util/FuncionesEmpresas.js'
+import DropdownList from "react-widgets/DropdownList";
 
 const UpdateEmpresa = () => {
     const location = useLocation();
@@ -135,10 +136,12 @@ const UpdateEmpresa = () => {
         }
     };
 
-    const handleChangeEmpresa = ({ target: { value } }) => {
-        let obj = JSON.parse(value);
-        setEmpresa(obj);
+    const handleChangeEmpresa = (value/*{ target: { value } }*/) => {
+        setEmpresa(value);
         setMensajeError("");
+        /*let obj = JSON.parse(value);
+        setEmpresa(obj);
+        setMensajeError("");*/
     };
 
 
@@ -148,12 +151,18 @@ const UpdateEmpresa = () => {
                 <h2>Update de empresas</h2>
                 <hr />
                 <label htmlFor="slcTipo"><b>Listado de empresas: </b></label>
-                {listado.length > 0 ? <select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={empresa ? JSON.stringify(empresa) : 'Default'}>
-                    <option value="Default" disabled>Seleccione una empresa</option>
-                    {listado.map((item, index) => (
-                        <option key={index} value={JSON.stringify(item)}>{item.empresaNombre}</option>
-                    ))}
-                </select> : <div><p>Cargando empresas...</p></div>}
+                {listado.length > 0 ?
+                    <div className='dropdown'>
+                        <DropdownList
+                            placeholder='Seleccione una empresa'
+                            dataKey="empresaId"
+                            textField="empresaNombre"
+                            data={listado}
+                            filter='contains'
+                            onChange={value => handleChangeEmpresa(value)}
+                        />
+                    </div>
+                    : <div><p>Cargando empresas...</p></div>}
                 <hr />
 
                 <label htmlFor="txtNom"><b>Nombre de empresa</b></label>
@@ -177,3 +186,10 @@ const UpdateEmpresa = () => {
 };
 
 export default withRouter(UpdateEmpresa);
+
+/*<select className='select' name="slcTipo" onChange={handleChangeEmpresa} defaultValue={empresa ? JSON.stringify(empresa) : 'Default'}>
+                    <option value="Default" disabled>Seleccione una empresa</option>
+                    {listado.map((item, index) => (
+                        <option key={index} value={JSON.stringify(item)}>{item.empresaNombre}</option>
+                    ))}
+                </select> */
