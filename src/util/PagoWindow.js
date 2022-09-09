@@ -2,6 +2,7 @@ import { default as DynamicTable } from './DynamicTable.js'
 import { renderToString } from 'react-dom/server'
 import { Component } from 'react'
 import { useHistory, withRouter, useParams } from 'react-router';
+import Pago from '../components/Pago';
 
 
 export default class PagoWindow extends Component {
@@ -12,10 +13,7 @@ export default class PagoWindow extends Component {
         const payerId = params.get("PayerID");
         return (
             <div>
-                <p>AAAAAAAAAAAAAAAAAAAAAAAAAAAAA</p>
-                <p>{paymentId}</p>
-                <p>{token}</p>
-                <p>{payerId}</p>
+                <Pago token={token} pagoId={paymentId}></Pago>
             </div>
         )
     }

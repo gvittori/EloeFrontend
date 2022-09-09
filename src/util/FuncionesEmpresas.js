@@ -75,7 +75,7 @@ async function Enviar(empresaCnpj) {
         const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
         if (window.confirm("Enviar factura de empresa seleccionada?")) {
             let condicion = false;
-            if (window.confirm("Generar nueva factura en base de datos?")) {
+            if (window.confirm("Generar enlace de pago y nueva factura en base de datos?")) {
                 condicion = true;
             }
             const reqBody = {

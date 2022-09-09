@@ -10,7 +10,7 @@ const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
     //const [jwt, setJwt] = useLocalState("", "jwt");
     const jwt = localStorage.getItem("jwt");
     const history = useHistory();
-    if (jwt!== null && jwt.length > 0) {
+    /*if (jwt!== null && jwt.length > 0) {
         var tokenDecodificado = decode(jwt);
         if (tokenDecodificado !== null) {
             if (!esVencido(tokenDecodificado)) {
@@ -29,10 +29,10 @@ const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
             }
         }
     }
-    logout();
+    logout();*/
 
 
-    /*if (jwt !== null && jwt.length > 0) {
+    if (jwt !== null && jwt.length > 0) {
         var tokenDecodificado = decode(jwt);
         if (tokenDecodificado !== null) {
             var val = esVencido(tokenDecodificado);
@@ -52,11 +52,11 @@ const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
                     }
                 }
             } else {
-                asyncLocalStorage.setItem('jwt', "").then(logout()/*function () {history.push("/Login")});
+                asyncLocalStorage.setItem('jwt', "").then(logout()/*function () {history.push("/Login")}*/);
             }
         }
     }
-    asyncLocalStorage.setItem('jwt', "").then(logout()/*function () {history.push("/Login")});*/
+    asyncLocalStorage.setItem('jwt', "").then(logout()/*function () {history.push("/Login")}*/);
 
 }
 
@@ -73,7 +73,7 @@ const asyncLocalStorage = {
     }
 };
 
-const esVencido = (token) => {
+/*const esVencido = (token) => {
     var vencido = false;
     var fecha = new Date();
     if (parseInt(fecha.getTime().toString().slice(0, -3)) > token.exp) {
@@ -81,16 +81,16 @@ const esVencido = (token) => {
         localStorage.setItem('jwt', "");
     }
     return vencido;
-}
+}*/
 
-/*const esVencido = (token) => {
+const esVencido = (token) => {
     var fecha = new Date().getTime().toString().slice(0, -3);
     var val = parseInt(fecha);
     if (val > token.exp) {
         return true;
     }
     return false;
-}*/
+}
 
 
 const contieneRol = (roles, allowedRoles) => {
