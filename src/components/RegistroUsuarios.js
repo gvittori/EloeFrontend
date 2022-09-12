@@ -13,6 +13,8 @@ const RegistroUsuarios = ({ history }) => {
   const [roles, setRoles] = useState([]);
   const [mensajeError, setMensajeError] = useState('');
   const [listaRoles, setListaRoles] = useState([]);
+  const [inProgress, setInProgress] = useState(false);
+  
 
   useEffect(() => {
     try {
@@ -74,6 +76,7 @@ const RegistroUsuarios = ({ history }) => {
       }
       else {
         document.body.style.cursor = 'wait'
+        setInProgress(true);
         const reqBody = {
           username,
           password,
@@ -97,6 +100,7 @@ const RegistroUsuarios = ({ history }) => {
             return res.text().then(
               res => {
                 document.body.style.cursor = 'default'
+                setInProgress(false);
                 setMensajeError(`Usuario "${res}" agregado correctamente`);
                 refresh();
               }
@@ -105,6 +109,7 @@ const RegistroUsuarios = ({ history }) => {
         })
           .catch(err => {
             document.body.style.cursor = 'default';
+            setInProgress(false);
             if (err.toString().includes('"status":500')) {
               setMensajeError("Error: Token inválido o error interno");
             }
@@ -112,6 +117,7 @@ const RegistroUsuarios = ({ history }) => {
           });
       }
     } catch (error) {
+      setInProgress(false);
       alert("Token inválido.");
       refresh();
     }
@@ -139,6 +145,11 @@ const RegistroUsuarios = ({ history }) => {
 
   return (
     <>
+      {inProgress ?
+        <div className="loader-container">
+          <div className="spinner"></div>
+        </div>
+        : null}
       <div className="seccion registroBox">
         <h2>Registro de usuarios</h2>
         <hr />

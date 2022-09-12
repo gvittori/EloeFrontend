@@ -58,6 +58,11 @@ const InfoUsuarios = ({ history }) => {
 
     return (
         <>
+            {inProgress ?
+                <div className="loader-container">
+                    <div className="spinner"></div>
+                </div>
+                : null}
             <div className='seccion'>
                 <h3>Información de usuarios</h3>
                 <hr />

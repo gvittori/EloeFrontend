@@ -10,6 +10,7 @@ const UpdateEmpresa = () => {
     const location = useLocation();
     const history = useHistory();
     const [empresa, setEmpresa] = useState(funciones.default.Validar());
+    const [inProgress, setInProgress] = useState(false);
 
     const [listado, setListado] = useState([]);
     useEffect(() => {
@@ -79,6 +80,7 @@ const UpdateEmpresa = () => {
                     setMensajeError(msj);
                 } else {
                     document.body.style.cursor = 'wait'
+                    setInProgress(true);
                     const reqBody = {
                         cnpj: empresa.empresaCnpj,
                         nombreUpdate,
@@ -104,6 +106,7 @@ const UpdateEmpresa = () => {
                             return res.json().then(
                                 res => {
                                     document.body.style.cursor = 'default'
+                                    setInProgress(false);
                                     setEmpresa(res);
                                     setMensajeError(`Empresa "${res.empresaNombre}" actualizada correctamente`);
                                     if (!ver) { sessionStorage.setItem("empresa", JSON.stringify(res)); }
@@ -115,6 +118,7 @@ const UpdateEmpresa = () => {
                     })
                         .catch(err => {
                             document.body.style.cursor = 'default'
+                            setInProgress(false);
                             if (err.toString().includes('"status":500')) {
                                 setMensajeError("Error: Token inválido o error interno");
                             }
@@ -124,6 +128,7 @@ const UpdateEmpresa = () => {
                 }
             }
         } catch (error) {
+            setInProgress(false);
             alert("Token inválido.")
             refresh();
         }
@@ -147,6 +152,11 @@ const UpdateEmpresa = () => {
 
     return (
         <>
+            {inProgress ?
+                <div className="loader-container">
+                    <div className="spinner"></div>
+                </div>
+                : null}
             <div className="seccion registroBox">
                 <h2>Update de empresas</h2>
                 <hr />

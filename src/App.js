@@ -1,5 +1,5 @@
 import './App.css';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Titulo from './components/Titulo';
 import Login from './components/Login';
@@ -25,6 +25,7 @@ import { default as LogAcciones } from './components/LogAcciones'
 import InfoUsuarios from './components/InfoUsuarios';
 import { useSiteTracking } from "react-event-tracker";
 import { loginAllTabs, logoutAllTabs, refreshAllTabs } from './util/FuncionesBroadcast';
+import MailConfig from './components/MailConfig';
 
 const trackingConfig = {
   siteData: {
@@ -69,7 +70,7 @@ const App = () => {
     refreshAllTabs();
     loginAllTabs();
     logoutAllTabs();
-   }, [])
+  }, [])
 
   return (
     <SiteTracking>
@@ -96,7 +97,7 @@ const App = () => {
 
               <Route path={"/UsuariosAcciones"} exact><PrivateRoute allowedRoles={roles3} homeRoles={roles1}><Secciones /> <LogAcciones /></PrivateRoute></Route>
 
-              <Route path={"/Configuracion"} exact><PrivateRoute allowedRoles={roles1} homeRoles={roles1}><Secciones /><Configuracion /></PrivateRoute></Route>
+              <Route path={"/Configuracion"} exact><PrivateRoute allowedRoles={roles1} homeRoles={roles1}><Secciones /><MailConfig /></PrivateRoute></Route>
 
               <Route path={"/UpdateUsuario"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1} ><Secciones /><UpdateUsuario /></PrivateRoute></Route>
 
@@ -104,7 +105,7 @@ const App = () => {
 
               {/*<Route path={"/facturaWindow"} exact><PrivateRoute allowedRoles={roles2} homeRoles={roles1}><FacturaWindow /></PrivateRoute></Route>*/}
 
-              <Route path={"/Pago"} exact><Pago/></Route>
+              <Route path={"/Pago"} exact><Pago /></Route>
 
               <Route path={"*"} exact><PrivateRoute allowedRoles={roles1} homeRoles={roles1}><Secciones /><Home /></PrivateRoute>
               </Route>

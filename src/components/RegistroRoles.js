@@ -8,7 +8,7 @@ import { refresh } from '../util/FuncionesBroadcast';
 const RegistroRoles = ({ history }) => {
   const [authority, setAuthority] = useState('');
   const [mensajeError, setMensajeError] = useState('');
-
+  const [inProgress, setInProgress] = useState(false);
 
   const handleChangeAuthority = ({ target: { value } }) => {
     setAuthority(value);
@@ -39,6 +39,7 @@ const RegistroRoles = ({ history }) => {
       }
       else {
         document.body.style.cursor = 'wait'
+        setInProgress(true);
         const reqBody = {
           authority,
           usuario
@@ -62,6 +63,7 @@ const RegistroRoles = ({ history }) => {
                 res => {
                   document.body.style.cursor = 'default'
                   setMensajeError(`Rol "${res}" agregado correctamente`);
+                  setInProgress(false);
                   refresh();
                 }
               );
@@ -69,6 +71,7 @@ const RegistroRoles = ({ history }) => {
           })
           .catch(err => {
             document.body.style.cursor = 'default'
+            setInProgress(false);
             if (err.toString().includes('"status":500')) {
               setMensajeError("Error: Token inválido o error interno");
             }
@@ -76,6 +79,7 @@ const RegistroRoles = ({ history }) => {
           })
       }
     } catch (error) {
+      setInProgress(false);
       alert("Token inválido.");
       refresh();
     }
@@ -91,6 +95,11 @@ const RegistroRoles = ({ history }) => {
 
   return (
     <>
+      {inProgress ?
+        <div className="loader-container">
+          <div className="spinner"></div>
+        </div>
+        : null}
       <div className="seccion registroBox">
         <h2>Registro de roles</h2>
         <hr />

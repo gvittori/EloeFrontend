@@ -12,7 +12,6 @@ export const refresh = () => {
         window.location.reload();
         refreshChannel.close();
     }
-    //window.location.reload();
    
 }
 

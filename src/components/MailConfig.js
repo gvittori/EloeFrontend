@@ -7,6 +7,7 @@ import { decode } from '../util/decode';
 
 const MailConfig = ({ history }) => {
     const [active, setActive] = useState(false);
+    const [inProgress, setInProgress] = useState(false);
     const [mensajeError, setMensajeError] = useState('');
     const [dias, setDias] = useState([])
     const listadoDias = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
@@ -27,6 +28,7 @@ const MailConfig = ({ history }) => {
 
     const guardarConfig = () => {
         try {
+            setInProgress(true);
             const usuario = decode(localStorage.getItem('jwt').slice(1, -1)).sub;
             document.body.style.cursor = 'wait'
             const reqBody = {
@@ -52,6 +54,7 @@ const MailConfig = ({ history }) => {
                         return res.text().then(
                             res => {
                                 document.body.style.cursor = 'default'
+                                setInProgress(false);
                                 setMensajeError(`Día de envio seteado como: ${res}`);
                                 refresh();
                             }
@@ -64,9 +67,11 @@ const MailConfig = ({ history }) => {
                         setMensajeError("Error: Token inválido o error interno");
                     }
                     else setMensajeError(err.toString());
+                    setInProgress(false);
                 })
         } catch (error) {
             alert("Token inválido.");
+            setInProgress(false);
             refresh();
         }
 
@@ -82,25 +87,39 @@ const MailConfig = ({ history }) => {
 
     return (
         <>
-            <div className="flex-column registroBox">
-                <h4>Configuración de día de envío de mails: </h4>
-                <select defaultValue={opcion} onChange={handleChangeOpcion}>
-                    <option value="Primero">Primer día del mes</option>
-                    <option value="Ultimo">Ultimo día del mes</option>
-                    <option value="Custom">Personalizado</option>
-                </select>
-                {opcion === "Custom" ?
-                    <Multiselect
-                        className='multiselect'
-                        placeholder='Seleccione uno o multiples dias'
-                        data={listadoDias}
-                        onChange={dias => setDias(dias)}
-                        onKeyDown={checkEnter}
-                    />
-                    : null}
-                <input type="button" value="Guardar" className="btnRegistro" onClick={guardarConfig} />
-                <p className="mensaje-error">{mensajeError}</p>
+            {inProgress ?
+                <div className="loader-container">
+                    <div className="spinner"></div>
+                </div>
+                : null}
+            <div className="seccion">
+                <div className="flex-column">
+                    <div className='flex-row'>
+                        <h3>Configuracion</h3>
+                    </div>
+                    <hr />
+                    <div className="flex-column registroBox">
+                        <h4>Configuración de día de envío de mails: </h4>
+                        <select defaultValue={opcion} onChange={handleChangeOpcion}>
+                            <option value="Primero">Primer día del mes</option>
+                            <option value="Ultimo">Ultimo día del mes</option>
+                            <option value="Custom">Personalizado</option>
+                        </select>
+                        {opcion === "Custom" ?
+                            <Multiselect
+                                className='multiselect'
+                                placeholder='Seleccione uno o multiples dias'
+                                data={listadoDias}
+                                onChange={dias => setDias(dias)}
+                                onKeyDown={checkEnter}
+                            />
+                            : null}
+                        <input type="button" value="Guardar" className="btnRegistro" onClick={guardarConfig} />
+                        <p className="mensaje-error">{mensajeError}</p>
+                    </div>
+                </div>
             </div>
+
         </>
     );
 };

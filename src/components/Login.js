@@ -13,6 +13,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [mensajeError, setMensajeError] = useState('');
   const [jwt, setJwt] = useLocalState("", "jwt");
+  const [inProgress, setInProgress] = useState(false);
 
   useEffect(() => {
     if (jwt.length > 0) {
@@ -36,6 +37,7 @@ const Login = () => {
         setMensajeError("Ingrese una contraseña");
       } else {
         document.body.style.cursor = 'wait'
+        setInProgress(true);
         const reqBody = {
           username,
           password,
@@ -56,13 +58,15 @@ const Login = () => {
                 .then(([body, headers]) => {
                   setJwt(headers.get("authorization"));
                   document.body.style.cursor = 'default'
-                  login();    
+                  setInProgress(false);
+                  login();
                 });
             }
           })
           .catch(err => {
             setMensajeError("Credenciales invalidas");
             document.body.style.cursor = 'default'
+            setInProgress(false);
           });
       }
 
@@ -98,6 +102,11 @@ const Login = () => {
 
   return (
     <>
+      {inProgress ?
+        <div className="loader-container">
+          <div className="spinner"></div>
+        </div>
+        : null}
       <div className='flex-column'>
         <div className="titulo">
           <Titulo />

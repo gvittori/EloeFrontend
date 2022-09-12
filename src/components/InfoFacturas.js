@@ -163,6 +163,11 @@ const InfoFacturas = () => {
 
     return (
         <>
+            {inProgress ?
+                <div className="loader-container">
+                    <div className="spinner"></div>
+                </div>
+                : null}
             <div className='seccion'>
                 <div className='flex-column'>
                     <h3>Listado de facturas</h3>

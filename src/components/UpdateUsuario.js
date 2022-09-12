@@ -16,6 +16,7 @@ const UpdateUsuario = ({ history }) => {
     const [actual, setActual] = useState()
     const [usr, setUsr] = useState(funciones.default.Validar());
     const [listado, setListado] = useState([]);
+    const [inProgress, setInProgress] = useState(false);
     useEffect(() => {
         try {
             setActual(decode(localStorage.getItem("jwt")).sub);
@@ -45,6 +46,7 @@ const UpdateUsuario = ({ history }) => {
     const [rolesUpdate, setRolesUpdate] = useState([]);
     const [mensajeError, setMensajeError] = useState('');
     const [listaRoles, setListaRoles] = useState([]);
+    
 
     const [ver, setVer] = useState(false);
 
@@ -107,6 +109,7 @@ const UpdateUsuario = ({ history }) => {
                     setMensajeError(msj);
                 } else {
                     document.body.style.cursor = 'wait'
+                    setInProgress(true);
                     const reqBody = {
                         username: usr.username,
                         passwordUpdate,
@@ -132,6 +135,7 @@ const UpdateUsuario = ({ history }) => {
                             return res.json().then(
                                 res => {
                                     document.body.style.cursor = 'default'
+                                    setInProgress(false);
                                     setUsr(res);
                                     setMensajeError(`Usuario "${res.username}" actualizado correctamente`);
                                     if (!ver) { sessionStorage.setItem("usr", JSON.stringify(res)); }
@@ -143,6 +147,7 @@ const UpdateUsuario = ({ history }) => {
                     })
                         .catch(err => {
                             document.body.style.cursor = 'default'
+                            setInProgress(false);
                             if (err.toString().includes('"status":500')) {
                                 setMensajeError("Error: Token inválido o error interno");
                             }
@@ -152,6 +157,7 @@ const UpdateUsuario = ({ history }) => {
 
             }
         } catch (error) {
+            setInProgress(false);
             alert("Token invalido.");
             refresh();
         }
@@ -183,6 +189,11 @@ const UpdateUsuario = ({ history }) => {
 
     return (
         <>
+            {inProgress ?
+                <div className="loader-container">
+                    <div className="spinner"></div>
+                </div>
+                : null}
             <div className="seccion registroBox">
                 <h2>Update de usuarios</h2>
                 <hr />
@@ -196,7 +207,7 @@ const UpdateUsuario = ({ history }) => {
                             data={listado}
                             filter='contains'
                             onChange={value => handleChangeUsuario(value)}
-                            disabled={[listado.find(obj=>obj.username===actual)]}
+                            disabled={[listado.find(obj => obj.username === actual)]}
                         />
                     </div>
                     : <div><p>Cargando usuarios...</p></div>}
