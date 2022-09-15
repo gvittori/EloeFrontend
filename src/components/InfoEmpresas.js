@@ -51,9 +51,17 @@ const InfoEmpresas = ({ history }) => {
         empresa.clicks = clicks;
     }
 
+    const refreshEmp = (lista)=>{
+        if(empresa!==null){
+            let emp = lista.find((emp) => emp.empresaId == empresa.empresaId);
+            if(emp!==undefined){
+                setEmpresa(emp);
+            }
+        }
+    }
 
     useEffect(() => {
-        funciones.default.Obtener().then(result => { setListado(result);/*setEmpresa(null);*/ setOk(false); });
+         funciones.default.Obtener().then(result => { refreshEmp(result); setListado(result); setOk(false);});
     }, [ok ? ok : null]);
 
     const handleChangeEmpresa = (value/*{ target: { value } }*/) => {

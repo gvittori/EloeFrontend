@@ -17,10 +17,22 @@ const UpdateUsuario = ({ history }) => {
     const [usr, setUsr] = useState(funciones.default.Validar());
     const [listado, setListado] = useState([]);
     const [inProgress, setInProgress] = useState(false);
+
+    
+    const refreshUsr = (lista)=>{
+        if(usuario!==null){
+            let usr = lista.find((usr) => usr.usuId == usuario.usuId);
+            if(usr!==undefined){
+                setUsuario(usr);
+            }
+        }
+    }
+
+
     useEffect(() => {
         try {
             setActual(decode(localStorage.getItem("jwt")).sub);
-            funciones.default.Obtener().then(result => { setListado(result) });
+            funciones.default.Obtener().then(result => { refreshUsr(result); setListado(result) });
             fetch('/api/roles', {
                 method: 'GET',
                 withCredentials: true,

@@ -12,9 +12,18 @@ const UpdateEmpresa = () => {
     const [empresa, setEmpresa] = useState(funciones.default.Validar());
     const [inProgress, setInProgress] = useState(false);
 
+    const refreshEmp = (lista)=>{
+        if(empresa!==null){
+            let emp = lista.find((emp) => emp.empresaId == empresa.empresaId);
+            if(emp!==undefined){
+                setEmpresa(emp);
+            }
+        }
+    }
+
     const [listado, setListado] = useState([]);
     useEffect(() => {
-        funciones.default.Obtener().then(result => { setListado(result) })
+        funciones.default.Obtener().then(result => { refreshEmp(result); setListado(result); })
     }, [])
 
     const [nombreUpdate, setNombre] = useState("");

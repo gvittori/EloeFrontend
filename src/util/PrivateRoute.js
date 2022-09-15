@@ -56,7 +56,7 @@ const PrivateRoute = ({ children, allowedRoles, homeRoles }) => {
             }
         }
     }
-    asyncLocalStorage.setItem('jwt', "").then(logout(*function () {history.push("/Login")});*/
+    asyncLocalStorage.setItem('jwt', "").then(logout()function () {history.push("/Login")});*/
 
 }
 

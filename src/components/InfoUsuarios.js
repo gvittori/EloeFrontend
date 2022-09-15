@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import ItemUsuario from './ItemUsuario';
 import * as funciones from '../util/FuncionesUsuarios'
 import { decode } from '../util/decode';
-import { setDataClearUsr } from '../util/FuncionesBroadcast';
+import { refresh, setDataClearUsr } from '../util/FuncionesBroadcast';
 import DropdownList from "react-widgets/DropdownList";
 
 const InfoUsuarios = ({ history }) => {
@@ -13,9 +13,18 @@ const InfoUsuarios = ({ history }) => {
     const [actual, setActual] = useState(decode(localStorage.getItem("jwt")).sub);
     const [inProgress, setInProgress] = useState(false);
 
+    const refreshUsr = (lista)=>{
+        if(usuario!==null){
+            let usr = lista.find((usr) => usr.usuId == usuario.usuId);
+            if(usr!==undefined){
+                setUsuario(usu);
+            }
+        }
+    }
+
 
     useEffect(() => {
-        funciones.default.Obtener().then(result => { setListado(result); /*setUsuario(null); */setOk(false); });
+        funciones.default.Obtener().then(result => { refreshUsr(result); setListado(result); setOk(false); });
     }, [ok ? ok : null]);
 
     const handleChangeUsuario = (value/*{ target: { value } }*/) => {
